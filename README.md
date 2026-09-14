@@ -25,3 +25,6 @@ to the pair.
 ## Core idea
 
 > Distance shouldn't mean having no place that belongs to both of you.
+
+## Local setup
+Run `npm install` then `npm run dev`.
