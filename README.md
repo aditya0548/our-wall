@@ -1,6 +1,6 @@
 # Our Wall
 
-A private shared space for two people in a long-distance relationship.
+A private shared space for two people.
 
 ## What it does
 
