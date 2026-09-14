@@ -1,16 +1,27 @@
-# React + Vite
+# Our Wall
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+A private shared space for two people in a long-distance relationship.
 
-Currently, two official plugins are available:
+## What it does
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Two partners pair with a connection code and share a wall where they can
+send each other notes in real time. Notes persist forever and stay private
+to the pair.
 
-## React Compiler
+## Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React + Vite
+- Supabase (Auth, Postgres, Realtime)
+- Row Level Security for privacy
 
-## Expanding the Oxlint configuration
+## Features
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and Oxlint's TypeScript related rules in your project.
+- Email + password auth
+- Pairing via 6-character connection codes
+- Real-time shared wall
+- Color-coded notes
+- Relative timestamps
+
+## Core idea
+
+> Distance shouldn't mean having no place that belongs to both of you.
