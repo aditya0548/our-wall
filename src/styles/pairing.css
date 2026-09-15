@@ -1,16 +1,11 @@
-/* pairing.css */
-
 .pairing-container {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 100vh;
-  background-color: var(--bg-panel-left); /* #FDF8F4 */
   padding: 24px;
-  font-family: 'Inter', sans-serif;
 }
 
-/* State 1: Create or Join */
 .pairing-state-1 {
   display: flex;
   flex-direction: column;
@@ -26,9 +21,7 @@
 
 .pairing-title {
   font-size: 32px;
-  font-weight: 600;
-  color: var(--text-primary-auth);
-  letter-spacing: -0.02em;
+  color: var(--accent-deep);
 }
 
 .cards-container {
@@ -42,7 +35,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-placeholder);
+  color: var(--text-muted);
   font-size: 14px;
   font-weight: 600;
   text-transform: uppercase;
@@ -54,25 +47,28 @@
     align-items: stretch;
   }
   .card-divider {
-    display: none; /* Hide OR divider on desktop */
+    display: none;
   }
 }
 
 .pairing-card {
   flex: 1;
-  background-color: #FFFFFF;
-  border-radius: 20px;
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-card);
   padding: 40px 32px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-soft);
   display: flex;
   flex-direction: column;
   justify-content: center;
+  transition: all 200ms ease;
 }
 
 .card-title {
   font-size: 20px;
   font-weight: 600;
-  color: var(--text-primary-auth);
+  color: var(--text-primary);
   margin-bottom: 12px;
 }
 
@@ -86,37 +82,38 @@
 
 .pairing-input {
   width: 100%;
-  background-color: var(--bg-input);
-  border: 1px solid transparent;
-  border-radius: 12px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-button);
   padding: 16px;
   font-size: 24px;
   font-family: monospace;
   text-align: center;
   letter-spacing: 4px;
-  color: var(--text-primary-auth);
-  transition: border-color 200ms ease, background-color 200ms ease;
+  color: var(--text-primary);
+  transition: all 200ms ease;
   outline: none;
   margin-bottom: 16px;
   text-transform: uppercase;
 }
 
 .pairing-input::placeholder {
-  color: var(--text-placeholder);
+  color: var(--text-muted);
   letter-spacing: normal;
 }
 
 .pairing-input:focus {
   border-color: var(--accent);
-  background-color: #FFFFFF;
+  box-shadow: 0 0 0 3px var(--accent-soft);
 }
 
-/* State 2: Waiting */
 .waiting-card {
-  background-color: #FFFFFF;
-  border-radius: 20px;
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-card);
   padding: 48px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-lifted);
   text-align: center;
   max-width: 500px;
   width: 100%;
@@ -128,9 +125,10 @@
   justify-content: center;
   gap: 16px;
   margin: 32px 0;
-  background-color: var(--bg-input);
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
   padding: 24px;
-  border-radius: 16px;
+  border-radius: var(--radius-button);
 }
 
 .code-text {
@@ -138,7 +136,7 @@
   font-family: monospace;
   letter-spacing: 8px;
   font-weight: 600;
-  color: var(--text-primary-auth);
+  color: var(--text-primary);
   user-select: all;
 }
 
@@ -152,12 +150,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 200ms, color 200ms;
+  transition: all 200ms ease;
 }
 
 .copy-btn:hover {
-  background-color: #EAE5E0;
-  color: var(--text-primary-auth);
+  background: var(--surface-border);
+  color: var(--text-primary);
 }
 
 .waiting-status {
@@ -191,18 +189,19 @@
 }
 
 .secondary-button:hover {
-  color: var(--error);
+  color: var(--accent-deep);
 }
 
-/* State 4: Connected */
 .connected-card {
   text-align: center;
   max-width: 400px;
   width: 100%;
-  background-color: #FFFFFF;
-  border-radius: 20px;
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-card);
   padding: 48px 32px;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+  box-shadow: var(--shadow-lifted);
 }
 
 .heart-icon {

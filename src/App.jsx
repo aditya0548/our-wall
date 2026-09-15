@@ -3,6 +3,8 @@ import { useEffect, useState } from 'react';
 import { supabase } from './supabaseClient';
 import Login from './pages/Login';
 import Home from './pages/Home';
+import Setup from './pages/Setup';
+import { ThemeProvider } from './theme/ThemeProvider';
 
 function App() {
   const [session, setSession] = useState(null);
@@ -28,13 +30,16 @@ function App() {
   }
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={!session ? <Login /> : <Navigate to="/" replace />} />
-        <Route path="/" element={session ? <Home session={session} /> : <Navigate to="/login" replace />} />
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </BrowserRouter>
+    <ThemeProvider session={session}>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={!session ? <Login /> : <Navigate to="/" replace />} />
+          <Route path="/setup" element={session ? <Setup session={session} /> : <Navigate to="/login" replace />} />
+          <Route path="/" element={session ? <Home session={session} /> : <Navigate to="/login" replace />} />
+          <Route path="*" element={<Navigate to="/" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </ThemeProvider>
   );
 }
 

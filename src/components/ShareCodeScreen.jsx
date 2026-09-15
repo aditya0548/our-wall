@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { supabase } from '../supabaseClient';
+import CancelModal from './CancelModal';
 
 export default function ShareCodeScreen({ space, onCancel }) {
   const [copied, setCopied] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
 
   const handleCopy = () => {
     navigator.clipboard.writeText(space.code);
@@ -10,10 +13,21 @@ export default function ShareCodeScreen({ space, onCancel }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleCancel = async () => {
-    // Delete the space completely, which cascades to space_members
-    await supabase.from('spaces').delete().eq('id', space.id);
-    onCancel();
+  const handleCancelClick = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleConfirmCancel = async () => {
+    setIsModalOpen(false);
+    const { error } = await supabase.rpc('cancel_current_space');
+    if (!error) {
+      setToastMessage('Space cancelled.');
+      setTimeout(() => {
+        onCancel();
+      }, 2000);
+    } else {
+      console.error(error);
+    }
   };
 
   return (
@@ -39,10 +53,22 @@ export default function ShareCodeScreen({ space, onCancel }) {
           <span className="dots">...</span>
         </div>
         
-        <button className="secondary-button" onClick={handleCancel}>
+        <button className="secondary-button" onClick={handleCancelClick}>
           Cancel space
         </button>
       </div>
+
+      <CancelModal 
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onConfirm={handleConfirmCancel}
+      />
+
+      {toastMessage && (
+        <div className="toast">
+          {toastMessage}
+        </div>
+      )}
     </div>
   );
 }

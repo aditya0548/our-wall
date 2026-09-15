@@ -1,0 +1,22 @@
+--- src/hooks/useProfile.js
++++ src/hooks/useProfile.js
+@@ -19,3 +19,3 @@
+         .from('profiles')
+         .select('*')
+-        .eq('id', session.user.id)
++        .eq('user_id', session.user.id)
+         .maybeSingle();
+@@ -43,3 +43,3 @@
+             const { data: pProfile } = await supabase
+               .from('profiles')
+               .select('*')
+-              .eq('id', partnerMember.user_id)
++              .eq('user_id', partnerMember.user_id)
+               .maybeSingle();
+@@ -69,3 +69,3 @@
+       const { error } = await supabase
+         .from('profiles')
+         .upsert({ 
+-          id: session.user.id, 
++          user_id: session.user.id, 
+           ...updates,

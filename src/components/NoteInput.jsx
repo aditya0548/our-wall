@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import ColorPicker from './ColorPicker';
 
-export default function NoteInput({ onSend }) {
+export default function NoteInput({ onSend, currentTheme }) {
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
   
@@ -52,11 +52,11 @@ export default function NoteInput({ onSend }) {
           onClick={handleSend}
           disabled={sending || !text.trim()}
         >
-          {sending ? 'Sending...' : 'Send'}
+          {sending ? 'Sending...' : <>Send <span style={{fontSize: '12px'}}>♥</span></>}
         </button>
       </div>
       
-      <ColorPicker selectedColor={color} onSelectColor={setColor} />
+      <ColorPicker selectedColor={color} onSelectColor={setColor} currentTheme={currentTheme} />
     </div>
   );
 }

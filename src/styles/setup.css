@@ -1,0 +1,210 @@
+.setup-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 24px;
+}
+
+.setup-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--surface);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-lifted);
+  padding: 40px;
+}
+
+.setup-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.setup-header h1 {
+  font-size: 28px;
+  color: var(--accent-deep);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.title-sparkle {
+  color: var(--accent);
+  font-size: 20px;
+}
+
+.setup-subtitle {
+  color: var(--text-muted);
+}
+
+.setup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.form-group .optional {
+  font-weight: 400;
+  color: var(--text-muted);
+}
+
+.form-group input,
+.form-group select {
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-button);
+  padding: 12px 16px;
+  font-size: 16px;
+  color: var(--text-primary);
+  transition: all 200ms ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.setup-submit {
+  margin-top: 16px;
+  background: var(--accent);
+  color: white;
+  border-radius: var(--radius-button);
+  padding: 16px;
+  font-size: 16px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: all 200ms ease;
+}
+
+.setup-submit:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+.setup-submit:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.setup-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Theme Picker */
+.theme-picker {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+
+@media (max-width: 480px) {
+  .theme-picker {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.theme-tile {
+  background: var(--surface);
+  border: 2px solid transparent;
+  border-radius: 12px;
+  padding: 8px;
+  cursor: pointer;
+  transition: all 200ms ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.theme-tile:hover {
+  transform: translateY(-2px);
+}
+
+.theme-tile.selected {
+  border-color: var(--accent);
+  background: var(--surface);
+}
+
+.theme-tile-preview {
+  width: 100%;
+  aspect-ratio: 4/3;
+  border-radius: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: linear-gradient(180deg, var(--preview-bg-from) 0%, var(--preview-bg-to) 100%);
+}
+
+.theme-tile[data-preview-theme="sakura"] {
+  --preview-bg-from: #FDF6F0;
+  --preview-bg-to: #F8E5EC;
+  --preview-card: rgba(255, 255, 255, 0.82);
+  --preview-accent: #D98BA8;
+}
+
+.theme-tile[data-preview-theme="ocean"] {
+  --preview-bg-from: #F2F7FC;
+  --preview-bg-to: #DDE9F5;
+  --preview-card: rgba(255, 255, 255, 0.82);
+  --preview-accent: #4A7BB8;
+}
+
+.theme-tile[data-preview-theme="matcha"] {
+  --preview-bg-from: #F6FAF2;
+  --preview-bg-to: #E2EDD8;
+  --preview-card: rgba(255, 255, 255, 0.82);
+  --preview-accent: #7FA85A;
+}
+
+.theme-tile[data-preview-theme="midnight"] {
+  --preview-bg-from: #1A1B2E;
+  --preview-bg-to: #23243D;
+  --preview-card: rgba(255, 255, 255, 0.15);
+  --preview-accent: #9A8AD8;
+}
+
+.fake-note {
+  background: var(--preview-card);
+  padding: 4px 12px;
+  border-radius: 6px;
+  font-size: 10px;
+  color: inherit;
+  box-shadow: var(--shadow-soft);
+}
+
+.fake-btn {
+  background: var(--preview-accent);
+  color: white;
+  padding: 3px 16px;
+  border-radius: 6px;
+  font-size: 9px;
+  font-weight: 600;
+}
+
+.theme-tile-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}

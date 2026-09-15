@@ -1,16 +1,19 @@
 import { useEffect } from 'react';
+import { Navigate } from 'react-router-dom';
 import useSpace from '../hooks/useSpace';
+import { useTheme } from '../theme/ThemeProvider';
 import CreateSpaceCard from '../components/CreateSpaceCard';
 import JoinSpaceCard from '../components/JoinSpaceCard';
 import ShareCodeScreen from '../components/ShareCodeScreen';
 import Wall from './Wall';
 import '../styles/pairing.css';
+import '../styles/auth.css';
 
 export default function Home({ session }) {
-  const { space, loading, refresh } = useSpace(session);
+  const { space, loading: spaceLoading, refresh } = useSpace(session);
+  const { profile, loading: profileLoading } = useTheme();
 
-  // If loading, show a simple spinner or text
-  if (loading) {
+  if (spaceLoading || profileLoading) {
     return (
       <div className="pairing-container">
         <div style={{ color: 'var(--text-muted)' }}>Loading...</div>
@@ -20,6 +23,9 @@ export default function Home({ session }) {
 
   // State 4: Connected (2 members)
   if (space && space.isFull) {
+    if (!profile) {
+      return <Navigate to="/setup" replace />;
+    }
     return <Wall session={session} spaceId={space.id} />;
   }
 
@@ -37,7 +43,7 @@ export default function Home({ session }) {
     <div className="pairing-container">
       <div className="pairing-state-1">
         <div className="pairing-header">
-          <h2 className="pairing-title">Start your shared space</h2>
+          <h2 className="pairing-title display-font">Start your shared space</h2>
         </div>
         
         <div className="cards-container">

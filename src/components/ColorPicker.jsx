@@ -1,29 +1,24 @@
-import { useState, useEffect } from 'react';
+import { noteColorMaps } from '../theme/themes';
 
-const COLORS = [
-  { id: 'coral', hex: '#F4B8A8' },
-  { id: 'lavender', hex: '#C9B8E8' },
-  { id: 'sky', hex: '#A8C8E8' },
-  { id: 'mint', hex: '#A8D8C8' },
-  { id: 'sunset', hex: '#F4C8A0' },
-  { id: 'sand', hex: '#E8D8C0' },
-];
+const COLOR_IDS = ['coral', 'lavender', 'sky', 'mint', 'sunset', 'sand'];
 
-export default function ColorPicker({ selectedColor, onSelectColor }) {
+export default function ColorPicker({ selectedColor, onSelectColor, currentTheme }) {
+  const palette = noteColorMaps[currentTheme || 'sakura'];
+
   return (
     <div className="color-picker">
-      {COLORS.map((c) => (
+      {COLOR_IDS.map((id) => (
         <button
-          key={c.id}
+          key={id}
           type="button"
-          className={`color-dot ${selectedColor === c.id ? 'selected' : ''}`}
-          style={{ backgroundColor: c.hex }}
-          onClick={() => onSelectColor(c.id)}
-          aria-label={`Select ${c.id} color`}
+          className={`color-dot ${selectedColor === id ? 'selected' : ''}`}
+          style={{ backgroundColor: palette[id] }}
+          onClick={() => onSelectColor(id)}
+          aria-label={`Select ${id} color`}
         />
       ))}
     </div>
   );
 }
 
-export { COLORS };
+export { COLOR_IDS };

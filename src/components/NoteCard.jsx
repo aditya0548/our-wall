@@ -1,6 +1,6 @@
-import { COLORS } from './ColorPicker';
+import { noteColorMaps } from '../theme/themes';
 
-export default function NoteCard({ note, isOwn }) {
+export default function NoteCard({ note, isOwn, profile, partnerProfile, currentTheme }) {
   const formatRelativeTime = (dateStr) => {
     if (!dateStr) return 'just now';
     const date = new Date(dateStr);
@@ -20,17 +20,26 @@ export default function NoteCard({ note, isOwn }) {
     return date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   };
 
-  const authorName = isOwn ? 'You' : 'Partner';
+  const getAuthorName = () => {
+    if (isOwn) {
+      return profile?.display_name || 'You';
+    } else {
+      return partnerProfile?.display_name || 'Partner';
+    }
+  };
+
+  const authorName = getAuthorName();
   
-  // Find mapped hex color
-  const matchedColor = COLORS.find(c => c.id === note.color);
-  const bgColor = matchedColor ? matchedColor.hex : '#FFFFFF';
+  // Find mapped hex color for current theme
+  const palette = noteColorMaps[currentTheme || 'sakura'];
+  const bgColor = palette[note.color] || palette['coral'];
 
   return (
     <div className="note-card" style={{ backgroundColor: bgColor }}>
       <p className="note-body">{note.body}</p>
       <div className="note-footer">
-        — {authorName} · {formatRelativeTime(note.created_at)}
+        <span>— {authorName}</span>
+        <span>{formatRelativeTime(note.created_at)}</span>
       </div>
     </div>
   );

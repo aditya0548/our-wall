@@ -1,27 +1,24 @@
 import { useState } from 'react';
 import { supabase } from '../supabaseClient';
-import { Mail, Lock, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Loader2 } from 'lucide-react';
+import Sparkle from '../components/Sparkle';
 import '../styles/auth.css';
 
 export default function Login() {
   const [mode, setMode] = useState('signin'); // 'signin' or 'signup'
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
   
-  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
-  
   const [errors, setErrors] = useState({
     email: '',
     password: '',
-    confirmPassword: '',
     general: ''
   });
 
   const validateForm = () => {
     let isValid = true;
-    const newErrors = { email: '', password: '', confirmPassword: '', general: '' };
+    const newErrors = { email: '', password: '', general: '' };
 
     if (!email || !/^\S+@\S+\.\S+$/.test(email)) {
       newErrors.email = 'Please enter a valid email address.';
@@ -30,11 +27,6 @@ export default function Login() {
 
     if (password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters.';
-      isValid = false;
-    }
-
-    if (mode === 'signup' && password !== confirmPassword) {
-      newErrors.confirmPassword = 'Passwords do not match.';
       isValid = false;
     }
 
@@ -62,7 +54,7 @@ export default function Login() {
     if (!validateForm()) return;
 
     setLoading(true);
-    setErrors({ email: '', password: '', confirmPassword: '', general: '' });
+    setErrors({ email: '', password: '', general: '' });
 
     try {
       if (mode === 'signup') {
@@ -87,123 +79,66 @@ export default function Login() {
 
   const toggleMode = () => {
     setMode(mode === 'signin' ? 'signup' : 'signin');
-    setErrors({ email: '', password: '', confirmPassword: '', general: '' });
+    setErrors({ email: '', password: '', general: '' });
     setPassword('');
-    setConfirmPassword('');
-    setShowPassword(false);
   };
 
   return (
     <div className="auth-container">
-      {/* LEFT PANEL */}
-      <div className="auth-brand-panel">
-        <div className="blob blob-1"></div>
-        <div className="blob blob-2"></div>
-        <div className="blob blob-3"></div>
-        
-        <div className="auth-brand-header">
-          Our Wall
+      <div className="auth-card">
+        <div className="auth-header">
+          <h1 className="auth-title display-font">
+            {mode === 'signin' ? 'Welcome back' : 'Join our wall'} <Sparkle style={{ fontSize: '24px' }} />
+          </h1>
+          <p className="auth-subtitle">
+            {mode === 'signin' ? 'Sign in to your shared space.' : 'Start your shared space.'}
+          </p>
         </div>
-        
-        <div className="auth-brand-content">
-          <h1 className="auth-headline">A place that belongs to both of you.</h1>
-          <p className="auth-subtext">Connect. Share. Stay close.</p>
-        </div>
-      </div>
 
-      {/* RIGHT PANEL */}
-      <div className="auth-form-panel">
-        <div className="form-container">
-          <div className="form-header">
-            <h2 className="form-title">
-              {mode === 'signin' ? 'Welcome back' : 'Create your account'}
-            </h2>
-            <p className="form-subtitle">
-              {mode === 'signin' ? 'Sign in to your shared space.' : 'Start your shared space.'}
-            </p>
+        <form className="auth-form" onSubmit={handleSubmit} noValidate>
+          <div className="input-group">
+            <label className="input-label">Email</label>
+            <input 
+              type="email" 
+              className="auth-input"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              disabled={loading}
+            />
+            {errors.email && <span className="auth-error">{errors.email}</span>}
           </div>
 
-          <form className="auth-form" onSubmit={handleSubmit} noValidate>
-            
-            <div className="input-group">
-              <div className="input-wrapper">
-                <Mail className="input-icon-left" size={20} />
-                <input 
-                  type="email" 
-                  className="auth-input"
-                  placeholder="Email" 
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  disabled={loading}
-                />
-              </div>
-              {errors.email && <span className="auth-error">{errors.email}</span>}
-            </div>
-
-            <div className="input-group">
-              <div className="input-wrapper">
-                <Lock className="input-icon-left" size={20} />
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  className="auth-input"
-                  placeholder="Password" 
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  disabled={loading}
-                />
-                <button 
-                  type="button" 
-                  className="input-icon-right" 
-                  onClick={() => setShowPassword(!showPassword)}
-                  aria-label={showPassword ? "Hide password" : "Show password"}
-                >
-                  {showPassword ? <EyeOff size={20} className="icon-transition" /> : <Eye size={20} className="icon-transition" />}
-                </button>
-              </div>
-              {errors.password && <span className="auth-error">{errors.password}</span>}
-            </div>
-
-            {mode === 'signup' && (
-              <div className="input-group">
-                <div className="input-wrapper">
-                  <Lock className="input-icon-left" size={20} />
-                  <input 
-                    type={showPassword ? "text" : "password"} 
-                    className="auth-input"
-                    placeholder="Confirm password" 
-                    value={confirmPassword}
-                    onChange={(e) => setConfirmPassword(e.target.value)}
-                    disabled={loading}
-                  />
-                </div>
-                {errors.confirmPassword && <span className="auth-error">{errors.confirmPassword}</span>}
-              </div>
-            )}
-
-            {errors.general && (
-              <div className="auth-error-banner">
-                {errors.general}
-              </div>
-            )}
-
-            <button 
-              type="submit" 
-              className="auth-button"
-              disabled={loading} 
-            >
-              {loading && <Loader2 size={18} className="animate-spin" style={{ animation: 'spin 1s linear infinite' }} />}
-              {loading 
-                ? (mode === 'signin' ? 'Signing in…' : 'Creating account…') 
-                : (mode === 'signin' ? 'Sign In' : 'Create Account')}
-            </button>
-          </form>
-          
-          <div className="auth-toggle">
-            {mode === 'signin' ? "Don't have an account? " : "Already have an account? "}
-            <button className="auth-toggle-btn" onClick={toggleMode} type="button" disabled={loading}>
-              {mode === 'signin' ? 'Sign up' : 'Sign in'}
-            </button>
+          <div className="input-group">
+            <label className="input-label">Password</label>
+            <input 
+              type="password" 
+              className="auth-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              disabled={loading}
+            />
+            {errors.password && <span className="auth-error">{errors.password}</span>}
           </div>
+
+          {errors.general && (
+            <div className="auth-error-banner">
+              {errors.general}
+            </div>
+          )}
+
+          <button type="submit" className="auth-button" disabled={loading}>
+            {loading && <Loader2 size={18} className="animate-spin" style={{ animation: 'spin 1s linear infinite' }} />}
+            {loading 
+              ? (mode === 'signin' ? 'Signing in…' : 'Creating account…') 
+              : (mode === 'signin' ? "Let's go" : 'Create Account')}
+          </button>
+        </form>
+        
+        <div className="auth-footer">
+          {mode === 'signin' ? "Don't have an account? " : "Already have an account? "}
+          <button className="auth-toggle-btn" onClick={toggleMode} type="button" disabled={loading}>
+            {mode === 'signin' ? 'Sign up' : 'Sign in'}
+          </button>
         </div>
       </div>
     </div>

@@ -90,3 +90,27 @@ export default function useSpace(session) {
 
   return { space, loading, refresh: fetchSpace };
 }
+
+export function subscribeToReset(spaceId, onReset) {
+  const channel = supabase
+    .channel(`space-${spaceId}`)
+    .on(
+      'postgres_changes',
+      { 
+        event: 'UPDATE', 
+        schema: 'public', 
+        table: 'spaces', 
+        filter: `id=eq.${spaceId}` 
+      },
+      (payload) => {
+        if (payload.new.deleted_at) {
+          onReset();
+        }
+      }
+    )
+    .subscribe();
+
+  return () => {
+    supabase.removeChannel(channel);
+  };
+}
