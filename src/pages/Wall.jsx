@@ -8,6 +8,7 @@ import NoteInput from '../components/NoteInput';
 import Sparkle from '../components/Sparkle';
 import ResetModal from '../components/ResetModal';
 import PartnerResetModal from '../components/PartnerResetModal';
+import NavWheel from '../components/NavWheel';
 import '../styles/wall.css';
 
 export default function Wall({ session, spaceId }) {
@@ -81,6 +82,7 @@ export default function Wall({ session, spaceId }) {
 
   return (
     <div className="wall-container">
+      <NavWheel />
       <header className="wall-header">
         <h1 className="wall-title display-font">♥ Our Wall</h1>
         <div className="header-right">

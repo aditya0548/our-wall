@@ -6,6 +6,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Home from './pages/Home';
 import Setup from './pages/Setup';
+import Notes from './pages/Notes';
 import { ThemeProvider } from './theme/ThemeProvider';
 
 function App() {
@@ -40,6 +41,7 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/setup" element={session ? <Setup session={session} /> : <Navigate to="/login" replace />} />
           <Route path="/" element={session ? <Home session={session} /> : <Navigate to="/login" replace />} />
+          <Route path="/notes" element={session ? <Notes session={session} /> : <Navigate to="/login" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
