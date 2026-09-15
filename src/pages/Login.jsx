@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { Loader2 } from 'lucide-react';
 import Sparkle from '../components/Sparkle';
@@ -133,6 +134,12 @@ export default function Login() {
               : (mode === 'signin' ? "Let's go" : 'Create Account')}
           </button>
         </form>
+
+        {mode === 'signin' && (
+          <Link to="/forgot-password" className="auth-forgot-link">
+            Forgot password?
+          </Link>
+        )}
         
         <div className="auth-footer">
           {mode === 'signin' ? "Don't have an account? " : "Already have an account? "}

@@ -158,3 +158,20 @@
 .icon-transition {
   transition: opacity 150ms ease;
 }
+
+.auth-forgot-link {
+  display: block;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 14px;
+  text-decoration: none;
+  margin-top: 16px;
+  margin-bottom: -8px;
+  font-family: inherit;
+  transition: color 200ms ease;
+}
+
+.auth-forgot-link:hover {
+  text-decoration: underline;
+  color: var(--accent);
+}
