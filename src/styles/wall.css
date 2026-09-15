@@ -62,7 +62,7 @@
   flex-direction: column;
   width: 100%;
   max-width: 600px;
-  gap: 24px;
+  gap: 8px;
   padding-bottom: 120px; /* space for the floating input */
 }
 
@@ -85,17 +85,28 @@
 }
 
 .note-card {
-  width: 100%;
-  max-width: 500px;
-  border-radius: var(--radius-card);
-  padding: 20px;
-  box-shadow: var(--shadow-soft);
-  border: 1px solid var(--surface-border);
-  align-self: flex-start;
+  width: fit-content;
+  max-width: 65%;
+  padding: 12px 16px;
   animation: slideIn 300ms ease-out forwards;
   transition: all 200ms ease;
+  position: relative;
+}
+
+.note-card.own {
+  background: var(--accent);
+  color: white;
+  border-radius: 18px 18px 6px 18px;
+  align-self: flex-end;
+}
+
+.note-card.partner {
   background: var(--surface);
+  color: var(--text-primary);
+  border-radius: 18px 18px 18px 6px;
+  align-self: flex-start;
   backdrop-filter: blur(10px);
+  border: 1px solid var(--surface-border);
 }
 
 .note-card:hover {
@@ -105,17 +116,23 @@
 .note-body {
   font-size: 16px;
   line-height: 1.5;
-  color: var(--text-primary);
-  margin-bottom: 12px;
+  margin-bottom: 4px;
   word-wrap: break-word;
   white-space: pre-wrap;
 }
 
 .note-footer {
-  font-size: 13px;
-  color: var(--text-secondary);
+  font-size: 11px;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-end;
+}
+
+.note-card.own .note-footer {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+.note-card.partner .note-footer {
+  color: var(--text-secondary);
 }
 
 /* Floating input bar */
@@ -190,31 +207,7 @@
   transform: scale(0.98);
 }
 
-.color-picker {
-  display: flex;
-  gap: 12px;
-  padding: 0 4px;
-}
 
-.color-dot {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  transition: all 200ms ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-}
-
-.color-dot:hover {
-  transform: scale(1.15);
-}
-
-.color-dot.selected {
-  transform: scale(1.15);
-  box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--text-muted);
-}
 
 @keyframes slideIn {
   from { opacity: 0; transform: translateY(10px); }

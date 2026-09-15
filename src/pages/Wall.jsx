@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../supabaseClient';
 import useNotes from '../hooks/useNotes';
 import { useTheme } from '../theme/ThemeProvider';
@@ -17,6 +17,8 @@ export default function Wall({ session, spaceId }) {
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isPartnerResetModalOpen, setIsPartnerResetModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  
+  const bottomRef = useRef(null);
 
   useEffect(() => {
     const unsubscribe = subscribeToReset(spaceId, () => {
@@ -26,6 +28,12 @@ export default function Wall({ session, spaceId }) {
       if (unsubscribe) unsubscribe();
     };
   }, [spaceId]);
+
+  useEffect(() => {
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [notes]);
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -68,6 +76,9 @@ export default function Wall({ session, spaceId }) {
     );
   }
 
+  // Reverse notes so newest is at the bottom
+  const sortedNotes = [...notes].reverse();
+
   return (
     <div className="wall-container">
       <header className="wall-header">
@@ -82,23 +93,21 @@ export default function Wall({ session, spaceId }) {
       </header>
       
       <main className="wall-main">
-        {notes.length === 0 ? (
+        {sortedNotes.length === 0 ? (
           <div className="empty-state">
             <Sparkle className="empty-sparkle" />
             <p>Nothing here yet. Send the first note to {partnerName}.</p>
           </div>
         ) : (
           <div className="notes-list">
-            {notes.map((note) => (
+            {sortedNotes.map((note) => (
               <NoteCard 
                 key={note.id} 
                 note={note} 
                 isOwn={note.author_id === session.user.id}
-                profile={profile}
-                partnerProfile={partnerProfile}
-                currentTheme={theme}
               />
             ))}
+            <div ref={bottomRef} />
           </div>
         )}
       </main>

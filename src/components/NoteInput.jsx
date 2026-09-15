@@ -1,24 +1,14 @@
 import { useState, useEffect } from 'react';
-import ColorPicker from './ColorPicker';
 
 export default function NoteInput({ onSend, currentTheme }) {
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
-  
-  // Persist color in localStorage
-  const [color, setColor] = useState(() => {
-    return localStorage.getItem('wall-preferred-color') || 'coral';
-  });
-
-  useEffect(() => {
-    localStorage.setItem('wall-preferred-color', color);
-  }, [color]);
 
   const handleSend = async () => {
     if (!text.trim()) return;
     setSending(true);
     try {
-      await onSend(text, color);
+      await onSend(text, 'coral');
       setText('');
     } catch (err) {
       console.error('Failed to send note:', err);
@@ -55,8 +45,6 @@ export default function NoteInput({ onSend, currentTheme }) {
           {sending ? 'Sending...' : <>Send <span style={{fontSize: '12px'}}>♥</span></>}
         </button>
       </div>
-      
-      <ColorPicker selectedColor={color} onSelectColor={setColor} currentTheme={currentTheme} />
     </div>
   );
 }
