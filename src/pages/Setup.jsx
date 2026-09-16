@@ -15,23 +15,28 @@ export default function Setup() {
   const [birthday, setBirthday] = useState(profile?.birthday || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     if (!displayName.trim() || displayName.length > 20) return;
     
     setIsSubmitting(true);
-    try {
-      await updateProfile({
-        display_name: displayName.trim(),
-        pronouns,
-        theme,
-        birthday: birthday || null
-      });
-      navigate('/', { replace: true });
-    } catch (err) {
-      console.error('Failed to save profile', err);
-      setIsSubmitting(false);
-    }
+    
+    // Use an IIFE so we don't return a Promise to React's onSubmit,
+    // avoiding the React 19 Action unmount crash.
+    (async () => {
+      try {
+        await updateProfile({
+          display_name: displayName.trim(),
+          pronouns,
+          theme,
+          birthday: birthday || null
+        });
+        navigate('/', { replace: true });
+      } catch (err) {
+        console.error('Failed to save profile', err);
+        setIsSubmitting(false);
+      }
+    })();
   };
 
   return (

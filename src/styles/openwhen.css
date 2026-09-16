@@ -1,0 +1,153 @@
+/* openwhen.css */
+
+.openwhen-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 2rem;
+  max-width: 800px;
+  width: 100%;
+  margin: 0 auto;
+  overflow-y: auto;
+}
+
+.openwhen-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  color: var(--text-primary);
+}
+
+.openwhen-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  text-align: center;
+  color: var(--text-muted);
+  gap: 1rem;
+}
+
+.empty-icon {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+
+.envelopes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 1.5rem;
+}
+
+/* For mobile */
+@media (max-width: 600px) {
+  .envelopes-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.envelope-card {
+  background-color: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 20px;
+  padding: 1.5rem 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.envelope-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+}
+
+.envelope-icon-wrapper {
+  position: relative;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.envelope-card.locked .envelope-icon-wrapper {
+  color: var(--text-muted);
+}
+
+.envelope-card.ready .envelope-icon-wrapper {
+  color: var(--accent);
+  animation: pulse 2s infinite;
+}
+
+.envelope-card.opened .envelope-icon-wrapper {
+  color: var(--text-muted);
+}
+
+.own-indicator {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  width: 8px;
+  height: 8px;
+  background-color: var(--accent);
+  border-radius: 50%;
+}
+
+.envelope-title {
+  color: var(--text-primary);
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-bottom: 0.5rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  line-height: 1.3;
+}
+
+.envelope-status {
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  margin-top: auto;
+}
+
+.envelope-card.opened {
+  opacity: 0.7;
+}
+
+.envelope-card.opened:hover {
+  opacity: 1;
+}
+
+/* Animation for the ready state */
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* Modal Open Animation */
+.envelope-open-modal {
+  animation: openEnvelope 0.4s ease-out forwards;
+  max-width: 500px;
+  width: 90%;
+}
+
+@keyframes openEnvelope {
+  0% {
+    opacity: 0;
+    transform: scale(0.9) translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
