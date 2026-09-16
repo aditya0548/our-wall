@@ -68,11 +68,11 @@ export default function useProfile(session) {
       setLoading(true);
       const { error } = await supabase
         .from('profiles')
-        .upsert({ 
-          user_id: session.user.id, 
+        .update({
           ...updates,
           updated_at: new Date().toISOString()
-        });
+        })
+        .eq('user_id', session.user.id);
 
       if (error) throw error;
       await fetchProfiles();

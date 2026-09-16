@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { UserPen, Palette, Settings, RotateCcw, LogOut } from 'lucide-react';
+import { Palette, Settings, RotateCcw, LogOut } from 'lucide-react';
 import { supabase } from '../supabaseClient';
 import ChangeThemeModal from './ChangeThemeModal';
 import { useTheme } from '../theme/ThemeProvider';
@@ -55,7 +55,6 @@ export default function ProfileMenu({ onResetClick, onSignOutClick }) {
   const handleAction = (action) => {
     setIsOpen(false);
     switch (action) {
-      case 'edit_profile':
       case 'settings':
         navigate('/settings');
         break;
@@ -110,11 +109,6 @@ export default function ProfileMenu({ onResetClick, onSignOutClick }) {
           </div>
           
           <div className="profile-dropdown-divider"></div>
-          
-          <button className="profile-menu-item" onClick={() => handleAction('edit_profile')}>
-            <UserPen size={16} />
-            Edit profile
-          </button>
           
           <button className="profile-menu-item" onClick={() => handleAction('change_theme')}>
             <Palette size={16} />
