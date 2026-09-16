@@ -9,6 +9,7 @@ import Sparkle from '../components/Sparkle';
 import ResetModal from '../components/ResetModal';
 import PartnerResetModal from '../components/PartnerResetModal';
 import NavWheel from '../components/NavWheel';
+import ProfileMenu from '../components/ProfileMenu';
 import '../styles/wall.css';
 
 export default function Wall({ session, spaceId }) {
@@ -86,11 +87,10 @@ export default function Wall({ session, spaceId }) {
       <header className="wall-header">
         <h1 className="wall-title display-font">♥ Our Wall</h1>
         <div className="header-right">
-          <div className="user-avatar" title={profile?.display_name}>
-            {getInitials(profile?.display_name)}
-          </div>
-          <button className="header-reset-btn" onClick={handleResetClick}>Reset</button>
-          <button className="secondary-button" onClick={handleLogout}>Sign out</button>
+          <ProfileMenu 
+            onResetClick={handleResetClick} 
+            onSignOutClick={handleLogout} 
+          />
         </div>
       </header>
       

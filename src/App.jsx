@@ -7,6 +7,7 @@ import ResetPassword from './pages/ResetPassword';
 import Home from './pages/Home';
 import Setup from './pages/Setup';
 import Notes from './pages/Notes';
+import Settings from './pages/Settings';
 import { ThemeProvider } from './theme/ThemeProvider';
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
           <Route path="/setup" element={session ? <Setup session={session} /> : <Navigate to="/login" replace />} />
           <Route path="/" element={session ? <Home session={session} /> : <Navigate to="/login" replace />} />
           <Route path="/notes" element={session ? <Notes session={session} /> : <Navigate to="/login" replace />} />
+          <Route path="/settings" element={session ? <Settings session={session} /> : <Navigate to="/login" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>

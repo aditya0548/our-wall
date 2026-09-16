@@ -1,0 +1,138 @@
+.settings-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  background: var(--bg-color);
+  color: var(--text-primary);
+}
+
+.settings-main {
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* So it's not perfectly vertically centered on large screens */
+  padding: 40px 24px;
+  overflow-y: auto;
+}
+
+.settings-card {
+  width: 100%;
+  max-width: 520px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: var(--radius-card);
+  padding: 32px;
+  box-shadow: var(--shadow-lifted);
+  backdrop-filter: blur(10px);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.settings-header {
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.settings-title {
+  font-size: 28px;
+  color: var(--accent-deep);
+  margin-bottom: 8px;
+}
+
+.settings-subtitle {
+  color: var(--text-secondary);
+  font-size: 15px;
+}
+
+.settings-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.form-input, .form-select {
+  padding: 12px 16px;
+  border-radius: var(--radius-button);
+  border: 1px solid var(--surface-border);
+  background: rgba(255, 255, 255, 0.5);
+  font-size: 15px;
+  color: var(--text-primary);
+  transition: all 0.2s;
+  font-family: inherit;
+}
+
+.form-input:focus, .form-select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+  background: white;
+}
+
+.form-input:disabled {
+  background: rgba(0, 0, 0, 0.03);
+  color: var(--text-muted);
+  cursor: not-allowed;
+}
+
+.settings-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.primary-button {
+  width: 100%;
+  padding: 14px;
+  border-radius: var(--radius-button);
+  background: var(--accent);
+  color: white;
+  border: none;
+  font-weight: 600;
+  font-size: 16px;
+  cursor: pointer;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.primary-button:hover:not(:disabled) {
+  background: var(--accent-hover);
+  transform: translateY(-2px);
+}
+
+.primary-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.back-link {
+  text-align: center;
+  color: var(--text-secondary);
+  font-size: 14px;
+  text-decoration: none;
+  transition: color 0.2s;
+  padding: 8px;
+}
+
+.back-link:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .settings-card {
+    padding: 24px;
+  }
+}
