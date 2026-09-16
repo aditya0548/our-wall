@@ -53,7 +53,7 @@ export default function useNotes(spaceId, userId) {
       )
       .subscribe((status, err) => {
         console.log('[realtime] status:', status)
-        if (err) console.error('[realtime] error:', err)
+        if (err) console.error('[realtime] full error:', JSON.stringify(err, null, 2))
       });
 
     return () => {
