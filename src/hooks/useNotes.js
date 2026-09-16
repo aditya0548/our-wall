@@ -51,7 +51,10 @@ export default function useNotes(spaceId, userId) {
           });
         }
       )
-      .subscribe();
+      .subscribe((status, err) => {
+        console.log('[realtime] status:', status)
+        if (err) console.error('[realtime] error:', err)
+      });
 
     return () => {
       isMounted = false;
