@@ -189,3 +189,19 @@ begin
   return query select true, null::text, target_space.id;
 end;
 $$ language plpgsql security definer;
+
+-- Check physical membership, bypassing RLS (useful for realtime broadcast evaluation on deleted spaces)
+create or replace function public.is_space_member(check_space_id uuid)
+returns boolean
+language sql
+stable security definer
+as $$
+  select exists (
+    select 1 from space_members
+    where space_id = check_space_id and user_id = auth.uid()
+  );
+$$;
+
+-- Allow members to read the row during realtime reset broadcasts, even if deleted_at is set
+create policy "allow realtime reset broadcasts" on spaces for select
+  using ( is_space_member(id) );
