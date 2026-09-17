@@ -12,9 +12,16 @@ import { supabase } from '../supabaseClient';
 import '../styles/wall.css';
 import '../styles/notes.css';
 
+const IDENTITY_COLORS = {
+  sakura:   { you: '#D98BA8', them: '#8BB8D9' },
+  ocean:    { you: '#4A7BB8', them: '#D98BA8' },
+  matcha:   { you: '#7FA85A', them: '#D98BA8' },
+  midnight: { you: '#9A8AD8', them: '#D98BA8' },
+};
+
 export default function Notes({ session }) {
   const { space, loading: spaceLoading } = useSpace(session);
-  const { profile, loading: profileLoading } = useTheme();
+  const { profile, partnerProfile, loading: profileLoading } = useTheme();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingNote, setEditingNote] = useState(null);
@@ -60,10 +67,8 @@ export default function Notes({ session }) {
       if (editingNote) {
         await updateNote(editingNote.id, noteData);
       } else {
-        // Random position between 0.2 and 0.8 to avoid edges
         const pos_x = 0.2 + Math.random() * 0.6;
         const pos_y = 0.2 + Math.random() * 0.6;
-        // Default size is 160x160 as per SQL default, but passing it explicitly makes it obvious
         await addNote({ ...noteData, position_x: pos_x, position_y: pos_y, width: 160, height: 160 });
       }
       setIsCreateModalOpen(false);
@@ -72,6 +77,22 @@ export default function Notes({ session }) {
       console.error('Error saving note:', e);
       alert('Failed to save note.');
     }
+  };
+
+  const myTheme = profile?.theme || 'sakura';
+  const partnerTheme = partnerProfile?.theme || 'sakura';
+
+  const getAuthorDetails = (isAuthor) => {
+    let color;
+    if (myTheme !== partnerTheme) {
+      const themeToUse = isAuthor ? myTheme : partnerTheme;
+      color = IDENTITY_COLORS[themeToUse]?.you || '#000';
+    } else {
+      color = isAuthor ? IDENTITY_COLORS[myTheme].you : IDENTITY_COLORS[myTheme].them;
+    }
+    
+    const name = isAuthor ? (profile?.display_name || 'You') : (partnerProfile?.display_name || 'Partner');
+    return { color, name };
   };
 
   return (
@@ -86,24 +107,30 @@ export default function Notes({ session }) {
       </header>
 
       <main className="sticky-canvas">
-        {notes.map(note => (
-          <StickyNote
-            key={note.id}
-            note={note}
-            isAuthor={note.author_id === session.user.id}
-            isFiring={firingAlarmNote?.id === note.id}
-            onUpdatePosition={(id, x, y) => updateNote(id, { position_x: x, position_y: y })}
-            onUpdateSize={(id, w, h) => updateNote(id, { width: w, height: h })}
-            onEdit={(n) => {
-              setEditingNote(n);
-              setIsCreateModalOpen(true);
-            }}
-            onDelete={deleteNote}
-            onAcknowledgeAlarm={async (id) => {
-              await updateNote(id, { alarm_acknowledged_at: new Date().toISOString() });
-            }}
-          />
-        ))}
+        {notes.map(note => {
+          const isAuthor = note.author_id === session.user.id;
+          const { color: authorColor, name: authorName } = getAuthorDetails(isAuthor);
+
+          return (
+            <StickyNote
+              key={note.id}
+              note={note}
+              isAuthor={isAuthor}
+              isFiring={firingAlarmNote?.id === note.id}
+              authorColor={authorColor}
+              authorName={authorName}
+              onUpdateNote={(id, updates) => updateNote(id, updates)}
+              onEdit={(n) => {
+                setEditingNote(n);
+                setIsCreateModalOpen(true);
+              }}
+              onDelete={deleteNote}
+              onAcknowledgeAlarm={async (id) => {
+                await updateNote(id, { alarm_acknowledged_at: new Date().toISOString() });
+              }}
+            />
+          );
+        })}
 
         <button 
           className="fab-add-note" 
