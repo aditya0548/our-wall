@@ -2,10 +2,28 @@ import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 
 const COLORS = ['coral', 'mint', 'lavender', 'sky'];
+const SHAPES = ['square', 'round'];
 
-export default function CreateNoteModal({ onClose, onSave, initialData = null }) {
+const THEME_TO_DEFAULT_COLOR = {
+  sakura:   'coral',
+  ocean:    'sky',
+  matcha:   'mint',
+  midnight: 'lavender',
+};
+
+const TEMPLATES = [
+  { label: 'Reminder', text: "Don't forget to " },
+  { label: 'Love', text: "I love you ❤️" },
+  { label: 'Running late', text: "Running a bit late, sorry!" },
+  { label: 'Thinking of you', text: "Thinking of you ✨" },
+  { label: 'Surprise', text: "Surprise! Check the chat 👀" },
+  { label: 'Clear', text: "" },
+];
+
+export default function CreateNoteModal({ onClose, onSave, initialData = null, userTheme = 'sakura' }) {
   const [body, setBody] = useState(initialData?.body || '');
-  const [color, setColor] = useState(initialData?.color || 'coral');
+  const [color, setColor] = useState(initialData?.color || THEME_TO_DEFAULT_COLOR[userTheme] || 'coral');
+  const [shape, setShape] = useState(initialData?.shape || 'square');
   const [hasAlarm, setHasAlarm] = useState(!!initialData?.alarm_at);
   const [alarmAt, setAlarmAt] = useState(
     initialData?.alarm_at ? new Date(initialData.alarm_at).toISOString().slice(0, 16) : ''
@@ -19,7 +37,7 @@ export default function CreateNoteModal({ onClose, onSave, initialData = null })
       finalAlarm = new Date(alarmAt).toISOString();
     }
     
-    onSave({ body, color, alarm_at: finalAlarm });
+    onSave({ body, color, shape, alarm_at: finalAlarm });
   };
 
   const setPreset = (type) => {
@@ -46,6 +64,18 @@ export default function CreateNoteModal({ onClose, onSave, initialData = null })
       <div className="note-modal-content" onClick={(e) => e.stopPropagation()}>
         <h3 style={{ margin: 0 }}>{initialData ? 'Edit Note' : 'New Note'}</h3>
         
+        <div className="templates-scroll">
+          {TEMPLATES.map(t => (
+            <button 
+              key={t.label} 
+              className="template-chip"
+              onClick={() => setBody(t.text)}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
         <textarea
           className="note-textarea"
           placeholder="What's on your mind? (max 200 chars)"
@@ -65,6 +95,19 @@ export default function CreateNoteModal({ onClose, onSave, initialData = null })
               />
             ))}
           </div>
+        </div>
+
+        <div className="shape-picker">
+          <span style={{ fontSize: '12px', marginRight: '8px' }}>Shape:</span>
+          {SHAPES.map(s => (
+            <button 
+              key={s}
+              className={`shape-btn ${shape === s ? 'selected' : ''}`}
+              onClick={() => setShape(s)}
+            >
+              {s === 'square' ? '□ Square' : '○ Round'}
+            </button>
+          ))}
         </div>
 
         <div className="alarm-section">

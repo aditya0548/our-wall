@@ -17,7 +17,16 @@
   cursor: grab;
   background-color: white;
   border: 1px solid rgba(0,0,0,0.05);
-  overflow: hidden; /* keep author strip inside corners */
+  /* overflow: hidden; removed so reaction pills and picker can bleed outside */
+}
+
+.sticky-note.is-pinned {
+  z-index: 50 !important;
+  box-shadow: 0 8px 12px rgba(0, 0, 0, 0.1), 0 16px 24px rgba(0, 0, 0, 0.1);
+}
+
+.sticky-note.shape-round {
+  border-radius: 50%;
 }
 
 .sticky-note:active {
@@ -36,6 +45,9 @@
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
   z-index: 10;
 }
+.sticky-note.is-pinned:hover:not(.dragging) {
+  z-index: 51 !important;
+}
 
 /* Author Strip */
 .sticky-author-strip {
@@ -45,13 +57,21 @@
   left: 0;
   width: 4px;
   z-index: 2;
+  border-top-left-radius: inherit;
+  border-bottom-left-radius: inherit;
+}
+.sticky-note.shape-round .sticky-author-strip {
+  border-radius: inherit;
+  /* Adjust for round shape: strip shouldn't just be on left edge? 
+     A 4px strip on a circle left edge is slightly weird but functional. 
+     To make it fit the circle perfectly: */
+  left: 0;
+  width: 4px;
 }
 
 /* Author Badge Container */
 .sticky-author-container {
   position: absolute;
-  top: 8px;
-  right: 8px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -84,17 +104,25 @@
 
 .sticky-content {
   flex: 1;
-  padding: 12px 16px 12px 20px; /* extra left padding for the strip */
+  padding: 24px 16px 12px 20px; /* extra top padding for badges, left for strip */
   font-size: 14px;
   word-wrap: break-word;
   white-space: pre-wrap;
-  overflow: hidden;
+  overflow: hidden; /* only hide overflow of text content */
   color: #3D3A36; /* Fixed warm dark */
+  border-radius: inherit; /* make sure content respects note's corners */
+}
+.sticky-note.shape-round .sticky-content {
+  padding: 32px 32px 32px 36px;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .sticky-header {
   position: absolute;
-  top: -8px;
+  top: 0;
   left: 0;
   right: 0;
   display: flex;
@@ -111,8 +139,6 @@
   transition: opacity 0.2s;
   pointer-events: auto;
   position: absolute;
-  top: 8px;
-  left: 12px; /* past the strip */
   z-index: 3;
 }
 .sticky-note:hover .sticky-actions {
@@ -137,6 +163,32 @@
   background: white;
 }
 
+/* Pin icon */
+.pin-icon-corner {
+  position: absolute;
+  top: 8px;
+  left: 12px;
+  font-size: 14px;
+  background: rgba(255,255,255,0.6);
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: auto;
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity 0.2s;
+}
+.sticky-note:hover .pin-icon-corner, .pin-icon-corner.pinned {
+  opacity: 1;
+}
+.pin-icon-corner.pinned {
+  background: var(--accent);
+}
+.sticky-note.shape-round .pin-icon-corner { top: 16px; left: 24px; }
+
 .alarm-badge {
   position: absolute;
   bottom: 8px;
@@ -155,6 +207,7 @@
   cursor: pointer;
   z-index: 2;
 }
+.sticky-note.shape-round .alarm-badge { bottom: 16px; left: 24px; }
 .alarm-badge.missed {
   animation: shake 2s infinite ease-in-out;
 }
@@ -162,7 +215,6 @@
 .alarm-icon-corner {
   position: absolute;
   top: 8px;
-  left: 12px;
   font-size: 14px;
   background: rgba(255,255,255,0.6);
   border-radius: 50%;
@@ -172,6 +224,90 @@
   align-items: center;
   justify-content: center;
   pointer-events: auto;
+}
+.sticky-note.shape-round .alarm-icon-corner { top: 16px; }
+
+/* Reactions */
+.reaction-trigger-container {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  z-index: 4;
+}
+.sticky-note.shape-round .reaction-trigger-container {
+  bottom: 16px;
+  right: 16px;
+}
+.reaction-trigger {
+  opacity: 0;
+  background: rgba(255,255,255,0.8);
+  border: none;
+  border-radius: 12px;
+  padding: 2px 6px;
+  font-size: 12px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: opacity 0.2s;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+.sticky-note:hover .reaction-trigger {
+  opacity: 1;
+}
+.reaction-picker {
+  position: absolute;
+  bottom: 100%;
+  right: 0;
+  margin-bottom: 4px;
+  background: white;
+  border-radius: 20px;
+  padding: 4px;
+  display: flex;
+  gap: 4px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+  pointer-events: auto;
+}
+.reaction-picker-btn {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 50%;
+  transition: transform 0.1s;
+}
+.reaction-picker-btn:hover {
+  transform: scale(1.2);
+  background: rgba(0,0,0,0.05);
+}
+
+.reaction-pills {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  gap: 4px;
+  margin-top: 4px;
+  z-index: 5;
+  pointer-events: auto;
+}
+.reaction-pill {
+  background: rgba(255,255,255,0.8);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+}
+.reaction-pill.active {
+  background: var(--accent-soft);
+  color: var(--accent-deep);
+  border: 1px solid var(--accent);
 }
 
 /* Resize handles (4 corners) */
@@ -194,22 +330,10 @@
   }
 }
 
-.resize-handle.top-left {
-  top: 0; left: 0;
-  cursor: nwse-resize;
-}
-.resize-handle.top-right {
-  top: 0; right: 0;
-  cursor: nesw-resize;
-}
-.resize-handle.bottom-left {
-  bottom: 0; left: 0;
-  cursor: nesw-resize;
-}
-.resize-handle.bottom-right {
-  bottom: 0; right: 0;
-  cursor: nwse-resize;
-}
+.resize-handle.top-left { top: 0; left: 0; cursor: nwse-resize; }
+.resize-handle.top-right { top: 0; right: 0; cursor: nesw-resize; }
+.resize-handle.bottom-left { bottom: 0; left: 0; cursor: nesw-resize; }
+.resize-handle.bottom-right { bottom: 0; right: 0; cursor: nwse-resize; }
 
 
 /* Pulsing animation for firing alarm */
@@ -260,6 +384,35 @@
   color: #EDEAF8;
 }
 
+.templates-scroll {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  /* hide scrollbar */
+  scrollbar-width: none; 
+}
+.templates-scroll::-webkit-scrollbar { display: none; }
+
+.template-chip {
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--surface-border);
+  border-radius: 16px;
+  padding: 4px 12px;
+  font-size: 10px;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.template-chip:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+[data-theme="midnight"] .template-chip {
+  background: #1F1F33;
+}
+
 .note-modal-content h2,
 .note-modal-content h3,
 .note-modal-content label {
@@ -279,7 +432,7 @@
 }
 [data-theme="midnight"] .note-modal-content input,
 [data-theme="midnight"] .note-modal-content textarea {
-  background: #1F1F33; /* slightly darker for input */
+  background: #1F1F33;
 }
 
 .note-textarea {
@@ -312,6 +465,25 @@
 .color-swatch.selected {
   border-color: #333;
   transform: scale(1.1);
+}
+
+.shape-picker {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.shape-btn {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid var(--surface-border);
+  background: transparent;
+  color: var(--text-primary);
+  font-size: 12px;
+  cursor: pointer;
+}
+.shape-btn.selected {
+  background: var(--accent-soft);
+  border-color: var(--accent);
 }
 
 .alarm-section {

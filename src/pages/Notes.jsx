@@ -30,10 +30,12 @@ export default function Notes({ session }) {
   
   const { 
     notes, 
+    reactions,
     loading: notesLoading, 
     addNote, 
     updateNote, 
-    deleteNote 
+    deleteNote,
+    toggleReaction
   } = useStickyNotes(spaceId, session.user.id);
   
   const { 
@@ -95,6 +97,13 @@ export default function Notes({ session }) {
     return { color, name };
   };
 
+  // Sort notes so pinned ones are at the end (rendered on top)
+  const sortedNotes = [...notes].sort((a, b) => {
+    if (a.is_pinned && !b.is_pinned) return 1;
+    if (!a.is_pinned && b.is_pinned) return -1;
+    return new Date(a.created_at) - new Date(b.created_at);
+  });
+
   return (
     <div className="wall-container" style={{ backgroundColor: 'var(--bg-color)' }}>
       <header className="wall-header">
@@ -107,9 +116,10 @@ export default function Notes({ session }) {
       </header>
 
       <main className="sticky-canvas">
-        {notes.map(note => {
+        {sortedNotes.map(note => {
           const isAuthor = note.author_id === session.user.id;
           const { color: authorColor, name: authorName } = getAuthorDetails(isAuthor);
+          const noteReactions = reactions.filter(r => r.note_id === note.id);
 
           return (
             <StickyNote
@@ -119,7 +129,10 @@ export default function Notes({ session }) {
               isFiring={firingAlarmNote?.id === note.id}
               authorColor={authorColor}
               authorName={authorName}
+              reactions={noteReactions}
+              currentUserId={session.user.id}
               onUpdateNote={(id, updates) => updateNote(id, updates)}
+              onToggleReaction={toggleReaction}
               onEdit={(n) => {
                 setEditingNote(n);
                 setIsCreateModalOpen(true);
@@ -146,6 +159,7 @@ export default function Notes({ session }) {
       {isCreateModalOpen && (
         <CreateNoteModal
           initialData={editingNote}
+          userTheme={myTheme}
           onClose={() => {
             setIsCreateModalOpen(false);
             setEditingNote(null);

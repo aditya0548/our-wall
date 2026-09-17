@@ -3,6 +3,7 @@ import { supabase } from '../supabaseClient';
 
 export default function useStickyNotes(spaceId, userId) {
   const [notes, setNotes] = useState([]);
+  const [reactions, setReactions] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -19,8 +20,22 @@ export default function useStickyNotes(spaceId, userId) {
           .eq('space_id', spaceId);
 
         if (error) throw error;
+        
         if (isMounted) {
           setNotes(data || []);
+          
+          if (data && data.length > 0) {
+            const noteIds = data.map(n => n.id);
+            const { data: reactionsData, error: rError } = await supabase
+              .from('note_reactions')
+              .select('*')
+              .in('note_id', noteIds);
+              
+            if (!rError && isMounted) {
+              setReactions(reactionsData || []);
+            }
+          }
+          
           setLoading(false);
         }
       } catch (err) {
@@ -30,10 +45,11 @@ export default function useStickyNotes(spaceId, userId) {
     };
     fetchNotes();
 
-    // 2. Subscribe to realtime inserts, updates, deletes
+    // 2. Subscribe to realtime inserts, updates, deletes for sticky_notes
     const channelName = `sticky_notes-${spaceId}`;
     supabase.getChannels().forEach(c => { if (c.topic === `realtime:${channelName}`) supabase.removeChannel(c); });
     console.log('[realtime] subscribing to', channelName);
+    
     const channel = supabase.channel(channelName)
       .on(
         'postgres_changes',
@@ -57,6 +73,25 @@ export default function useStickyNotes(spaceId, userId) {
           });
         }
       )
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'note_reactions',
+        },
+        (payload) => {
+          setReactions((prev) => {
+            if (payload.eventType === 'INSERT') {
+              if (prev.some((r) => r.id === payload.new.id)) return prev;
+              return [...prev, payload.new];
+            } else if (payload.eventType === 'DELETE') {
+              return prev.filter(r => r.id !== payload.old.id);
+            }
+            return prev;
+          });
+        }
+      )
       .subscribe();
 
     return () => {
@@ -66,12 +101,13 @@ export default function useStickyNotes(spaceId, userId) {
     };
   }, [spaceId]);
 
-  const addNote = async ({ body, color, width, height, alarm_at, position_x, position_y }) => {
+  const addNote = async ({ body, color, shape, width, height, alarm_at, position_x, position_y }) => {
     const { data, error } = await supabase.from('sticky_notes').insert({
       space_id: spaceId,
       author_id: userId,
       body,
       color,
+      shape,
       width,
       height,
       alarm_at,
@@ -100,6 +136,35 @@ export default function useStickyNotes(spaceId, userId) {
     const { error } = await supabase.from('sticky_notes').delete().eq('id', id);
     if (error) throw error;
   };
+  
+  const toggleReaction = async (noteId, emoji) => {
+    const existing = reactions.find(r => r.note_id === noteId && r.user_id === userId && r.emoji === emoji);
+    
+    if (existing) {
+      // Optimistic delete
+      setReactions(prev => prev.filter(r => r.id !== existing.id));
+      await supabase.from('note_reactions').delete().eq('id', existing.id);
+    } else {
+      const tempId = `temp-${Date.now()}`;
+      const newReaction = { id: tempId, note_id: noteId, user_id: userId, emoji, created_at: new Date().toISOString() };
+      
+      // Optimistic insert
+      setReactions(prev => [...prev, newReaction]);
+      
+      const { data, error } = await supabase.from('note_reactions').insert({
+        note_id: noteId,
+        user_id: userId,
+        emoji
+      }).select().single();
+      
+      if (!error && data) {
+        setReactions(prev => prev.map(r => r.id === tempId ? data : r));
+      } else {
+        // Revert on error
+        setReactions(prev => prev.filter(r => r.id !== tempId));
+      }
+    }
+  };
 
-  return { notes, loading, addNote, updateNote, deleteNote };
+  return { notes, reactions, loading, addNote, updateNote, deleteNote, toggleReaction };
 }

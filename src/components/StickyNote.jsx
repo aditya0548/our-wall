@@ -1,5 +1,7 @@
 import React, { useRef, useState } from 'react';
 
+const EMOJIS = ['❤️', '😂', '😮', '🥰'];
+
 export default function StickyNote({ 
   note, 
   isAuthor, 
@@ -9,15 +11,19 @@ export default function StickyNote({
   isFiring, 
   onAcknowledgeAlarm,
   authorColor,
-  authorName
+  authorName,
+  reactions = [],
+  currentUserId,
+  onToggleReaction
 }) {
   const [isDragging, setIsDragging] = useState(false);
+  const [showReactions, setShowReactions] = useState(false);
   const noteRef = useRef(null);
 
   const handlePointerDown = (e) => {
     if (!isAuthor || e.button !== 0) return; // Only left click and author
     // Ignore if clicking on buttons or resize handle
-    if (e.target.closest('button') || e.target.closest('.sticky-author-container') || e.target.closest('.alarm-badge') || e.target.closest('.resize-handle')) return;
+    if (e.target.closest('button') || e.target.closest('.sticky-author-container') || e.target.closest('.alarm-badge') || e.target.closest('.resize-handle') || e.target.closest('.reaction-trigger') || e.target.closest('.reaction-picker') || e.target.closest('.pin-icon-corner') || e.target.closest('.reaction-pill')) return;
 
     setIsDragging(true);
     e.target.setPointerCapture(e.pointerId);
@@ -149,29 +155,55 @@ export default function StickyNote({
   const authorInitials = authorName ? authorName.substring(0, 2).toUpperCase() : '?';
   const firstName = authorName ? authorName.split(' ')[0] : '?';
 
+  // Group reactions by emoji
+  const groupedReactions = EMOJIS.map(emoji => ({
+    emoji,
+    users: reactions.filter(r => r.emoji === emoji).map(r => r.user_id)
+  })).filter(g => g.users.length > 0);
+
+  const isRound = note.shape === 'round';
+  const isSmall = (parseFloat(note.width) || 160) < 140 || (parseFloat(note.height) || 160) < 140;
+  
+  let displayText = note.body || '';
+  if (isRound && isSmall && displayText.length > 40) {
+    displayText = displayText.substring(0, 37) + '...';
+  }
+
   return (
     <div
       ref={noteRef}
-      className={`sticky-note color-${note.color || 'coral'} ${isDragging ? 'dragging' : ''} ${isFiring ? 'alarm-firing' : ''}`}
+      className={`sticky-note shape-${note.shape || 'square'} color-${note.color || 'coral'} ${isDragging ? 'dragging' : ''} ${isFiring ? 'alarm-firing' : ''} ${note.is_pinned ? 'is-pinned' : ''}`}
       style={{
-        left: `${note.position_x * 100}%`,
-        top: `${note.position_y * 100}%`,
-        width: `${note.width || 160}px`,
-        height: `${note.height || 160}px`,
+        left: `${parseFloat(note.position_x) * 100 || 0}%`,
+        top: `${parseFloat(note.position_y) * 100 || 0}%`,
+        width: `${parseFloat(note.width) || 160}px`,
+        height: `${parseFloat(note.height) || 160}px`,
         touchAction: 'none' // Prevent scrolling while dragging on mobile
       }}
       onPointerDown={handlePointerDown}
+      onMouseLeave={() => setShowReactions(false)}
     >
       <div className="sticky-author-strip" style={{ backgroundColor: authorColor }} />
       
       <div className="sticky-header">
+        {isAuthor && (
+          <div 
+            className={`pin-icon-corner ${note.is_pinned ? 'pinned' : ''}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              onUpdateNote(note.id, { is_pinned: !note.is_pinned });
+            }}
+          >
+            📌
+          </div>
+        )}
         {hasAlarmSet && !isFiring && !isMissedAlarm && (
-          <div className="alarm-icon-corner">🔔</div>
+          <div className="alarm-icon-corner" style={{ left: isAuthor ? '36px' : '12px' }}>🔔</div>
         )}
       </div>
       
       {isAuthor && (
-        <div className="sticky-actions">
+        <div className="sticky-actions" style={{ top: isRound ? '16px' : '8px', left: isRound ? '24px' : '12px' }}>
           <button className="sticky-action-btn" onClick={() => onEdit(note)}>✏️</button>
           <button className="sticky-action-btn" onClick={() => {
             if (window.confirm('Delete this note?')) {
@@ -181,7 +213,7 @@ export default function StickyNote({
         </div>
       )}
 
-      <div className="sticky-author-container">
+      <div className="sticky-author-container" style={{ top: isRound ? '16px' : '8px', right: isRound ? '16px' : '8px' }}>
         <div className="sticky-author-badge" style={{ backgroundColor: authorColor, color: '#fff' }}>
           {authorInitials}
         </div>
@@ -189,7 +221,7 @@ export default function StickyNote({
       </div>
 
       <div className="sticky-content">
-        {note.body}
+        {displayText}
       </div>
 
       {isMissedAlarm && (
@@ -198,6 +230,57 @@ export default function StickyNote({
           onAcknowledgeAlarm(note.id);
         }}>
           🔔 Missed
+        </div>
+      )}
+
+      {/* Reactions trigger */}
+      <div className="reaction-trigger-container">
+        {showReactions && (
+          <div className="reaction-picker">
+            {EMOJIS.map(emoji => (
+              <button 
+                key={emoji} 
+                className="reaction-picker-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleReaction(note.id, emoji);
+                  setShowReactions(false);
+                }}
+              >
+                {emoji}
+              </button>
+            ))}
+          </div>
+        )}
+        <button 
+          className="reaction-trigger"
+          onClick={(e) => {
+            e.stopPropagation();
+            setShowReactions(!showReactions);
+          }}
+        >
+          + ❤️
+        </button>
+      </div>
+
+      {/* Reaction pills below note */}
+      {groupedReactions.length > 0 && (
+        <div className="reaction-pills">
+          {groupedReactions.map(g => {
+            const iReacted = g.users.includes(currentUserId);
+            return (
+              <div 
+                key={g.emoji} 
+                className={`reaction-pill ${iReacted ? 'active' : ''}`}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onToggleReaction(note.id, g.emoji);
+                }}
+              >
+                {g.emoji} {g.users.length}
+              </div>
+            );
+          })}
         </div>
       )}
 
