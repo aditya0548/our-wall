@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, Heart, Star } from 'lucide-react';
 import useSpace from '../hooks/useSpace';
 import useProfile from '../hooks/useProfile';
 import useTicTacToe from '../hooks/useTicTacToe';
@@ -54,6 +54,14 @@ export default function TicTacToe({ session }) {
     }
   }
 
+  const iAmX = game?.player_x_user_id === userId;
+  const myIcon = iAmX ? <Heart size={16} fill="currentColor" className="legend-icon" /> : <Star size={16} fill="currentColor" className="legend-icon" />;
+  const partnerIcon = iAmX ? <Star size={16} fill="currentColor" className="legend-icon" /> : <Heart size={16} fill="currentColor" className="legend-icon" />;
+
+  const myWins = iAmX ? (game?.wins_x || 0) : (game?.wins_o || 0);
+  const partnerWins = iAmX ? (game?.wins_o || 0) : (game?.wins_x || 0);
+  const draws = game?.draws || 0;
+
   return (
     <div className="wall-container">
       <NavWheel />
@@ -77,6 +85,12 @@ export default function TicTacToe({ session }) {
               {statusText}
             </div>
 
+            <div className="tic-tac-toe-legend">
+              <span className="legend-you">You {myIcon}</span>
+              <span className="legend-dot">·</span>
+              <span className="legend-partner">{partnerName} {partnerIcon}</span>
+            </div>
+
             <TicTacToeBoard 
               board={game.board}
               isMyTurn={isMyTurn}
@@ -85,6 +99,14 @@ export default function TicTacToe({ session }) {
               myUserId={userId}
               playerXId={game.player_x_user_id}
             />
+
+            <div className="tic-tac-toe-scoreboard">
+              <span className="score-you">You <span className="score-number">{myWins}</span></span>
+              <span className="score-dot">·</span>
+              <span className="score-partner">{partnerName} <span className="score-number">{partnerWins}</span></span>
+              <span className="score-dot">·</span>
+              <span className="score-draws">Draws <span className="score-number">{draws}</span></span>
+            </div>
 
             {(game.winner_user_id || game.is_draw) && (
               <button className="play-again-btn" onClick={playAgain}>

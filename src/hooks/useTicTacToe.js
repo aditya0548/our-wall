@@ -112,6 +112,20 @@ export default function useTicTacToe(spaceId, userId) {
       nextTurnId = partner ? partner.user_id : userId; // Fallback
     }
 
+    let newWinsX = game.wins_x || 0;
+    let newWinsO = game.wins_o || 0;
+    let newDraws = game.draws || 0;
+
+    if (winnerId) {
+      if (game.player_x_user_id === winnerId) {
+        newWinsX += 1;
+      } else {
+        newWinsO += 1;
+      }
+    } else if (isDraw) {
+      newDraws += 1;
+    }
+
     try {
       const { data: updatedGame, error } = await supabase
         .from('tic_tac_toe_games')
@@ -120,6 +134,9 @@ export default function useTicTacToe(spaceId, userId) {
           current_turn_user_id: nextTurnId,
           winner_user_id: winnerId,
           is_draw: isDraw,
+          wins_x: newWinsX,
+          wins_o: newWinsO,
+          draws: newDraws,
           updated_at: new Date().toISOString()
         })
         .eq('id', game.id)
@@ -135,7 +152,22 @@ export default function useTicTacToe(spaceId, userId) {
 
   const playAgain = async () => {
     if (!game) return;
+    
+    // Concurrency guard: Only reset if the game is actually ended.
+    if (!game.winner_user_id && !game.is_draw) return;
+
     try {
+      // Re-fetch to ensure we're looking at the latest before reset, to avoid race conditions.
+      const { data: latestGame } = await supabase
+        .from('tic_tac_toe_games')
+        .select('winner_user_id, is_draw')
+        .eq('id', game.id)
+        .single();
+        
+      if (!latestGame || (!latestGame.winner_user_id && !latestGame.is_draw)) {
+        return;
+      }
+
       const { data: members } = await supabase
         .from('space_members')
         .select('user_id')

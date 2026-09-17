@@ -103,7 +103,7 @@
 .tic-tac-toe-status {
   font-family: 'Quicksand', sans-serif;
   font-size: 1.25rem;
-  margin-bottom: 32px;
+  margin-bottom: 8px;
   height: 30px;
   font-weight: 500;
 }
@@ -210,4 +210,72 @@
     width: min(28vw, 100px);
     height: min(28vw, 100px);
   }
+}
+
+/* Legend */
+.tic-tac-toe-legend {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+.legend-you, .legend-partner {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.legend-you {
+  color: var(--accent-deep);
+}
+
+.legend-partner {
+  color: var(--accent-deep);
+}
+
+.legend-icon {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.legend-dot {
+  color: var(--text-muted);
+  opacity: 0.5;
+}
+
+/* Scoreboard */
+.tic-tac-toe-scoreboard {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.score-you {
+  color: var(--accent);
+}
+
+.score-partner {
+  color: var(--text-secondary);
+}
+
+.score-draws {
+  color: var(--text-muted);
+}
+
+.score-number {
+  font-weight: 600;
+  font-size: 15px;
+  margin-left: 2px;
+}
+
+.score-dot {
+  color: var(--text-muted);
+  opacity: 0.5;
 }
