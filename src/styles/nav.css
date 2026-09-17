@@ -10,8 +10,6 @@
 
 .floating-fab {
   position: fixed;
-  bottom: 24px;
-  right: 24px;
   z-index: 100;
   width: 56px;
   height: 56px;
@@ -19,13 +17,23 @@
   background: var(--accent);
   color: white;
   border: none;
-  cursor: pointer;
+  cursor: grab;
   box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 200ms ease;
+  transition: opacity 300ms ease, transform 200ms ease, box-shadow 200ms ease;
   padding: 0;
+  user-select: none;
+  touch-action: none;
+}
+
+.floating-fab.dragging {
+  cursor: grabbing;
+  transform: scale(1.1);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+  /* Remove transition for transform to prevent lag while dragging */
+  transition: opacity 300ms ease, box-shadow 200ms ease;
 }
 
 .floating-fab:hover {
@@ -48,8 +56,6 @@
 
 .floating-menu {
   position: fixed;
-  bottom: 92px; /* 24 + 56 + 12 */
-  right: 24px;
   z-index: 99;
   width: 220px;
   background: var(--surface);
@@ -162,15 +168,4 @@
   font-weight: 500;
 }
 
-/* Mobile adjustments */
-@media (max-width: 767px) {
-  .floating-fab {
-    bottom: calc(24px + env(safe-area-inset-bottom));
-    right: 16px;
-  }
 
-  .floating-menu {
-    bottom: calc(92px + env(safe-area-inset-bottom));
-    right: 16px;
-  }
-}

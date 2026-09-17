@@ -11,20 +11,145 @@ const NAV_ITEMS = [
   { id: 'games',      label: 'Games',      icon: Gamepad2,      route: '/games' },
 ];
 
+const STORAGE_KEY = 'our-wall-fab-position';
+
 export default function FloatingNav() {
   const [isOpen, setIsOpen] = useState(false);
   const [isClosing, setIsClosing] = useState(false);
+  const [isIdle, setIsIdle] = useState(false);
+  const [isDragging, setIsDragging] = useState(false);
+  const [fabPosition, setFabPosition] = useState(() => {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    
+    if (saved) {
+      try {
+        const parsed = JSON.parse(saved);
+        const clampedY = Math.max(60, Math.min(parsed.y, h - 120));
+        const snapToLeft = parsed.x < w / 2;
+        const snapX = snapToLeft ? 16 : w - 56 - 16;
+        return { x: snapX, y: clampedY };
+      } catch (e) {}
+    }
+    return { x: w - 72, y: h - 100 };
+  });
+
   const menuRef = useRef(null);
   const fabRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  const idleTimerRef = useRef(null);
+  const dragState = useRef({
+    startX: 0,
+    startY: 0,
+    fabStartX: 0,
+    fabStartY: 0,
+    isDragging: false,
+  });
+
+  // Handle window resize
+  useEffect(() => {
+    const handleResize = () => {
+      setFabPosition((prev) => {
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        const clampedY = Math.max(60, Math.min(prev.y, h - 120));
+        const snapToLeft = prev.x < w / 2;
+        const snapX = snapToLeft ? 16 : w - 56 - 16;
+        return { x: snapX, y: clampedY };
+      });
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const resetIdleTimer = () => {
+    setIsIdle(false);
+    clearTimeout(idleTimerRef.current);
+    idleTimerRef.current = setTimeout(() => setIsIdle(true), 3000);
+  };
+
+  useEffect(() => {
+    resetIdleTimer();
+    return () => clearTimeout(idleTimerRef.current);
+  }, []);
+
+  const handlePointerDown = (e) => {
+    if (e.button !== 0 && e.type.includes('mouse')) return; // Only left click
+    
+    resetIdleTimer();
+    
+    dragState.current = {
+      startX: e.clientX,
+      startY: e.clientY,
+      fabStartX: fabPosition.x,
+      fabStartY: fabPosition.y,
+      isDragging: false,
+    };
+    
+    e.target.setPointerCapture(e.pointerId);
+  };
+
+  const handlePointerMove = (e) => {
+    resetIdleTimer();
+    const state = dragState.current;
+    
+    if (!e.target.hasPointerCapture(e.pointerId)) return;
+
+    const dx = e.clientX - state.startX;
+    const dy = e.clientY - state.startY;
+
+    if (!state.isDragging && Math.hypot(dx, dy) > 5) {
+      state.isDragging = true;
+      setIsDragging(true);
+    }
+
+    if (state.isDragging) {
+      setFabPosition({
+        x: state.fabStartX + dx,
+        y: state.fabStartY + dy,
+      });
+    }
+  };
+
+  const handlePointerUp = (e) => {
+    resetIdleTimer();
+    const state = dragState.current;
+    
+    if (e.target.hasPointerCapture(e.pointerId)) {
+      e.target.releasePointerCapture(e.pointerId);
+    }
+
+    if (state.isDragging) {
+      // Snap to nearest edge
+      const w = window.innerWidth;
+      const h = window.innerHeight;
+      const fabCenterX = fabPosition.x + 28;
+      const snapToLeft = fabCenterX < w / 2;
+      const snapX = snapToLeft ? 16 : w - 56 - 16;
+      
+      const clampedY = Math.max(60, Math.min(fabPosition.y, h - 120));
+      
+      const newPos = { x: snapX, y: clampedY };
+      setFabPosition(newPos);
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(newPos));
+    } else {
+      // Treat as tap
+      handleToggle();
+    }
+    
+    state.isDragging = false;
+    setIsDragging(false);
+  };
 
   const handleClose = () => {
     setIsClosing(true);
     setTimeout(() => {
       setIsOpen(false);
       setIsClosing(false);
-    }, 150); // Matches the exit animation duration
+    }, 150);
   };
 
   const handleToggle = () => {
@@ -78,18 +203,47 @@ export default function FloatingNav() {
     };
   }, [isOpen]);
 
-  // Don't render on login, setup, settings, etc.
+  // Hidden routes
   const hiddenRoutes = ['/login', '/setup', '/forgot-password', '/reset-password', '/settings'];
   if (hiddenRoutes.includes(location.pathname)) {
     return null;
   }
 
+  const isOnLeftEdge = fabPosition.x < window.innerWidth / 2;
+  const menuStyle = {};
+  if (isOnLeftEdge) {
+    menuStyle.left = fabPosition.x + 56 + 8;
+  } else {
+    menuStyle.right = window.innerWidth - fabPosition.x + 8;
+  }
+  
+  // Vertically
+  // Simplify: anchor the menu's bottom to the FAB's top + 8px, unless the FAB is very high (then anchor top).
+  const isHigh = fabPosition.y < 280; // 220px (menu height approximate) + 60px
+  if (isHigh) {
+    menuStyle.top = Math.max(16, fabPosition.y); // anchor top near FAB
+  } else {
+    menuStyle.bottom = window.innerHeight - fabPosition.y + 8; // anchor bottom near FAB
+  }
+
+  const shouldFade = isIdle && !isOpen && !isDragging;
+
   return (
     <>
       <button
         ref={fabRef}
-        className={`floating-fab ${isOpen ? 'open' : ''}`}
-        onClick={handleToggle}
+        className={`floating-fab ${isOpen ? 'open' : ''} ${isDragging ? 'dragging' : ''}`}
+        style={{
+          left: fabPosition.x,
+          top: fabPosition.y,
+          opacity: shouldFade ? 0.6 : 1,
+        }}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerCancel={handlePointerUp}
+        onMouseEnter={resetIdleTimer}
+        onMouseLeave={resetIdleTimer}
         aria-label="Open navigation menu"
         aria-expanded={isOpen}
       >
@@ -100,6 +254,7 @@ export default function FloatingNav() {
         <div
           ref={menuRef}
           className={`floating-menu ${isClosing ? 'closing' : ''}`}
+          style={menuStyle}
           role="menu"
         >
           {NAV_ITEMS.map((item) => {
