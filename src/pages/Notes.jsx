@@ -63,7 +63,8 @@ export default function Notes({ session }) {
         // Random position between 0.2 and 0.8 to avoid edges
         const pos_x = 0.2 + Math.random() * 0.6;
         const pos_y = 0.2 + Math.random() * 0.6;
-        await addNote({ ...noteData, position_x: pos_x, position_y: pos_y });
+        // Default size is 160x160 as per SQL default, but passing it explicitly makes it obvious
+        await addNote({ ...noteData, position_x: pos_x, position_y: pos_y, width: 160, height: 160 });
       }
       setIsCreateModalOpen(false);
       setEditingNote(null);
@@ -92,6 +93,7 @@ export default function Notes({ session }) {
             isAuthor={note.author_id === session.user.id}
             isFiring={firingAlarmNote?.id === note.id}
             onUpdatePosition={(id, x, y) => updateNote(id, { position_x: x, position_y: y })}
+            onUpdateSize={(id, w, h) => updateNote(id, { width: w, height: h })}
             onEdit={(n) => {
               setEditingNote(n);
               setIsCreateModalOpen(true);

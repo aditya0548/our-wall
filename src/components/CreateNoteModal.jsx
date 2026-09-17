@@ -1,13 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { createPortal } from 'react-dom';
 
 const COLORS = ['coral', 'mint', 'lavender', 'sky'];
-const SIZES = ['small', 'medium', 'large'];
 
 export default function CreateNoteModal({ onClose, onSave, initialData = null }) {
   const [body, setBody] = useState(initialData?.body || '');
   const [color, setColor] = useState(initialData?.color || 'coral');
-  const [size, setSize] = useState(initialData?.size || 'medium');
   const [hasAlarm, setHasAlarm] = useState(!!initialData?.alarm_at);
   const [alarmAt, setAlarmAt] = useState(
     initialData?.alarm_at ? new Date(initialData.alarm_at).toISOString().slice(0, 16) : ''
@@ -21,7 +19,7 @@ export default function CreateNoteModal({ onClose, onSave, initialData = null })
       finalAlarm = new Date(alarmAt).toISOString();
     }
     
-    onSave({ body, color, size, alarm_at: finalAlarm });
+    onSave({ body, color, alarm_at: finalAlarm });
   };
 
   const setPreset = (type) => {
@@ -67,17 +65,6 @@ export default function CreateNoteModal({ onClose, onSave, initialData = null })
               />
             ))}
           </div>
-          <div className="size-picker">
-            {SIZES.map(s => (
-              <button 
-                key={s} 
-                className={`size-btn ${size === s ? 'selected' : ''}`}
-                onClick={() => setSize(s)}
-              >
-                {s.charAt(0).toUpperCase() + s.slice(1)}
-              </button>
-            ))}
-          </div>
         </div>
 
         <div className="alarm-section">
@@ -100,7 +87,7 @@ export default function CreateNoteModal({ onClose, onSave, initialData = null })
                 type="datetime-local" 
                 value={alarmAt} 
                 onChange={(e) => setAlarmAt(e.target.value)}
-                style={{ marginTop: '12px', width: '100%', padding: '8px', borderRadius: '4px', border: '1px solid var(--surface-border)' }}
+                style={{ marginTop: '12px', width: '100%', padding: '8px', borderRadius: '4px' }}
               />
             </div>
           )}

@@ -37,16 +37,11 @@
   z-index: 10;
 }
 
-/* Sizes */
-.sticky-note.size-small { width: 120px; height: 120px; }
-.sticky-note.size-medium { width: 160px; height: 160px; }
-.sticky-note.size-large { width: 220px; height: 220px; }
-
 /* Colors */
-.sticky-note.color-coral { background-color: #ffb3ba; color: #4a2e2e; }
-.sticky-note.color-mint { background-color: #baffc9; color: #2e4a36; }
-.sticky-note.color-lavender { background-color: #e6b3ff; color: #3a2e4a; }
-.sticky-note.color-sky { background-color: #bae1ff; color: #2e3e4a; }
+.sticky-note.color-coral { background-color: #ffb3ba; color: #3D3A36; }
+.sticky-note.color-mint { background-color: #baffc9; color: #3D3A36; }
+.sticky-note.color-lavender { background-color: #e6b3ff; color: #3D3A36; }
+.sticky-note.color-sky { background-color: #bae1ff; color: #3D3A36; }
 
 .sticky-content {
   flex: 1;
@@ -55,12 +50,8 @@
   word-wrap: break-word;
   white-space: pre-wrap;
   overflow: hidden;
-  text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 8;
-  -webkit-box-orient: vertical;
+  color: #3D3A36; /* Fixed warm dark */
 }
-.size-small .sticky-content { -webkit-line-clamp: 4; padding: 8px 12px; font-size: 12px;}
 
 .sticky-header {
   position: absolute;
@@ -120,7 +111,7 @@
   font-size: 10px;
   font-weight: bold;
   text-transform: uppercase;
-  color: rgba(0,0,0,0.6);
+  color: #3D3A36;
   pointer-events: auto;
 }
 
@@ -159,6 +150,28 @@
   justify-content: center;
 }
 
+/* Resize handle */
+.sticky-note__resize-handle {
+  position: absolute;
+  bottom: 4px;
+  right: 4px;
+  width: 14px;
+  height: 14px;
+  cursor: nwse-resize;
+  opacity: 0.6;
+  transition: opacity 200ms;
+  /* Little lines icon logic via gradient or icon font, here we use simple bg or svg */
+  background: radial-gradient(circle at 100% 100%, rgba(0,0,0,0.2) 20%, transparent 20%);
+}
+.sticky-note:hover .sticky-note__resize-handle {
+  opacity: 1;
+}
+@media (hover: none) {
+  .sticky-note__resize-handle {
+    opacity: 0.8;
+  }
+}
+
 /* Pulsing animation for firing alarm */
 @keyframes pulseGlow {
   0% { box-shadow: 0 0 0 0 rgba(255, 215, 0, 0.7); }
@@ -191,7 +204,8 @@
 }
 
 .note-modal-content {
-  background: var(--surface);
+  background: var(--surface-solid, var(--surface));
+  color: var(--text-primary);
   border-radius: 16px;
   padding: 24px;
   width: 90%;
@@ -201,25 +215,49 @@
   flex-direction: column;
   gap: 16px;
 }
+[data-theme="midnight"] .note-modal-content {
+  background: #2A2B45;
+  color: #EDEAF8;
+}
+
+.note-modal-content h2,
+.note-modal-content h3,
+.note-modal-content label {
+  color: var(--text-primary);
+}
+
+.note-modal-content input,
+.note-modal-content textarea {
+  background: var(--surface-solid, var(--surface));
+  color: var(--text-primary);
+  border: 1px solid var(--surface-border);
+}
+
+.note-modal-content input::placeholder,
+.note-modal-content textarea::placeholder {
+  color: var(--text-muted);
+}
+[data-theme="midnight"] .note-modal-content input,
+[data-theme="midnight"] .note-modal-content textarea {
+  background: #1F1F33; /* slightly darker for input */
+}
 
 .note-textarea {
   width: 100%;
   min-height: 100px;
-  border: 1px solid var(--surface-border);
   border-radius: 8px;
   padding: 12px;
   font-family: inherit;
   resize: none;
-  background: rgba(255,255,255,0.5);
 }
 
 .note-options-row {
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
 }
 
-.color-picker, .size-picker {
+.color-picker {
   display: flex;
   gap: 8px;
 }
@@ -236,25 +274,10 @@
   transform: scale(1.1);
 }
 
-.size-btn {
-  padding: 4px 8px;
-  border-radius: 4px;
-  border: 1px solid var(--surface-border);
-  background: transparent;
-  cursor: pointer;
-  font-size: 12px;
-}
-.size-btn.selected {
-  background: var(--accent);
-  color: white;
-  border-color: var(--accent);
-}
-
 .alarm-section {
   border: 1px solid var(--surface-border);
   padding: 12px;
   border-radius: 8px;
-  background: rgba(255,255,255,0.3);
 }
 .alarm-header {
   display: flex;
@@ -273,7 +296,8 @@
   padding: 4px 8px;
   border-radius: 12px;
   border: 1px solid var(--surface-border);
-  background: white;
+  background: transparent;
+  color: var(--text-primary);
   font-size: 12px;
   cursor: pointer;
 }
