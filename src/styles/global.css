@@ -58,6 +58,28 @@
   --shadow-glass: 0 8px 32px rgba(122, 84, 105, 0.10);
 }
 
+/* ─── Sakura Background Gradient ─── */
+[data-theme="sakura"] body,
+body[data-theme="sakura"] {
+  background: linear-gradient(180deg, var(--bg-from) 0%, var(--bg-to) 100%);
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+}
+
+/* ─── Soft Radial Light Patches ─── */
+[data-theme="sakura"] body::before,
+body[data-theme="sakura"]::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 15%, rgba(245, 198, 213, 0.45) 0%, transparent 45%),
+    radial-gradient(circle at 85% 80%, rgba(232, 217, 168, 0.30) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
 [data-theme="ocean"] {
   --bg-from: #F2F7FC;
   --bg-to: #DDE9F5;
