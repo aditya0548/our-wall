@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MessageCircle, StickyNote, Mail, Palette } from 'lucide-react';
+import { MessageCircle, StickyNote, Mail, Palette, Gamepad2 } from 'lucide-react';
 import '../styles/nav.css';
 
 const features = [
@@ -8,6 +8,7 @@ const features = [
   { id: 'notes',   label: 'Notes',      icon: StickyNote,    route: '/notes' },
   { id: 'open-when', label: 'Open When', icon: Mail, route: '/open-when' },
   { id: 'whiteboard', label: 'Whiteboard', icon: Palette, route: '/whiteboard' },
+  { id: 'games', label: 'Games', icon: Gamepad2, route: '/games' },
 ];
 
 let globalIsVisible = false;

@@ -1,0 +1,213 @@
+.games-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  max-width: 800px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.games-header-row {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.games-title {
+  color: var(--accent-deep);
+  font-size: 2rem;
+  margin: 0;
+}
+
+.games-grid {
+  display: flex;
+  justify-content: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.game-tile {
+  width: 180px;
+  height: 180px;
+  background: var(--surface);
+  border: 1px solid var(--surface-border);
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+  text-decoration: none;
+  color: var(--text-main);
+}
+
+.game-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  background: var(--surface-hover);
+}
+
+.game-tile-icon {
+  color: var(--accent);
+  margin-bottom: 16px;
+  transition: transform 0.3s ease;
+}
+
+.game-tile:hover .game-tile-icon {
+  transform: scale(1.1);
+}
+
+.game-tile-label {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.games-coming-soon {
+  text-align: center;
+  margin-top: 48px;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  font-family: 'Quicksand', sans-serif;
+}
+
+/* Tic Tac Toe Board */
+.tic-tac-toe-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.tic-tac-toe-breadcrumb {
+  align-self: flex-start;
+  margin-bottom: 16px;
+  color: var(--text-muted);
+  text-decoration: none;
+  font-size: 0.9rem;
+  transition: color 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.tic-tac-toe-breadcrumb:hover {
+  color: var(--text-main);
+}
+
+.tic-tac-toe-status {
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.25rem;
+  margin-bottom: 32px;
+  height: 30px;
+  font-weight: 500;
+}
+
+.status-turn {
+  color: var(--accent-deep);
+}
+
+.status-waiting {
+  color: var(--text-muted);
+}
+
+.status-win {
+  color: var(--accent);
+  font-weight: 700;
+  animation: pulse-soft 2s infinite;
+}
+
+.tic-tac-toe-board {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: var(--surface-border);
+  padding: 8px;
+  border-radius: 16px;
+  margin-bottom: 32px;
+}
+
+.tic-tac-toe-cell {
+  width: min(24vw, 120px);
+  height: min(24vw, 120px);
+  background: var(--surface);
+  border: none;
+  border-radius: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: default;
+  transition: all 0.2s;
+}
+
+.tic-tac-toe-cell.interactive {
+  cursor: pointer;
+}
+
+.tic-tac-toe-cell.interactive:hover {
+  background: var(--surface-hover);
+  transform: scale(1.02);
+}
+
+.cell-mark-x {
+  color: var(--accent);
+  animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.cell-mark-o {
+  color: var(--theme-secondary, #94a3b8);
+  animation: pop-in 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.tic-tac-toe-cell.win-cell {
+  background: var(--accent-soft);
+  animation: pulse-win 2s infinite;
+}
+
+.play-again-btn {
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 99px;
+  font-family: 'Quicksand', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.3);
+}
+
+.play-again-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(var(--accent-rgb), 0.4);
+}
+
+@keyframes pop-in {
+  0% { transform: scale(0.5); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes pulse-soft {
+  0% { opacity: 0.8; }
+  50% { opacity: 1; }
+  100% { opacity: 0.8; }
+}
+
+@keyframes pulse-win {
+  0% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0.4); }
+  70% { box-shadow: 0 0 0 10px rgba(var(--accent-rgb), 0); }
+  100% { box-shadow: 0 0 0 0 rgba(var(--accent-rgb), 0); }
+}
+
+@media (max-width: 640px) {
+  .tic-tac-toe-cell {
+    width: min(28vw, 100px);
+    height: min(28vw, 100px);
+  }
+}
