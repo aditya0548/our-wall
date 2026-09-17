@@ -1,0 +1,32 @@
+[data-theme="sakura"] {
+  /* ── Background ── */
+  --bg-from: #FDF6F0;        /* top of gradient — cream */
+  --bg-to: #F0D9E4;          /* bottom of gradient — soft pink */
+
+  /* ── Surfaces (glass) ── */
+  --surface: rgba(255, 255, 255, 0.65);
+  --surface-solid: #FBF4F6;
+  --surface-border: rgba(122, 84, 105, 0.15);
+  --surface-blur: 16px;
+
+  /* ── Text ── */
+  --text-primary: #4A3F4B;     /* warm dark plum — body text */
+  --text-secondary: #806C79;   /* muted mauve — secondary text */
+  --text-muted: #B5A0AC;       /* very soft — hints, placeholders */
+  --text-anchor: #16131F;      /* deep anchor — headings */
+
+  /* ── Accents ── */
+  --accent: #D9A0B5;           /* warm dusty rose — buttons, CTAs */
+  --accent-hover: #C88FA5;
+  --accent-soft: #F8E5EC;
+  --accent-deep: #8B4A6B;
+
+  /* ── Decorative ── */
+  --decorative-gold: #E8D9A8;
+  --decorative-blossom: #F5C6D5;
+
+  /* ── Shadows ── */
+  --shadow-soft: 0 4px 20px rgba(122, 84, 105, 0.08);
+  --shadow-lifted: 0 12px 40px rgba(122, 84, 105, 0.12);
+  --shadow-glass: 0 8px 32px rgba(122, 84, 105, 0.10);
+}

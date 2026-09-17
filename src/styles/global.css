@@ -27,8 +27,8 @@
 
 [data-theme="sakura"] {
   /* ── Background ── */
-  --bg-from: #FDF6F0;
-  --bg-to: #F0D9E4;
+  --bg-from: #FDF6F0;        /* top of gradient — cream */
+  --bg-to: #F0D9E4;          /* bottom of gradient — soft pink */
 
   /* ── Surfaces (glass) ── */
   --surface: rgba(255, 255, 255, 0.65);
@@ -37,13 +37,13 @@
   --surface-blur: 16px;
 
   /* ── Text ── */
-  --text-primary: #4A3F4B;
-  --text-secondary: #806C79;
-  --text-muted: #B5A0AC;
-  --text-anchor: #16131F;
+  --text-primary: #4A3F4B;     /* warm dark plum — body text */
+  --text-secondary: #806C79;   /* muted mauve — secondary text */
+  --text-muted: #B5A0AC;       /* very soft — hints, placeholders */
+  --text-anchor: #16131F;      /* deep anchor — headings */
 
   /* ── Accents ── */
-  --accent: #D9A0B5;
+  --accent: #D9A0B5;           /* warm dusty rose — buttons, CTAs */
   --accent-hover: #C88FA5;
   --accent-soft: #F8E5EC;
   --accent-deep: #8B4A6B;
@@ -292,116 +292,3 @@ input {
   animation: slideIn 300ms ease-out forwards;
 }
 
-/* Sakura Theme Global Overrides */
-[data-theme="sakura"] body {
-  background: linear-gradient(180deg, var(--bg-from) 0%, var(--bg-to) 100%);
-  background-attachment: fixed;
-  min-height: 100vh;
-}
-
-[data-theme="sakura"] body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(circle at 20% 15%, rgba(245, 198, 213, 0.35) 0%, transparent 45%),
-    radial-gradient(circle at 85% 80%, rgba(232, 217, 168, 0.20) 0%, transparent 50%);
-  pointer-events: none;
-  z-index: 0;
-  opacity: 1;
-  filter: none;
-}
-
-[data-theme="sakura"] input[type="text"],
-[data-theme="sakura"] input[type="email"],
-[data-theme="sakura"] input[type="password"],
-[data-theme="sakura"] textarea {
-  background: rgba(255, 255, 255, 0.55);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid var(--surface-border);
-  color: var(--text-primary);
-}
-
-[data-theme="sakura"] input::placeholder,
-[data-theme="sakura"] textarea::placeholder {
-  color: var(--text-muted);
-}
-
-[data-theme="sakura"] .primary-button,
-[data-theme="sakura"] button[type="submit"],
-[data-theme="sakura"] .auth-button,
-[data-theme="sakura"] .btn-primary,
-[data-theme="sakura"] .reset-modal-confirm {
-  background: var(--accent);
-  color: #FFFFFF;
-  box-shadow: 0 4px 14px rgba(217, 160, 181, 0.35);
-  border-radius: 16px;
-  transition: all 200ms cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-[data-theme="sakura"] .primary-button:hover,
-[data-theme="sakura"] button[type="submit"]:hover,
-[data-theme="sakura"] .auth-button:hover,
-[data-theme="sakura"] .btn-primary:hover,
-[data-theme="sakura"] .reset-modal-confirm:hover {
-  background: var(--accent-hover);
-  transform: translateY(-1px);
-  box-shadow: 0 6px 20px rgba(217, 160, 181, 0.45);
-}
-
-[data-theme="sakura"] h1,
-[data-theme="sakura"] h2,
-[data-theme="sakura"] h3,
-[data-theme="sakura"] h4,
-[data-theme="sakura"] .display-font {
-  color: var(--text-anchor);
-  letter-spacing: -0.01em;
-  font-weight: 600;
-}
-
-[data-theme="sakura"] .reset-modal-card,
-[data-theme="sakura"] .modal-content,
-[data-theme="sakura"] .note-modal-content,
-[data-theme="sakura"] .change-theme-modal {
-  background: rgba(255, 255, 255, 0.72);
-  backdrop-filter: blur(24px) saturate(140%);
-  -webkit-backdrop-filter: blur(24px) saturate(140%);
-  border: 1px solid var(--surface-border);
-  box-shadow: var(--shadow-lifted);
-  border-radius: 28px;
-}
-
-[data-theme="sakura"] .reset-modal-overlay,
-[data-theme="sakura"] .modal-backdrop,
-[data-theme="sakura"] .note-modal-overlay {
-  background: rgba(74, 63, 75, 0.28);
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
-}
-
-/* Sakura Decorative Touches */
-[data-theme="sakura"] .title-sparkle {
-  color: var(--decorative-blossom);
-}
-
-[data-theme="sakura"] .sakura-title-icon {
-  opacity: 0.85;
-  font-size: 0.9em;
-  margin-right: 2px;
-}
-
-[data-theme="sakura"] .floating-menu-item.active {
-  position: relative;
-}
-
-[data-theme="sakura"] .floating-menu-item.active::after {
-  content: '';
-  position: absolute;
-  bottom: 6px;
-  left: 42px; /* align with text */
-  right: 16px;
-  height: 2px;
-  background: var(--decorative-gold);
-  border-radius: 2px;
-}
