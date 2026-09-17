@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { MessageCircle, StickyNote, Mail } from 'lucide-react';
+import { MessageCircle, StickyNote, Mail, Palette } from 'lucide-react';
 import '../styles/nav.css';
 
 const features = [
   { id: 'chat',    label: 'Chat',       icon: MessageCircle, route: '/' },
   { id: 'notes',   label: 'Notes',      icon: StickyNote,    route: '/notes' },
   { id: 'open-when', label: 'Open When', icon: Mail, route: '/open-when' },
+  { id: 'whiteboard', label: 'Whiteboard', icon: Palette, route: '/whiteboard' },
 ];
 
 let globalIsVisible = false;
