@@ -181,3 +181,59 @@
     animation: none !important;
   }
 }
+
+/* Hint Pill */
+.nav-hint-pill {
+  position: fixed;
+  left: 4px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 24px;
+  background-color: var(--surface-border);
+  border-radius: 4px;
+  opacity: 0.3;
+  z-index: 95;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.nav-hint-pill:hover {
+  opacity: 1;
+  width: 6px;
+}
+
+/* Mobile adjustments */
+@media (max-width: 640px) {
+  .nav-hint-pill::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24px;
+    height: 60px;
+  }
+
+  .carousel-card {
+    width: 140px;
+    height: 44px;
+    padding: 6px 10px;
+    margin-top: -22px; /* half of 44px */
+  }
+
+  .carousel-card .card-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .carousel-card .card-label {
+    font-size: 12px;
+  }
+
+  .scroll-wheel {
+    width: 32px;
+    height: 72px;
+    margin-top: -36px;
+  }
+}

@@ -24,6 +24,13 @@ export default function NavWheel() {
   const [isVisible, setIsVisible] = useState(globalIsVisible);
   const [pendingIndex, setPendingIndex] = useState(globalIsVisible ? globalPendingIndex : actualIndex);
   const [wheelBounce, setWheelBounce] = useState(0);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 640);
+
+  useEffect(() => {
+    const handleResize = () => setIsMobile(window.innerWidth <= 640);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   const commitTimerRef = useRef(null);
   const hideTimerRef = useRef(null);
@@ -51,7 +58,7 @@ export default function NavWheel() {
     hideTimerRef.current = setTimeout(() => {
       setIsVisible(false);
       globalIsVisible = false;
-    }, 3000);
+    }, 1200);
   }, [actualIndex]);
 
   // Handle initialization on mount
@@ -66,38 +73,18 @@ export default function NavWheel() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Activation hover & edge scroll
+  // Activation edge scroll
   useEffect(() => {
-    let hoverTimer;
-    
-    const handleMouseMove = (e) => {
-      if (e.clientX <= 40) {
-        if (!globalIsVisible && !hoverTimer) {
-          hoverTimer = setTimeout(() => {
-            markInteraction();
-          }, 300);
-        }
-      } else {
-        if (hoverTimer) {
-          clearTimeout(hoverTimer);
-          hoverTimer = null;
-        }
-      }
-    };
-    
     const handleWindowWheel = (e) => {
       if (e.clientX <= 40 && !globalIsVisible) {
          markInteraction();
       }
     };
 
-    window.addEventListener('mousemove', handleMouseMove);
     window.addEventListener('wheel', handleWindowWheel, { passive: true });
     
     return () => {
-      window.removeEventListener('mousemove', handleMouseMove);
       window.removeEventListener('wheel', handleWindowWheel);
-      if (hoverTimer) clearTimeout(hoverTimer);
     };
   }, [markInteraction]);
 
@@ -169,15 +156,16 @@ export default function NavWheel() {
 
   const getCardStyle = (index) => {
     const diff = index - pendingIndex;
+    const spacing = isMobile ? 50 : 64;
     
     if (diff === 0) {
       return { opacity: 1, scale: 1, y: 0, zIndex: 3 };
     } else if (diff === -1) {
-      return { opacity: 0.6, scale: 0.85, y: -64, zIndex: 2 };
+      return { opacity: 0.6, scale: 0.85, y: -spacing, zIndex: 2 };
     } else if (diff === 1) {
-      return { opacity: 0.6, scale: 0.85, y: 64, zIndex: 2 };
+      return { opacity: 0.6, scale: 0.85, y: spacing, zIndex: 2 };
     } else {
-      return { opacity: 0, scale: 0.5, y: diff * 64, zIndex: 1, pointerEvents: 'none' };
+      return { opacity: 0, scale: 0.5, y: diff * spacing, zIndex: 1, pointerEvents: 'none' };
     }
   };
 
@@ -209,6 +197,8 @@ export default function NavWheel() {
     <>
       <div className={`nav-backdrop ${isVisible ? 'visible' : ''}`} />
       
+      <div className="nav-hint-pill" onClick={markInteraction} />
+
       <div 
         className={`kawaii-nav-container ${isVisible ? 'visible' : ''}`}
         onMouseMove={markInteraction}
