@@ -60,7 +60,7 @@ export default function useStrokes(spaceId, userId) {
     };
   }, [spaceId]);
 
-  const addStroke = async (points) => {
+  const addStroke = async (points, colorId = 'coral', sizePx = 4) => {
     if (!spaceId || !userId) return;
 
     // Insert to DB directly (simpler v1 approach as requested)
@@ -70,11 +70,25 @@ export default function useStrokes(spaceId, userId) {
         space_id: spaceId,
         author_id: userId,
         points,
-        color: 'accent', // from specification
+        color: colorId,
+        size: sizePx,
       });
 
     if (error) {
       console.error('Error adding stroke:', error);
+    }
+  };
+
+  const deleteStroke = async (strokeId) => {
+    if (!spaceId || !userId) return;
+
+    const { error } = await supabase
+      .from('strokes')
+      .delete()
+      .eq('id', strokeId);
+
+    if (error) {
+      console.error('Error deleting stroke:', error);
     }
   };
 
@@ -111,5 +125,5 @@ export default function useStrokes(spaceId, userId) {
     }
   };
 
-  return { strokes, loading, addStroke, undoLast, clearAll };
+  return { strokes, loading, addStroke, deleteStroke, undoLast, clearAll };
 }

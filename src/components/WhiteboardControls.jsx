@@ -1,7 +1,27 @@
 import React, { useState } from 'react';
-import { Undo2, Trash2 } from 'lucide-react';
+import { Undo2, Trash2, Pen, Eraser } from 'lucide-react';
 
-export default function WhiteboardControls({ onUndo, onClear, canUndo }) {
+export const COLORS = [
+  { id: 'coral',    value: '#F4B8A8' },
+  { id: 'lavender', value: '#C9B8E8' },
+  { id: 'sky',      value: '#A8C8E8' },
+  { id: 'mint',     value: '#A8D8C8' },
+  { id: 'sunset',   value: '#F4C8A0' },
+  { id: 'sand',     value: '#E8D8C0' },
+];
+
+export const SIZES = [
+  { id: 'thin',   px: 2, visualSize: 8 },
+  { id: 'medium', px: 4, visualSize: 12 },
+  { id: 'thick',  px: 8, visualSize: 18 },
+];
+
+export default function WhiteboardControls({ 
+  selectedColor, onColorChange, 
+  selectedSize, onSizeChange,
+  selectedTool, onToolChange,
+  onUndo, onClear, canUndo 
+}) {
   const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   const handleClearClick = () => setShowClearConfirm(true);
@@ -12,22 +32,76 @@ export default function WhiteboardControls({ onUndo, onClear, canUndo }) {
   };
 
   return (
-    <div className="whiteboard-controls">
-      <button 
-        className="whiteboard-control-btn" 
-        onClick={onUndo} 
-        disabled={!canUndo}
-        title="Undo your last stroke"
-      >
-        <Undo2 size={20} />
-      </button>
-      <button 
-        className="whiteboard-control-btn clear-btn" 
-        onClick={handleClearClick}
-        title="Clear whiteboard"
-      >
-        <Trash2 size={20} />
-      </button>
+    <div className="whiteboard-toolbar">
+      {/* Colors */}
+      <div className="toolbar-section">
+        {COLORS.map(c => (
+          <button
+            key={c.id}
+            className={`color-btn ${selectedColor === c.id ? 'selected' : ''}`}
+            style={{ backgroundColor: c.value }}
+            onClick={() => onColorChange(c.id)}
+            title={c.id}
+          />
+        ))}
+      </div>
+
+      <div className="toolbar-divider" />
+
+      {/* Sizes */}
+      <div className="toolbar-section">
+        {SIZES.map(s => (
+          <button
+            key={s.id}
+            className={`size-btn ${selectedSize === s.px ? 'selected' : ''}`}
+            onClick={() => onSizeChange(s.px)}
+            title={`${s.id} brush`}
+          >
+            <div className="size-dot" style={{ width: s.visualSize, height: s.visualSize }} />
+          </button>
+        ))}
+      </div>
+
+      <div className="toolbar-divider" />
+
+      {/* Tools */}
+      <div className="toolbar-section">
+        <button
+          className={`tool-btn ${selectedTool === 'pen' ? 'selected' : ''}`}
+          onClick={() => onToolChange('pen')}
+          title="Pen"
+        >
+          <Pen size={18} />
+        </button>
+        <button
+          className={`tool-btn ${selectedTool === 'eraser' ? 'selected' : ''}`}
+          onClick={() => onToolChange('eraser')}
+          title="Eraser"
+        >
+          <Eraser size={18} />
+        </button>
+      </div>
+
+      <div className="toolbar-divider" />
+
+      {/* Actions */}
+      <div className="toolbar-section">
+        <button 
+          className="tool-btn" 
+          onClick={onUndo} 
+          disabled={!canUndo}
+          title="Undo your last stroke"
+        >
+          <Undo2 size={18} />
+        </button>
+        <button 
+          className="tool-btn clear-btn" 
+          onClick={handleClearClick}
+          title="Clear whiteboard"
+        >
+          <Trash2 size={18} />
+        </button>
+      </div>
 
       {showClearConfirm && (
         <div className="reset-modal-overlay">

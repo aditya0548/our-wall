@@ -1,6 +1,14 @@
 import React, { useRef, useEffect, useState } from 'react';
+import { COLORS } from './WhiteboardControls';
 
-export default function WhiteboardCanvas({ strokes, onAddStroke }) {
+export default function WhiteboardCanvas({ 
+  strokes, 
+  onAddStroke, 
+  onDeleteStroke,
+  selectedColor,
+  selectedSize,
+  selectedTool
+}) {
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
@@ -23,12 +31,17 @@ export default function WhiteboardCanvas({ strokes, onAddStroke }) {
     
     window.addEventListener('resize', resizeCanvas);
     return () => window.removeEventListener('resize', resizeCanvas);
-  }, [strokes]); // Re-bind if strokes changes to ensure redraw gets latest strokes
+  }, [strokes, selectedColor, selectedSize, selectedTool]); // Re-bind if strokes changes to ensure redraw gets latest strokes
 
   // Draw strokes when they change
   useEffect(() => {
     drawAllStrokes();
-  }, [strokes, currentStroke]);
+  }, [strokes, currentStroke, selectedColor, selectedSize, selectedTool]);
+
+  const getColorHex = (colorId) => {
+    const c = COLORS.find(c => c.id === colorId);
+    return c ? c.value : '#000';
+  };
 
   const drawAllStrokes = () => {
     const canvas = canvasRef.current;
@@ -38,20 +51,25 @@ export default function WhiteboardCanvas({ strokes, onAddStroke }) {
     // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
-    // Get accent color from computed styles of the canvas
-    const computedStyle = getComputedStyle(document.body);
-    const accentColor = computedStyle.getPropertyValue('--accent').trim();
-    
-    ctx.strokeStyle = accentColor || '#000'; // fallback
-    ctx.lineWidth = 3;
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     
     // Draw committed strokes
-    strokes.forEach(stroke => drawStroke(ctx, stroke.points));
+    strokes.forEach(stroke => {
+      ctx.strokeStyle = getColorHex(stroke.color);
+      ctx.lineWidth = stroke.size || 4; // default to 4 if missing
+      drawStroke(ctx, stroke.points);
+    });
     
     // Draw current in-progress stroke
     if (currentStroke.length > 0) {
+      if (selectedTool === 'eraser') {
+        ctx.strokeStyle = 'rgba(255, 100, 100, 0.5)'; // visual feedback for eraser
+        ctx.lineWidth = 20;
+      } else {
+        ctx.strokeStyle = getColorHex(selectedColor);
+        ctx.lineWidth = selectedSize;
+      }
       drawStroke(ctx, currentStroke);
     }
   };
@@ -107,14 +125,45 @@ export default function WhiteboardCanvas({ strokes, onAddStroke }) {
     }
   };
 
+  const distSq = (p1, p2) => (p1[0] - p2[0])**2 + (p1[1] - p2[1])**2;
+
   const handlePointerUp = () => {
     if (!isDrawing) return;
-    
     setIsDrawing(false);
     
-    if (currentStroke.length > 0) {
+    if (currentStroke.length === 0) return;
+
+    if (selectedTool === 'eraser') {
+      const ERASER_RADIUS = 10; // 20px width / 2
+      const strokesToDelete = new Set();
+      
+      // Hit-test eraser stroke against all existing strokes
+      for (const stroke of strokes) {
+        const STROKE_RADIUS = (stroke.size || 4) / 2;
+        const HIT_DIST_SQ = (ERASER_RADIUS + STROKE_RADIUS) ** 2;
+        
+        // Simple point-to-point distance check O(n*m)
+        let hit = false;
+        for (const ep of currentStroke) {
+          for (const sp of stroke.points) {
+            if (distSq(ep, sp) <= HIT_DIST_SQ) {
+              hit = true;
+              break;
+            }
+          }
+          if (hit) break;
+        }
+        
+        if (hit) {
+          strokesToDelete.add(stroke.id);
+        }
+      }
+      
+      strokesToDelete.forEach(id => onDeleteStroke(id));
+      setCurrentStroke([]);
+    } else {
       // Commit stroke
-      onAddStroke(currentStroke);
+      onAddStroke(currentStroke, selectedColor, selectedSize);
       setCurrentStroke([]);
     }
   };

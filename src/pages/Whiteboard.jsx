@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useSpace from '../hooks/useSpace';
 import useStrokes from '../hooks/useStrokes';
 import NavWheel from '../components/NavWheel';
@@ -14,7 +14,11 @@ export default function Whiteboard({ session }) {
   const spaceId = space?.id;
   const userId = session?.user?.id;
   
-  const { strokes, loading: strokesLoading, addStroke, undoLast, clearAll } = useStrokes(spaceId, userId);
+  const { strokes, loading: strokesLoading, addStroke, deleteStroke, undoLast, clearAll } = useStrokes(spaceId, userId);
+
+  const [selectedColor, setSelectedColor] = useState('coral');
+  const [selectedSize, setSelectedSize] = useState(4);
+  const [selectedTool, setSelectedTool] = useState('pen');
 
   const handleLogout = async () => {
     await supabase.auth.signOut();
@@ -42,20 +46,32 @@ export default function Whiteboard({ session }) {
       </header>
 
       <main className="whiteboard-main">
-        <div className="whiteboard-header">
+        <div className="whiteboard-header-row">
           <h2 className="display-font whiteboard-title">Whiteboard ✦</h2>
-          <WhiteboardControls 
-            onUndo={undoLast} 
-            onClear={clearAll} 
-            canUndo={canUndo} 
-          />
         </div>
+        
+        <WhiteboardControls 
+          selectedColor={selectedColor}
+          onColorChange={setSelectedColor}
+          selectedSize={selectedSize}
+          onSizeChange={setSelectedSize}
+          selectedTool={selectedTool}
+          onToolChange={setSelectedTool}
+          onUndo={undoLast} 
+          onClear={clearAll} 
+          canUndo={canUndo} 
+        />
 
         <WhiteboardCanvas 
           strokes={strokes} 
-          onAddStroke={addStroke} 
+          onAddStroke={addStroke}
+          onDeleteStroke={deleteStroke}
+          selectedColor={selectedColor}
+          selectedSize={selectedSize}
+          selectedTool={selectedTool}
         />
       </main>
     </div>
   );
 }
+
