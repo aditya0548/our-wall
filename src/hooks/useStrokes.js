@@ -28,8 +28,10 @@ export default function useStrokes(spaceId, userId) {
     fetchStrokes();
 
     // Subscribe to realtime changes
-    const channel = supabase
-      .channel(`strokes_space_${spaceId}`)
+    const channelName = `strokes_space_${spaceId}`;
+    supabase.getChannels().forEach(c => { if (c.topic === `realtime:${channelName}`) supabase.removeChannel(c); });
+    console.log('[realtime] subscribing to', channelName);
+    const channel = supabase.channel(channelName)
       .on(
         'postgres_changes',
         {
@@ -73,6 +75,7 @@ export default function useStrokes(spaceId, userId) {
       .subscribe();
 
     return () => {
+      console.log('[realtime] unsubscribing', channelName);
       supabase.removeChannel(channel);
     };
   }, [spaceId]);

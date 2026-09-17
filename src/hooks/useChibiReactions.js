@@ -9,7 +9,10 @@ export default function useChibiReactions(spaceId, currentUserId) {
   useEffect(() => {
     if (!spaceId) return;
 
-    const channel = supabase.channel(`chibi-${spaceId}`);
+    const channelName = `chibi-${spaceId}`;
+    supabase.getChannels().forEach(c => { if (c.topic === `realtime:${channelName}`) supabase.removeChannel(c); });
+    console.log('[realtime] subscribing to', channelName);
+    const channel = supabase.channel(channelName);
     
     channel
       .on('broadcast', { event: 'reaction' }, (event) => {
@@ -22,6 +25,7 @@ export default function useChibiReactions(spaceId, currentUserId) {
     channelRef.current = channel;
 
     return () => {
+      console.log('[realtime] unsubscribing', channelName);
       supabase.removeChannel(channel);
       // clear all timeouts
       Object.values(timeoutsRef.current).forEach(clearTimeout);

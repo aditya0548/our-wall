@@ -77,10 +77,7 @@ export default function useProfile(session) {
       if (existing) {
         const { error } = await supabase
           .from('profiles')
-          .update({
-            ...updates,
-            updated_at: new Date().toISOString()
-          })
+          .update(updates)
           .eq('user_id', session.user.id);
 
         if (error) throw error;
@@ -89,8 +86,7 @@ export default function useProfile(session) {
           .from('profiles')
           .insert({
             user_id: session.user.id,
-            ...updates,
-            updated_at: new Date().toISOString()
+            ...updates
           });
 
         if (error) throw error;

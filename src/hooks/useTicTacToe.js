@@ -66,7 +66,10 @@ export default function useTicTacToe(spaceId, userId) {
 
   useEffect(() => {
     if (!spaceId) return;
-    const channel = supabase.channel(`tic_tac_toe_${spaceId}`)
+    const channelName = `tic_tac_toe_${spaceId}`;
+    supabase.getChannels().forEach(c => { if (c.topic === `realtime:${channelName}`) supabase.removeChannel(c); });
+    console.log('[realtime] subscribing to', channelName);
+    const channel = supabase.channel(channelName)
       .on(
         'postgres_changes',
         { event: 'UPDATE', schema: 'public', table: 'tic_tac_toe_games', filter: `space_id=eq.${spaceId}` },
@@ -76,6 +79,7 @@ export default function useTicTacToe(spaceId, userId) {
       )
       .subscribe();
     return () => {
+      console.log('[realtime] unsubscribing', channelName);
       supabase.removeChannel(channel);
     };
   }, [spaceId]);

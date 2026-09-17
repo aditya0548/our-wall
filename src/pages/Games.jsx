@@ -1,6 +1,6 @@
 import React from 'react';
 import { Gamepad2 } from 'lucide-react';
-import NavWheel from '../components/NavWheel';
+import SideNav from '../components/SideNav';
 import ProfileMenu from '../components/ProfileMenu';
 import GameTile from '../components/GameTile';
 import { supabase } from '../supabaseClient';
@@ -14,7 +14,7 @@ export default function Games({ session }) {
 
   return (
     <div className="wall-container">
-      <NavWheel />
+      <SideNav />
       <header className="wall-header">
         <h1 className="wall-title display-font">♥ Our Wall</h1>
         <div className="header-right">

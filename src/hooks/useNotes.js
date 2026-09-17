@@ -33,8 +33,10 @@ export default function useNotes(spaceId, userId) {
     fetchNotes();
 
     // 2. Subscribe to realtime inserts
-    const channel = supabase
-      .channel(`notes-${spaceId}`)
+    const channelName = `notes-${spaceId}`;
+    supabase.getChannels().forEach(c => { if (c.topic === `realtime:${channelName}`) supabase.removeChannel(c); });
+    console.log('[realtime] subscribing to', channelName);
+    const channel = supabase.channel(channelName)
       .on(
         'postgres_changes',
         {
@@ -70,6 +72,7 @@ export default function useNotes(spaceId, userId) {
 
     return () => {
       isMounted = false;
+      console.log('[realtime] unsubscribing', channelName);
       supabase.removeChannel(channel);
     };
   }, [spaceId]);

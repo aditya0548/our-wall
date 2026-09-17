@@ -92,8 +92,10 @@ export default function useSpace(session) {
 }
 
 export function subscribeToReset(spaceId, onReset) {
-  const channel = supabase
-    .channel(`space-${spaceId}`)
+  const channelName = `space-${spaceId}`;
+    supabase.getChannels().forEach(c => { if (c.topic === `realtime:${channelName}`) supabase.removeChannel(c); });
+    console.log('[realtime] subscribing to', channelName);
+    const channel = supabase.channel(channelName)
     .on(
       'postgres_changes',
       { 
@@ -111,6 +113,7 @@ export function subscribeToReset(spaceId, onReset) {
     .subscribe();
 
   return () => {
+    console.log('[realtime] unsubscribing', channelName);
     supabase.removeChannel(channel);
   };
 }

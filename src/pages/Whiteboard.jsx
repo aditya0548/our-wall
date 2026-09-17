@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useSpace from '../hooks/useSpace';
 import useStrokes from '../hooks/useStrokes';
-import NavWheel from '../components/NavWheel';
+import SideNav from '../components/SideNav';
 import ProfileMenu from '../components/ProfileMenu';
 import WhiteboardCanvas from '../components/WhiteboardCanvas';
 import WhiteboardControls from '../components/WhiteboardControls';
@@ -37,7 +37,7 @@ export default function Whiteboard({ session }) {
 
   return (
     <div className="wall-container">
-      <NavWheel />
+      <SideNav />
       <header className="wall-header">
         <h1 className="wall-title display-font">♥ Our Wall</h1>
         <div className="header-right">

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import useSpace from '../hooks/useSpace';
 import useEnvelopes from '../hooks/useEnvelopes';
-import NavWheel from '../components/NavWheel';
+import SideNav from '../components/SideNav';
 import ProfileMenu from '../components/ProfileMenu';
 import EnvelopeCard from '../components/EnvelopeCard';
 import CreateEnvelopeModal from '../components/CreateEnvelopeModal';
@@ -85,7 +85,7 @@ export default function OpenWhen({ session }) {
 
   return (
     <div className="wall-container">
-      <NavWheel />
+      <SideNav />
       <header className="wall-header">
         <h1 className="wall-title display-font">♥ Our Wall</h1>
         <div className="header-right">

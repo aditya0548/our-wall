@@ -4,7 +4,7 @@ import { ArrowLeft, Heart, Star } from 'lucide-react';
 import useSpace from '../hooks/useSpace';
 import useProfile from '../hooks/useProfile';
 import useTicTacToe from '../hooks/useTicTacToe';
-import NavWheel from '../components/NavWheel';
+import SideNav from '../components/SideNav';
 import ProfileMenu from '../components/ProfileMenu';
 import TicTacToeBoard from '../components/TicTacToeBoard';
 import { supabase } from '../supabaseClient';
@@ -64,7 +64,7 @@ export default function TicTacToe({ session }) {
 
   return (
     <div className="wall-container">
-      <NavWheel />
+      <SideNav />
       <header className="wall-header">
         <h1 className="wall-title display-font">♥ Our Wall</h1>
         <div className="header-right">
