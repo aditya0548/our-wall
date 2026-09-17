@@ -10,6 +10,7 @@ import ResetModal from '../components/ResetModal';
 import PartnerResetModal from '../components/PartnerResetModal';
 import NavWheel from '../components/NavWheel';
 import ProfileMenu from '../components/ProfileMenu';
+import ChibiRow from '../components/ChibiRow';
 import '../styles/wall.css';
 
 export default function Wall({ session, spaceId }) {
@@ -94,6 +95,13 @@ export default function Wall({ session, spaceId }) {
         </div>
       </header>
       
+      <ChibiRow 
+        spaceId={spaceId} 
+        session={session} 
+        profile={profile} 
+        partnerProfile={partnerProfile} 
+      />
+
       <main className="wall-main">
         {sortedNotes.length === 0 ? (
           <div className="empty-state">
