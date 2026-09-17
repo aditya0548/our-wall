@@ -29,20 +29,20 @@ export default function OpenEnvelopeModal({ envelope, onClose }) {
   const openedDate = envelope.opened_at ? new Date(envelope.opened_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }) : null;
 
   const modalContent = (
-    <div className="modal-backdrop" onClick={onClose}>
-      <div className="modal-content envelope-open-modal" onClick={(e) => e.stopPropagation()}>
+    <div className="reset-modal-overlay" onClick={onClose}>
+      <div className="reset-modal-card envelope-open-modal" onClick={(e) => e.stopPropagation()}>
         <div className="envelope-flap" />
         <div className="envelope-inner-content">
           <h3 className="display-font" style={{ marginBottom: '1.5rem', color: 'var(--text-primary)', fontSize: '1.5rem' }}>{envelope.title}</h3>
-          <p style={{ color: 'var(--text-primary)', whiteSpace: 'pre-wrap', lineHeight: '1.6', marginBottom: '2rem' }}>
+          <p style={{ color: 'var(--text-primary)', whiteSpace: 'pre-wrap', lineHeight: '1.6', marginBottom: '2rem', textAlign: 'left' }}>
             {envelope.body}
           </p>
           <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem' }}>
             <div>From {senderName} · Sealed {sealedDate}</div>
             {openedDate && <div>· Opened {openedDate}</div>}
           </div>
-          <div className="modal-actions" style={{ justifyContent: 'center', marginTop: '2rem' }}>
-            <button className="primary-button" onClick={onClose}>Close</button>
+          <div className="reset-modal-actions" style={{ justifyContent: 'center', marginTop: '2rem' }}>
+            <button className="reset-modal-cancel" onClick={onClose}>Close</button>
           </div>
         </div>
       </div>

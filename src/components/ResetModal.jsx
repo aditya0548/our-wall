@@ -5,8 +5,8 @@ export default function ResetModal({ isOpen, onClose, onConfirm }) {
   if (!isOpen) return null;
 
   const modalContent = (
-    <div className="reset-modal-overlay">
-      <div className="reset-modal-card">
+    <div className="reset-modal-overlay" onClick={onClose}>
+      <div className="reset-modal-card" onClick={(e) => e.stopPropagation()}>
         <h2 className="reset-modal-title display-font">Reset your connection?</h2>
         <p className="reset-modal-body">
           This will disconnect you from your partner. Your notes will be saved, but your partner will need the new code to reconnect.

@@ -27,9 +27,9 @@ export default function CreateEnvelopeModal({ isOpen, onClose, onSubmit }) {
   const todayStr = new Date().toISOString().split('T')[0];
 
   const modalContent = (
-    <div className="modal-backdrop">
-      <div className="modal-content">
-        <h3 className="display-font" style={{ marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Seal an envelope</h3>
+    <div className="reset-modal-overlay" onClick={onClose}>
+      <div className="reset-modal-card" onClick={(e) => e.stopPropagation()} style={{ textAlign: 'left', maxWidth: '500px' }}>
+        <h3 className="display-font" style={{ marginBottom: '1.5rem', color: 'var(--text-primary)', textAlign: 'center' }}>Seal an envelope</h3>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
             <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Title</label>
@@ -40,7 +40,7 @@ export default function CreateEnvelopeModal({ isOpen, onClose, onSubmit }) {
               placeholder="Open when you miss me"
               maxLength={60}
               required
-              style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--surface-border)', backgroundColor: 'var(--bg-color)', color: 'var(--text-primary)' }}
+              style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--surface-border)', backgroundColor: 'var(--surface)', color: 'var(--text-primary)' }}
             />
           </div>
           <div>
@@ -52,7 +52,7 @@ export default function CreateEnvelopeModal({ isOpen, onClose, onSubmit }) {
               maxLength={2000}
               required
               rows={4}
-              style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--surface-border)', backgroundColor: 'var(--bg-color)', color: 'var(--text-primary)', resize: 'vertical' }}
+              style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--surface-border)', backgroundColor: 'var(--surface)', color: 'var(--text-primary)', resize: 'vertical' }}
             />
           </div>
           <div>
@@ -63,12 +63,12 @@ export default function CreateEnvelopeModal({ isOpen, onClose, onSubmit }) {
               onChange={(e) => setUnlockAt(e.target.value)}
               min={new Date().toISOString().slice(0, 16)}
               required
-              style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--surface-border)', backgroundColor: 'var(--bg-color)', color: 'var(--text-primary)' }}
+              style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--surface-border)', backgroundColor: 'var(--surface)', color: 'var(--text-primary)' }}
             />
           </div>
-          <div className="modal-actions" style={{ marginTop: '1rem' }}>
-            <button type="button" className="secondary-button" onClick={onClose}>Cancel</button>
-            <button type="submit" className="primary-button">Seal envelope</button>
+          <div className="reset-modal-actions" style={{ marginTop: '1rem' }}>
+            <button type="button" className="reset-modal-cancel" onClick={onClose}>Cancel</button>
+            <button type="submit" className="reset-modal-confirm">Seal envelope</button>
           </div>
         </form>
       </div>

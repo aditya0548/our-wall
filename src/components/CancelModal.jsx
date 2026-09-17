@@ -5,8 +5,8 @@ export default function CancelModal({ isOpen, onClose, onConfirm }) {
   if (!isOpen) return null;
 
   const modalContent = (
-    <div className="reset-modal-overlay">
-      <div className="reset-modal-card">
+    <div className="reset-modal-overlay" onClick={onClose}>
+      <div className="reset-modal-card" onClick={(e) => e.stopPropagation()}>
         <h2 className="reset-modal-title display-font">Cancel this space?</h2>
         <p className="reset-modal-body">
           You'll need to create a new one or enter a different code.

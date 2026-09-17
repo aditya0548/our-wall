@@ -30,8 +30,8 @@ export default function ChangeThemeModal({ isOpen, onClose }) {
   };
 
   const modalContent = (
-    <div className="reset-modal-overlay">
-      <div className="reset-modal-card" style={{ maxWidth: '480px' }}>
+    <div className="reset-modal-overlay" onClick={onClose}>
+      <div className="reset-modal-card" style={{ maxWidth: '480px' }} onClick={(e) => e.stopPropagation()}>
         <h2 className="reset-modal-title display-font">Change theme</h2>
         
         <div style={{ marginBottom: '24px' }}>

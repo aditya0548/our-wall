@@ -133,14 +133,14 @@ export default function OpenWhen({ session }) {
       />
 
       {lockedModalEnvelope && (
-        <div className="modal-backdrop">
-          <div className="modal-content">
+        <div className="reset-modal-overlay" onClick={() => setLockedModalEnvelope(null)}>
+          <div className="reset-modal-card" onClick={(e) => e.stopPropagation()}>
             <h3 className="display-font">Not yet...</h3>
             <p style={{ margin: '1rem 0', color: 'var(--text-muted)' }}>
               This envelope opens on {new Date(lockedModalEnvelope.unlock_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })}. Come back then.
             </p>
-            <div className="modal-actions" style={{ justifyContent: 'center' }}>
-              <button className="primary-button" onClick={() => setLockedModalEnvelope(null)}>OK</button>
+            <div className="reset-modal-actions" style={{ justifyContent: 'center' }}>
+              <button className="reset-modal-confirm" onClick={() => setLockedModalEnvelope(null)}>OK</button>
             </div>
           </div>
         </div>
