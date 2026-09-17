@@ -77,7 +77,7 @@ export default function useStrokes(spaceId, userId) {
     };
   }, [spaceId]);
 
-  const addStroke = async (points, colorId = 'coral', sizePx = 4) => {
+  const addStroke = async (points, pressures, colorId = 'coral', sizePx = 4) => {
     if (!spaceId || !userId) return;
 
     const tempStroke = {
@@ -85,6 +85,7 @@ export default function useStrokes(spaceId, userId) {
       space_id: spaceId,
       author_id: userId,
       points,
+      pressures,
       color: colorId,
       size: sizePx,
       created_at: new Date().toISOString(),
@@ -98,6 +99,7 @@ export default function useStrokes(spaceId, userId) {
         space_id: spaceId,
         author_id: userId,
         points,
+        pressures,
         color: colorId,
         size: sizePx,
       });
@@ -112,6 +114,9 @@ export default function useStrokes(spaceId, userId) {
   const deleteStroke = async (strokeId) => {
     if (!spaceId || !userId) return;
 
+    // Optimistic delete
+    setStrokes(current => current.filter(s => s.id !== strokeId));
+
     const { error } = await supabase
       .from('strokes')
       .delete()
@@ -119,6 +124,46 @@ export default function useStrokes(spaceId, userId) {
 
     if (error) {
       console.error('Error deleting stroke:', error);
+    }
+  };
+
+  const replaceStroke = async (originalId, fragments) => {
+    if (!spaceId || !userId) return;
+
+    // Optimistic UI
+    const tempFragments = fragments.map(f => ({
+      ...f,
+      id: `local-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+      space_id: spaceId,
+      author_id: userId,
+      created_at: new Date().toISOString()
+    }));
+
+    setStrokes(current => {
+      const next = current.filter(s => s.id !== originalId);
+      return [...next, ...tempFragments];
+    });
+
+    const { error: delErr } = await supabase.from('strokes').delete().eq('id', originalId);
+    if (delErr) {
+      console.error('Error deleting original stroke:', delErr);
+      return;
+    }
+
+    if (fragments.length > 0) {
+      const { error: insErr } = await supabase.from('strokes').insert(
+        fragments.map(f => ({
+          space_id: spaceId,
+          author_id: userId,
+          points: f.points,
+          pressures: f.pressures,
+          color: f.color,
+          size: f.size,
+        }))
+      );
+      if (insErr) {
+        console.error('Error inserting fragments:', insErr);
+      }
     }
   };
 
@@ -160,5 +205,5 @@ export default function useStrokes(spaceId, userId) {
     }
   };
 
-  return { strokes, loading, addStroke, deleteStroke, undoLast, clearAll };
+  return { strokes, loading, addStroke, deleteStroke, replaceStroke, undoLast, clearAll };
 }

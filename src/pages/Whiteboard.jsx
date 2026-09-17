@@ -14,7 +14,7 @@ export default function Whiteboard({ session }) {
   const spaceId = space?.id;
   const userId = session?.user?.id;
   
-  const { strokes, loading: strokesLoading, addStroke, deleteStroke, undoLast, clearAll } = useStrokes(spaceId, userId);
+  const { strokes, loading: strokesLoading, addStroke, deleteStroke, replaceStroke, undoLast, clearAll } = useStrokes(spaceId, userId);
 
   const [selectedColor, setSelectedColor] = useState('coral');
   const [selectedSize, setSelectedSize] = useState(4);
@@ -66,6 +66,7 @@ export default function Whiteboard({ session }) {
           strokes={strokes} 
           onAddStroke={addStroke}
           onDeleteStroke={deleteStroke}
+          onReplaceStroke={replaceStroke}
           selectedColor={selectedColor}
           selectedSize={selectedSize}
           selectedTool={selectedTool}

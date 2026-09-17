@@ -5,6 +5,7 @@ export default function WhiteboardCanvas({
   strokes, 
   onAddStroke, 
   onDeleteStroke,
+  onReplaceStroke,
   selectedColor,
   selectedSize,
   selectedTool
@@ -12,31 +13,29 @@ export default function WhiteboardCanvas({
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const [isDrawing, setIsDrawing] = useState(false);
-  const [currentStroke, setCurrentStroke] = useState([]);
   
-  // Handle window resize
+  // Parallel arrays for the current stroke
+  const [currentStroke, setCurrentStroke] = useState([]);
+  const [currentPressures, setCurrentPressures] = useState([]);
+  
   useEffect(() => {
     const resizeCanvas = () => {
       if (containerRef.current && canvasRef.current) {
         const { clientWidth, clientHeight } = containerRef.current;
-        // Set actual pixel dimensions to match display dimensions
         canvasRef.current.width = clientWidth;
         canvasRef.current.height = clientHeight;
-        drawAllStrokes(); // Redraw after resize
+        drawAllStrokes(); 
       }
     };
     
-    // Initial size
     resizeCanvas();
-    
     window.addEventListener('resize', resizeCanvas);
     return () => window.removeEventListener('resize', resizeCanvas);
-  }, [strokes, selectedColor, selectedSize, selectedTool]); // Re-bind if strokes changes to ensure redraw gets latest strokes
+  }, [strokes, selectedColor, selectedSize, selectedTool]); 
 
-  // Draw strokes when they change
   useEffect(() => {
     drawAllStrokes();
-  }, [strokes, currentStroke, selectedColor, selectedSize, selectedTool]);
+  }, [strokes, currentStroke, currentPressures, selectedColor, selectedSize, selectedTool]);
 
   const getColorHex = (colorId) => {
     const c = COLORS.find(c => c.id === colorId);
@@ -48,70 +47,97 @@ export default function WhiteboardCanvas({
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     
-    // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     ctx.lineCap = 'round';
     ctx.lineJoin = 'round';
     
-    // Draw committed strokes
     strokes.forEach(stroke => {
       ctx.strokeStyle = getColorHex(stroke.color);
-      ctx.lineWidth = stroke.size || 4; // default to 4 if missing
-      drawStroke(ctx, stroke.points);
+      const baseSize = stroke.size || 4;
+      drawSmoothStroke(ctx, stroke.points, stroke.pressures, baseSize);
     });
     
-    // Draw current in-progress stroke
     if (currentStroke.length > 0) {
       if (selectedTool === 'eraser') {
-        ctx.strokeStyle = 'rgba(255, 100, 100, 0.5)'; // visual feedback for eraser
-        ctx.lineWidth = 20;
+        ctx.strokeStyle = 'rgba(255, 100, 100, 0.5)'; 
+        drawSmoothStroke(ctx, currentStroke, null, 20); // 20px uniform width
       } else {
         ctx.strokeStyle = getColorHex(selectedColor);
-        ctx.lineWidth = selectedSize;
+        drawSmoothStroke(ctx, currentStroke, currentPressures, selectedSize);
       }
-      drawStroke(ctx, currentStroke);
     }
   };
   
-  const drawStroke = (ctx, points) => {
+  const drawSmoothStroke = (ctx, points, pressures, baseSize) => {
     if (!points || points.length === 0) return;
     
-    ctx.beginPath();
-    points.forEach(([x, y], i) => {
-      if (i === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
-    });
-    ctx.stroke();
+    if (points.length === 1) {
+       ctx.lineWidth = pressures ? getWidth(baseSize, pressures[0]) : baseSize;
+       ctx.beginPath();
+       ctx.moveTo(points[0][0], points[0][1]);
+       ctx.lineTo(points[0][0], points[0][1]);
+       ctx.stroke();
+       return;
+    }
+
+    let prevMid = points[0];
+
+    for (let i = 1; i < points.length; i++) {
+      const p1 = points[i - 1];
+      const p2 = points[i];
+      const mid = i === points.length - 1 ? p2 : [(p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2];
+
+      const pr1 = pressures ? pressures[i - 1] : 1.0;
+      const pr2 = pressures ? pressures[i] : 1.0;
+      const avgPressure = (pr1 + pr2) / 2;
+      
+      ctx.lineWidth = getWidth(baseSize, avgPressure);
+      ctx.beginPath();
+      ctx.moveTo(prevMid[0], prevMid[1]);
+      ctx.quadraticCurveTo(p1[0], p1[1], mid[0], mid[1]);
+      ctx.stroke();
+
+      prevMid = mid;
+    }
   };
 
-  const getCoordinates = (e) => {
+  const getWidth = (baseSize, pressure) => {
+    const p = pressure ?? 1.0;
+    const MIN_MULT = 0.3;
+    const MAX_MULT = 1.7;
+    return baseSize * (MIN_MULT + p * (MAX_MULT - MIN_MULT));
+  };
+
+  const getEventData = (e) => {
     const canvas = canvasRef.current;
     if (!canvas) return null;
     
     const rect = canvas.getBoundingClientRect();
     
+    let x, y, pressure = 1.0;
+
     if (e.touches && e.touches.length > 0) {
-      return [
-        e.touches[0].clientX - rect.left,
-        e.touches[0].clientY - rect.top
-      ];
+      x = e.touches[0].clientX - rect.left;
+      y = e.touches[0].clientY - rect.top;
+      // standard touch doesn't report pressure cleanly in all browsers, default to 1.0
     } else {
-      return [
-        e.clientX - rect.left,
-        e.clientY - rect.top
-      ];
+      x = e.clientX - rect.left;
+      y = e.clientY - rect.top;
+      if (e.pointerType === 'pen' && e.pressure !== undefined) {
+        pressure = e.pressure;
+      }
     }
+    return { pos: [x, y], pressure };
   };
 
   const handlePointerDown = (e) => {
-    // Prevent scrolling when drawing on touch
     if (e.type === 'touchstart') e.preventDefault();
-    
     setIsDrawing(true);
-    const coords = getCoordinates(e);
-    if (coords) {
-      setCurrentStroke([coords]);
+    const data = getEventData(e);
+    if (data) {
+      setCurrentStroke([data.pos]);
+      setCurrentPressures([data.pressure]);
     }
   };
 
@@ -119,9 +145,10 @@ export default function WhiteboardCanvas({
     if (!isDrawing) return;
     if (e.type === 'touchmove') e.preventDefault();
     
-    const coords = getCoordinates(e);
-    if (coords) {
-      setCurrentStroke(prev => [...prev, coords]);
+    const data = getEventData(e);
+    if (data) {
+      setCurrentStroke(prev => [...prev, data.pos]);
+      setCurrentPressures(prev => [...prev, data.pressure]);
     }
   };
 
@@ -134,38 +161,68 @@ export default function WhiteboardCanvas({
     if (currentStroke.length === 0) return;
 
     if (selectedTool === 'eraser') {
-      const ERASER_RADIUS = 10; // 20px width / 2
-      const strokesToDelete = new Set();
+      const ERASER_RADIUS = 10;
       
-      // Hit-test eraser stroke against all existing strokes
       for (const stroke of strokes) {
         const STROKE_RADIUS = (stroke.size || 4) / 2;
         const HIT_DIST_SQ = (ERASER_RADIUS + STROKE_RADIUS) ** 2;
         
-        // Simple point-to-point distance check O(n*m)
-        let hit = false;
-        for (const ep of currentStroke) {
-          for (const sp of stroke.points) {
+        const hitIndices = [];
+        for (let i = 0; i < stroke.points.length; i++) {
+          const sp = stroke.points[i];
+          let hit = false;
+          for (const ep of currentStroke) {
             if (distSq(ep, sp) <= HIT_DIST_SQ) {
               hit = true;
               break;
             }
           }
-          if (hit) break;
+          if (hit) hitIndices.push(i);
         }
         
-        if (hit) {
-          strokesToDelete.add(stroke.id);
+        if (hitIndices.length > 0) {
+          const fragmentsToInsert = [];
+          let currentFragmentPoints = [];
+          let currentFragmentPressures = [];
+          
+          for (let i = 0; i < stroke.points.length; i++) {
+            if (hitIndices.includes(i)) {
+              if (currentFragmentPoints.length >= 2) {
+                fragmentsToInsert.push({
+                  points: currentFragmentPoints,
+                  pressures: stroke.pressures ? currentFragmentPressures : null,
+                  color: stroke.color,
+                  size: stroke.size
+                });
+              }
+              currentFragmentPoints = [];
+              currentFragmentPressures = [];
+            } else {
+              currentFragmentPoints.push(stroke.points[i]);
+              if (stroke.pressures) {
+                currentFragmentPressures.push(stroke.pressures[i]);
+              }
+            }
+          }
+          if (currentFragmentPoints.length >= 2) {
+             fragmentsToInsert.push({
+                points: currentFragmentPoints,
+                pressures: stroke.pressures ? currentFragmentPressures : null,
+                color: stroke.color,
+                size: stroke.size
+             });
+          }
+          
+          onReplaceStroke(stroke.id, fragmentsToInsert);
         }
       }
-      
-      strokesToDelete.forEach(id => onDeleteStroke(id));
-      setCurrentStroke([]);
     } else {
       // Commit stroke
-      onAddStroke(currentStroke, selectedColor, selectedSize);
-      setCurrentStroke([]);
+      onAddStroke(currentStroke, currentPressures, selectedColor, selectedSize);
     }
+    
+    setCurrentStroke([]);
+    setCurrentPressures([]);
   };
 
   return (
@@ -173,14 +230,12 @@ export default function WhiteboardCanvas({
       <canvas
         ref={canvasRef}
         className="whiteboard-canvas"
-        onMouseDown={handlePointerDown}
-        onMouseMove={handlePointerMove}
-        onMouseUp={handlePointerUp}
-        onMouseOut={handlePointerUp} // Also commit if mouse leaves canvas
-        onTouchStart={handlePointerDown}
-        onTouchMove={handlePointerMove}
-        onTouchEnd={handlePointerUp}
-        onTouchCancel={handlePointerUp}
+        onPointerDown={handlePointerDown}
+        onPointerMove={handlePointerMove}
+        onPointerUp={handlePointerUp}
+        onPointerOut={handlePointerUp} 
+        onPointerCancel={handlePointerUp}
+        style={{ touchAction: 'none' }}
       />
     </div>
   );
