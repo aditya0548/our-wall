@@ -53,17 +53,32 @@
   --decorative-blossom: #F5C6D5;
 
   /* ── Shadows ── */
-  --shadow-soft: 0 4px 20px rgba(122, 84, 105, 0.08);
-  --shadow-lifted: 0 12px 40px rgba(122, 84, 105, 0.12);
-  --shadow-glass: 0 8px 32px rgba(122, 84, 105, 0.10);
+  --shadow-soft:
+    0 1px 2px rgba(122, 84, 105, 0.04),
+    0 4px 12px rgba(122, 84, 105, 0.06),
+    0 8px 20px rgba(122, 84, 105, 0.08);
+
+  --shadow-lifted:
+    0 2px 4px rgba(122, 84, 105, 0.05),
+    0 8px 20px rgba(122, 84, 105, 0.08),
+    0 20px 40px rgba(122, 84, 105, 0.12);
+
+  --shadow-glass:
+    0 2px 6px rgba(122, 84, 105, 0.04),
+    0 8px 20px rgba(122, 84, 105, 0.08),
+    0 20px 40px rgba(122, 84, 105, 0.10);
 }
 
 /* ─── Sakura Background Gradient ─── */
 [data-theme="sakura"] body,
 body[data-theme="sakura"] {
-  background: linear-gradient(180deg, var(--bg-from) 0%, var(--bg-to) 100%);
+  background: linear-gradient(
+    160deg,
+    #FFF8F2 0%,
+    #F8E5EC 45%,
+    #EDD4E0 100%
+  );
   background-attachment: fixed;
-  background-repeat: no-repeat;
   min-height: 100vh;
 }
 
@@ -74,10 +89,87 @@ body[data-theme="sakura"]::before {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(circle at 20% 15%, rgba(245, 198, 213, 0.45) 0%, transparent 45%),
-    radial-gradient(circle at 85% 80%, rgba(232, 217, 168, 0.30) 0%, transparent 50%);
+    radial-gradient(circle at 15% 12%, rgba(245, 198, 213, 0.55) 0%, transparent 55%),
+    radial-gradient(circle at 88% 85%, rgba(232, 217, 168, 0.40) 0%, transparent 60%),
+    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
   pointer-events: none;
   z-index: 0;
+}
+
+/* ─── Sakura Glass Surfaces ─── */
+[data-theme="sakura"] .auth-card,
+[data-theme="sakura"] .setup-card,
+[data-theme="sakura"] .pairing-card,
+[data-theme="sakura"] .waiting-card,
+[data-theme="sakura"] .connected-card,
+[data-theme="sakura"] .envelope-card,
+[data-theme="sakura"] .note-card,
+[data-theme="sakura"] .reset-modal-card,
+[data-theme="sakura"] .modal-content,
+[data-theme="sakura"] .profile-dropdown,
+[data-theme="sakura"] .change-theme-modal,
+[data-theme="sakura"] .note-modal-content {
+  background: rgba(255, 255, 255, 0.72) !important;
+  backdrop-filter: blur(20px) saturate(140%);
+  -webkit-backdrop-filter: blur(20px) saturate(140%);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 
+    0 2px 6px rgba(122, 84, 105, 0.04),
+    0 8px 20px rgba(122, 84, 105, 0.08),
+    0 20px 40px rgba(122, 84, 105, 0.10);
+}
+
+/* Inputs — subtler glass */
+[data-theme="sakura"] input[type="text"],
+[data-theme="sakura"] input[type="email"],
+[data-theme="sakura"] input[type="password"],
+[data-theme="sakura"] textarea {
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(122, 84, 105, 0.15);
+  color: var(--text-primary);
+}
+
+[data-theme="sakura"] input::placeholder,
+[data-theme="sakura"] textarea::placeholder {
+  color: var(--text-muted);
+}
+
+/* Modal backdrops — warm dim instead of grey */
+[data-theme="sakura"] .reset-modal-overlay,
+[data-theme="sakura"] .note-modal-overlay,
+[data-theme="sakura"] .modal-backdrop {
+  background: rgba(74, 63, 75, 0.32) !important;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* ─── Deep Plum Headings ─── */
+[data-theme="sakura"] h1,
+[data-theme="sakura"] h2,
+[data-theme="sakura"] h3,
+[data-theme="sakura"] h4,
+[data-theme="sakura"] .display-font {
+  color: var(--text-anchor);
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+
+/* ─── Decorative Touches ─── */
+[data-theme="sakura"] .title-sparkle {
+  color: var(--decorative-blossom) !important;
+}
+
+[data-theme="sakura"] .floating-menu-item[data-active="true"]::after,
+[data-theme="sakura"] .floating-menu-item.active::after,
+[data-theme="sakura"] .nav-active::after {
+  content: '';
+  display: block;
+  height: 2px;
+  background: var(--decorative-gold);
+  border-radius: 2px;
+  margin-top: 2px;
 }
 
 [data-theme="ocean"] {
