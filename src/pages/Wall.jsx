@@ -8,7 +8,6 @@ import NoteInput from '../components/NoteInput';
 import Sparkle from '../components/Sparkle';
 import ResetModal from '../components/ResetModal';
 import PartnerResetModal from '../components/PartnerResetModal';
-import SideNav from '../components/SideNav';
 import ProfileMenu from '../components/ProfileMenu';
 import ChibiRow from '../components/ChibiRow';
 import '../styles/wall.css';
@@ -84,7 +83,6 @@ export default function Wall({ session, spaceId }) {
 
   return (
     <div className="wall-container">
-      <SideNav />
       <header className="wall-header">
         <h1 className="wall-title display-font">♥ Our Wall</h1>
         <div className="header-right">
