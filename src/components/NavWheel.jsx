@@ -36,6 +36,8 @@ export default function NavWheel() {
   const hideTimerRef = useRef(null);
   const scrollAccumulator = useRef(0);
   const wheelBounceTimerRef = useRef(null);
+  const touchStartY = useRef(0);
+  const touchLastY = useRef(0);
 
   // Sync module state
   useEffect(() => {
@@ -73,20 +75,95 @@ export default function NavWheel() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Activation edge scroll
+  // Zone scrolling (wheel & touch)
   useEffect(() => {
     const handleWindowWheel = (e) => {
-      if (e.clientX <= 40 && !globalIsVisible) {
-         markInteraction();
+      if (e.clientX >= window.innerWidth * 0.4) return;
+      
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+      
+      markInteraction();
+      scrollAccumulator.current += e.deltaY;
+      const threshold = 40; 
+      
+      if (Math.abs(scrollAccumulator.current) >= threshold) {
+         const steps = Math.sign(scrollAccumulator.current) * Math.floor(Math.abs(scrollAccumulator.current) / threshold);
+         scrollAccumulator.current -= steps * threshold;
+         
+         setPendingIndex(prev => {
+            const next = Math.max(0, Math.min(prev + steps, features.length - 1));
+            if (next !== prev) {
+               setWheelBounce(Math.sign(steps) * 4);
+               if (wheelBounceTimerRef.current) clearTimeout(wheelBounceTimerRef.current);
+               wheelBounceTimerRef.current = setTimeout(() => setWheelBounce(0), 150);
+            }
+            return next;
+         });
       }
     };
 
-    window.addEventListener('wheel', handleWindowWheel, { passive: true });
+    const handleTouchStart = (e) => {
+      if (e.touches[0].clientX >= window.innerWidth * 0.4) return;
+      touchStartY.current = e.touches[0].clientY;
+      touchLastY.current = e.touches[0].clientY;
+    };
+
+    const handleTouchMove = (e) => {
+      if (e.touches[0].clientX >= window.innerWidth * 0.4) return;
+      
+      if (e.cancelable) {
+        e.preventDefault();
+      }
+      
+      markInteraction();
+      const currentY = e.touches[0].clientY;
+      const deltaY = touchLastY.current - currentY;
+      touchLastY.current = currentY;
+      
+      scrollAccumulator.current += deltaY;
+      const threshold = 40; 
+      
+      if (Math.abs(scrollAccumulator.current) >= threshold) {
+         const steps = Math.sign(scrollAccumulator.current) * Math.floor(Math.abs(scrollAccumulator.current) / threshold);
+         scrollAccumulator.current -= steps * threshold;
+         
+         setPendingIndex(prev => {
+            const next = Math.max(0, Math.min(prev + steps, features.length - 1));
+            if (next !== prev) {
+               setWheelBounce(Math.sign(steps) * 4);
+               if (wheelBounceTimerRef.current) clearTimeout(wheelBounceTimerRef.current);
+               wheelBounceTimerRef.current = setTimeout(() => setWheelBounce(0), 150);
+            }
+            return next;
+         });
+      }
+    };
+
+    document.addEventListener('wheel', handleWindowWheel, { passive: false });
+    document.addEventListener('touchstart', handleTouchStart, { passive: true });
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
     
     return () => {
-      window.removeEventListener('wheel', handleWindowWheel);
+      document.removeEventListener('wheel', handleWindowWheel);
+      document.removeEventListener('touchstart', handleTouchStart);
+      document.removeEventListener('touchmove', handleTouchMove);
     };
   }, [markInteraction]);
+
+  // Auto-hide when cursor moves to the right 40% (x > 60%)
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (e.clientX > window.innerWidth * 0.6 && globalIsVisible) {
+        setIsVisible(false);
+        globalIsVisible = false;
+        if (hideTimerRef.current) clearTimeout(hideTimerRef.current);
+      }
+    };
+    document.addEventListener('mousemove', handleMouseMove);
+    return () => document.removeEventListener('mousemove', handleMouseMove);
+  }, []);
 
   // Escape key
   useEffect(() => {
@@ -121,30 +198,6 @@ export default function NavWheel() {
     };
   }, [pendingIndex, isVisible, actualIndex, navigate, location.pathname]);
 
-  const handleWheelScroll = (e) => {
-    if (!isVisible) return;
-    
-    markInteraction();
-    
-    scrollAccumulator.current += e.deltaY;
-    const threshold = 40; 
-    
-    if (Math.abs(scrollAccumulator.current) >= threshold) {
-       const steps = Math.sign(scrollAccumulator.current) * Math.floor(Math.abs(scrollAccumulator.current) / threshold);
-       scrollAccumulator.current -= steps * threshold;
-       
-       setPendingIndex(prev => {
-          const next = Math.max(0, Math.min(prev + steps, features.length - 1));
-          if (next !== prev) {
-             setWheelBounce(Math.sign(steps) * 4); // 4px bounce
-             if (wheelBounceTimerRef.current) clearTimeout(wheelBounceTimerRef.current);
-             wheelBounceTimerRef.current = setTimeout(() => setWheelBounce(0), 150);
-          }
-          return next;
-       });
-    }
-  };
-
   const handleCardClick = (index) => {
     markInteraction();
     setPendingIndex(index);
@@ -170,28 +223,9 @@ export default function NavWheel() {
   };
 
   // Determine indicator position inside the wheel
-  // It moves up/down slightly based on the pending index
   const indicatorY = features.length > 1 
     ? (pendingIndex / (features.length - 1)) * 40 - 20 // -20px to +20px
     : 0;
-
-  // Touch support for the wheel
-  const touchStartY = useRef(0);
-  const touchLastY = useRef(0);
-
-  const handleTouchStart = (e) => {
-    touchStartY.current = e.touches[0].clientY;
-    touchLastY.current = e.touches[0].clientY;
-  };
-
-  const handleTouchMove = (e) => {
-    const currentY = e.touches[0].clientY;
-    const deltaY = touchLastY.current - currentY; // positive when dragging up (scrolling down)
-    touchLastY.current = currentY;
-    
-    // synthesize a wheel event object
-    handleWheelScroll({ deltaY });
-  };
 
   return (
     <>
@@ -206,9 +240,6 @@ export default function NavWheel() {
       >
         <div 
           className="scroll-wheel"
-          onWheel={handleWheelScroll}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
           style={{ transform: `translateY(${wheelBounce}px)` }}
         >
           <div className="wheel-highlight" />

@@ -188,11 +188,11 @@
   left: 4px;
   top: 50%;
   transform: translateY(-50%);
-  width: 4px;
-  height: 24px;
+  width: 6px;
+  height: 40px;
   background-color: var(--surface-border);
-  border-radius: 4px;
-  opacity: 0.3;
+  border-radius: 6px;
+  opacity: 0.45;
   z-index: 95;
   cursor: pointer;
   transition: all 200ms ease;
@@ -200,7 +200,9 @@
 
 .nav-hint-pill:hover {
   opacity: 1;
-  width: 6px;
+  width: 8px;
+  height: 48px;
+  box-shadow: 0 0 12px var(--accent);
 }
 
 /* Mobile adjustments */
@@ -211,8 +213,8 @@
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 24px;
-    height: 60px;
+    width: 32px;
+    height: 80px;
   }
 
   .carousel-card {
