@@ -143,13 +143,14 @@ const renderParticles = (reaction) => {
     }
 };
 
-export default function Chibi({ theme = 'sakura', reaction = 'idle', isMine, name, onClick }) {
+export default function Chibi({ theme = 'sakura', reaction = 'idle', isMine, name, onClick, size = 'large' }) {
     const hairColor = THEME_COLORS[theme] || THEME_COLORS.sakura;
     const blushOpacity = reaction === 'blush' ? 0.8 : 0.3;
+    const isSmall = size === 'small';
 
     return (
         <div 
-            className={`chibi-wrapper ${isMine ? 'chibi-mine' : 'chibi-partner'}`} 
+            className={`chibi-wrapper ${isMine ? 'chibi-mine' : 'chibi-partner'} chibi-${size}`} 
             onClick={onClick}
         >
            <div className={`chibi-svg-container reaction-${reaction}`}>
@@ -181,7 +182,7 @@ export default function Chibi({ theme = 'sakura', reaction = 'idle', isMine, nam
                    {renderHands(reaction)}
                    
                    {/* Particles */}
-                   {renderParticles(reaction)}
+                   {!isSmall && renderParticles(reaction)}
                </svg>
            </div>
            {name && <div className="chibi-name">{name}</div>}

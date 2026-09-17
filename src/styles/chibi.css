@@ -2,12 +2,13 @@
 
 .chibi-row {
   display: flex;
-  justify-content: space-evenly;
-  align-items: flex-end;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 30px;
   width: 100%;
   max-width: 400px;
   margin: 0 auto 16px auto;
-  height: 120px;
+  height: 140px;
   position: relative;
   z-index: 10;
 }
@@ -33,13 +34,33 @@
 }
 
 .chibi-svg-container {
-  width: 60px;
-  height: 70px;
   position: relative;
   /* subtle drop shadow */
   filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.08));
   /* idle breathing */
   animation: chibi-breathe 3s ease-in-out infinite;
+}
+
+.chibi-large .chibi-svg-container {
+  width: 90px;
+  height: 105px;
+}
+
+.chibi-small .chibi-svg-container {
+  width: 45px;
+  height: 52px;
+}
+
+.chibi-small.chibi-wrapper {
+  cursor: default;
+}
+
+.chibi-small.chibi-wrapper:hover {
+  transform: none;
+}
+
+.chibi-small .chibi-name {
+  font-size: 10px;
 }
 
 /* Base blink */
@@ -65,9 +86,13 @@
 
 /* Mobile adjustments */
 @media (max-width: 768px) {
-  .chibi-svg-container {
-    width: 56px;
-    height: 65px;
+  .chibi-large .chibi-svg-container {
+    width: 70px;
+    height: 81px;
+  }
+  .chibi-small .chibi-svg-container {
+    width: 35px;
+    height: 40px;
   }
 }
 
@@ -198,6 +223,9 @@
     font-size: 18px;
   }
 }
+
+
+
 
 .chibi-mine .chibi-name {
   font-weight: 600;
