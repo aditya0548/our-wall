@@ -175,3 +175,13 @@
   text-decoration: underline;
   color: var(--accent);
 }
+
+/* Sakura Theme Global Overrides */
+[data-theme="sakura"] .auth-card {
+  background: var(--surface);
+  backdrop-filter: blur(var(--surface-blur));
+  -webkit-backdrop-filter: blur(var(--surface-blur));
+  border: 1px solid var(--surface-border);
+  box-shadow: var(--shadow-glass);
+  border-radius: 24px;
+}

@@ -84,7 +84,9 @@ export default function Wall({ session, spaceId }) {
   return (
     <div className="wall-container">
       <header className="wall-header">
-        <h1 className="wall-title display-font">♥ Our Wall</h1>
+        <h1 className="wall-title display-font">
+          {theme === 'sakura' ? <span className="sakura-title-icon">🌸</span> : '♥'} Our Wall
+        </h1>
         <div className="header-right">
           <ProfileMenu 
             onResetClick={handleResetClick} 

@@ -93,7 +93,7 @@ export default function OpenWhen({ session }) {
 
       <main className="openwhen-main">
         <div className="openwhen-header">
-          <h2 className="display-font">Open When ✦</h2>
+          <h2 className="display-font">Open When <span className="title-sparkle">✦</span></h2>
           <button className="primary-button" onClick={() => setIsCreateModalOpen(true)}>
             + New
           </button>

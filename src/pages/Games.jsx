@@ -22,7 +22,7 @@ export default function Games({ session }) {
 
       <main className="games-main">
         <div className="games-header-row">
-          <h2 className="display-font games-title">Games ✦</h2>
+          <h2 className="display-font games-title">Games <span className="title-sparkle">✦</span></h2>
         </div>
         
         <div className="games-grid">

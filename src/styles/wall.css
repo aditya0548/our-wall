@@ -215,3 +215,14 @@
 }
 
 
+
+/* Sakura Theme Global Overrides */
+[data-theme="sakura"] .note-card {
+  box-shadow: 0 2px 12px rgba(122, 84, 105, 0.08);
+  border: 1px solid rgba(122, 84, 105, 0.06);
+  border-radius: 20px;
+}
+[data-theme="sakura"] .note-card:hover {
+  box-shadow: 0 6px 24px rgba(122, 84, 105, 0.14);
+  transform: translateY(-1px);
+}

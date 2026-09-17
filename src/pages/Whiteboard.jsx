@@ -45,7 +45,7 @@ export default function Whiteboard({ session }) {
 
       <main className="whiteboard-main">
         <div className="whiteboard-header-row">
-          <h2 className="display-font whiteboard-title">Whiteboard ✦</h2>
+          <h2 className="display-font whiteboard-title">Whiteboard <span className="title-sparkle">✦</span></h2>
         </div>
         
         <WhiteboardControls 

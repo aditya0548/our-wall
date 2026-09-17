@@ -75,7 +75,7 @@ export default function TicTacToe({ session }) {
           <ArrowLeft size={16} /> Back to Games
         </Link>
         
-        <h2 className="display-font games-title" style={{ marginBottom: '16px' }}>Tic-Tac-Toe ✦</h2>
+        <h2 className="display-font games-title" style={{ marginBottom: '16px' }}>Tic-Tac-Toe <span className="title-sparkle">✦</span></h2>
         
         {game && (
           <div className="tic-tac-toe-container">

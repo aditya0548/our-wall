@@ -7,7 +7,7 @@ import '../styles/settings.css';
 import '../styles/wall.css'; // For header styles
 
 export default function Settings({ session }) {
-  const { profile, updateProfile, loading } = useTheme();
+  const { profile, updateProfile, loading, theme } = useTheme();
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
@@ -75,7 +75,9 @@ export default function Settings({ session }) {
     <div className="settings-container">
       <header className="wall-header">
         <h1 className="wall-title display-font">
-          <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>♥ Our Wall</Link>
+          <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>
+            {theme === 'sakura' ? <span className="sakura-title-icon">🌸</span> : '♥'} Our Wall
+          </Link>
         </h1>
         <div className="header-right">
           <ProfileMenu onSignOutClick={handleLogout} />
