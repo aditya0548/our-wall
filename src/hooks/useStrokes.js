@@ -48,7 +48,6 @@ export default function useStrokes(spaceId, userId) {
           event: 'DELETE',
           schema: 'public',
           table: 'strokes',
-          filter: `space_id=eq.${spaceId}`,
         },
         (payload) => {
           setStrokes((current) => current.filter((s) => s.id !== payload.old.id));
