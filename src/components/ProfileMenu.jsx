@@ -97,43 +97,46 @@ export default function ProfileMenu({ onResetClick, onSignOutClick }) {
       </button>
 
       {isOpen && (
-        <div className="profile-dropdown">
-          <div className="profile-dropdown-header">
-            <div className="profile-dropdown-avatar">
-              {getInitials(profile?.display_name)}
+        <>
+          <div className="profile-menu-backdrop" onClick={() => setIsOpen(false)} />
+          <div className="profile-dropdown">
+            <div className="profile-dropdown-header">
+              <div className="profile-dropdown-avatar">
+                {getInitials(profile?.display_name)}
+              </div>
+              <div className="profile-dropdown-info">
+                <span className="profile-dropdown-name">{profile?.display_name || 'Anonymous'}</span>
+                <span className="profile-dropdown-email">{userEmail}</span>
+              </div>
             </div>
-            <div className="profile-dropdown-info">
-              <span className="profile-dropdown-name">{profile?.display_name || 'Anonymous'}</span>
-              <span className="profile-dropdown-email">{userEmail}</span>
-            </div>
+            
+            <div className="profile-dropdown-divider"></div>
+            
+            <button className="profile-menu-item" onClick={() => handleAction('change_theme')}>
+              <Palette size={16} />
+              Change theme
+            </button>
+            
+            <button className="profile-menu-item" onClick={() => handleAction('settings')}>
+              <Settings size={16} />
+              Settings
+            </button>
+            
+            <div className="profile-dropdown-divider"></div>
+            
+            <button className="profile-menu-item" onClick={() => handleAction('reset_connection')}>
+              <RotateCcw size={16} />
+              Reset connection
+            </button>
+            
+            <div className="profile-dropdown-divider"></div>
+            
+            <button className="profile-menu-item" onClick={() => handleAction('sign_out')}>
+              <LogOut size={16} />
+              Sign out
+            </button>
           </div>
-          
-          <div className="profile-dropdown-divider"></div>
-          
-          <button className="profile-menu-item" onClick={() => handleAction('change_theme')}>
-            <Palette size={16} />
-            Change theme
-          </button>
-          
-          <button className="profile-menu-item" onClick={() => handleAction('settings')}>
-            <Settings size={16} />
-            Settings
-          </button>
-          
-          <div className="profile-dropdown-divider"></div>
-          
-          <button className="profile-menu-item" onClick={() => handleAction('reset_connection')}>
-            <RotateCcw size={16} />
-            Reset connection
-          </button>
-          
-          <div className="profile-dropdown-divider"></div>
-          
-          <button className="profile-menu-item" onClick={() => handleAction('sign_out')}>
-            <LogOut size={16} />
-            Sign out
-          </button>
-        </div>
+        </>
       )}
 
       <ChangeThemeModal 

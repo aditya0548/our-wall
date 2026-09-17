@@ -37,20 +37,23 @@ export default function ChibiReactions({ isOpen, onClose, onSelect }) {
   if (!isOpen) return null;
 
   return (
-    <div className="chibi-reactions-popup" ref={popupRef}>
-      {REACTION_OPTIONS.map((r) => (
-        <button 
-          key={r.id} 
-          className="chibi-reaction-btn" 
-          onClick={() => {
-            onSelect(r.id);
-            onClose();
-          }}
-          title={r.id}
-        >
-          {r.icon}
-        </button>
-      ))}
-    </div>
+    <>
+      <div className="chibi-reactions-backdrop" onClick={onClose} />
+      <div className="chibi-reactions-popup" ref={popupRef}>
+        {REACTION_OPTIONS.map((r) => (
+          <button 
+            key={r.id} 
+            className="chibi-reaction-btn" 
+            onClick={() => {
+              onSelect(r.id);
+              onClose();
+            }}
+            title={r.id}
+          >
+            {r.icon}
+          </button>
+        ))}
+      </div>
+    </>
   );
 }

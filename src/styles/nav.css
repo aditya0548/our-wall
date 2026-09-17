@@ -22,7 +22,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: opacity 300ms ease, transform 200ms ease, box-shadow 200ms ease;
+  transition: 
+    left 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    top 320ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 300ms ease, 
+    transform 200ms ease, 
+    box-shadow 200ms ease;
   padding: 0;
   user-select: none;
   touch-action: none;
@@ -32,8 +37,8 @@
   cursor: grabbing;
   transform: scale(1.1);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
-  /* Remove transition for transform to prevent lag while dragging */
-  transition: opacity 300ms ease, box-shadow 200ms ease;
+  /* No left/top transition while dragging — must follow pointer instantly */
+  transition: opacity 300ms ease, transform 200ms ease, box-shadow 200ms ease;
 }
 
 .floating-fab:hover {

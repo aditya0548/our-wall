@@ -159,6 +159,8 @@ input {
   justify-content: center;
   z-index: 100;
   animation: fadeIn 200ms ease-out;
+  padding: 24px;
+  overflow-y: auto;
 }
 
 .reset-modal-card {
@@ -167,10 +169,13 @@ input {
   padding: 32px;
   width: 90%;
   max-width: 400px;
+  max-height: min(80vh, 640px);
+  overflow-y: auto;
   box-shadow: var(--shadow-lifted);
   border: 1px solid var(--surface-border);
   animation: scaleIn 200ms ease-out;
   text-align: center;
+  margin: auto;
 }
 
 .reset-modal-title {
