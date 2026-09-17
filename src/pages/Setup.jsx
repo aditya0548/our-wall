@@ -14,12 +14,14 @@ export default function Setup() {
   const [theme, setTheme] = useState(profile?.theme || 'sakura');
   const [birthday, setBirthday] = useState(profile?.birthday || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState('');
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!displayName.trim() || displayName.length > 20) return;
     
     setIsSubmitting(true);
+    setError('');
     
     // Use an IIFE so we don't return a Promise to React's onSubmit,
     // avoiding the React 19 Action unmount crash.
@@ -34,6 +36,7 @@ export default function Setup() {
         navigate('/', { replace: true });
       } catch (err) {
         console.error('Failed to save profile', err);
+        setError(err.message || 'Failed to save profile. Please try again.');
         setIsSubmitting(false);
       }
     })();
@@ -84,6 +87,8 @@ export default function Setup() {
               onChange={(e) => setBirthday(e.target.value)}
             />
           </div>
+
+          {error && <div className="setup-error" style={{ color: 'var(--accent-red)', marginBottom: '1rem', fontSize: '0.9rem' }}>{error}</div>}
 
           <button type="submit" disabled={isSubmitting || !displayName.trim()} className="setup-submit">
             {isSubmitting ? 'Saving...' : <>Let's go <Sparkle /></>}

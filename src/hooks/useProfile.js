@@ -66,15 +66,36 @@ export default function useProfile(session) {
     
     try {
       setLoading(true);
-      const { error } = await supabase
+      
+      // Check if profile exists
+      const { data: existing } = await supabase
         .from('profiles')
-        .update({
-          ...updates,
-          updated_at: new Date().toISOString()
-        })
-        .eq('user_id', session.user.id);
+        .select('user_id')
+        .eq('user_id', session.user.id)
+        .maybeSingle();
 
-      if (error) throw error;
+      if (existing) {
+        const { error } = await supabase
+          .from('profiles')
+          .update({
+            ...updates,
+            updated_at: new Date().toISOString()
+          })
+          .eq('user_id', session.user.id);
+
+        if (error) throw error;
+      } else {
+        const { error } = await supabase
+          .from('profiles')
+          .insert({
+            user_id: session.user.id,
+            ...updates,
+            updated_at: new Date().toISOString()
+          });
+
+        if (error) throw error;
+      }
+
       await fetchProfiles();
     } catch (err) {
       console.error('Error updating profile:', err);
