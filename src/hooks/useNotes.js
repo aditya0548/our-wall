@@ -44,8 +44,20 @@ export default function useNotes(spaceId, userId) {
           filter: `space_id=eq.${spaceId}`,
         },
         (payload) => {
-          // Only add if not already present (avoid duplicates)
           setNotes((prev) => {
+            const localIdx = prev.findIndex(
+              (n) => 
+                n.author_id === payload.new.author_id && 
+                String(n.id).startsWith('local-') && 
+                n.body === payload.new.body
+            );
+            
+            if (localIdx >= 0) {
+              const copy = [...prev];
+              copy[localIdx] = payload.new;
+              return copy;
+            }
+
             if (prev.some((n) => n.id === payload.new.id)) return prev;
             return [payload.new, ...prev];
           });
@@ -63,13 +75,28 @@ export default function useNotes(spaceId, userId) {
   }, [spaceId]);
 
   const sendNote = async (body, color) => {
+    const tempNote = {
+      id: `local-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+      space_id: spaceId,
+      author_id: userId,
+      body: body.trim(),
+      color: color,
+      created_at: new Date().toISOString(),
+    };
+
+    setNotes((prev) => [tempNote, ...prev]);
+
     const { error } = await supabase.from('notes').insert({
       space_id: spaceId,
       author_id: userId,
       body: body.trim(),
       color: color,
     });
-    if (error) throw error;
+    
+    if (error) {
+      setNotes((prev) => prev.filter(n => n.id !== tempNote.id));
+      throw error;
+    }
   };
 
   return { notes, loading, sendNote };

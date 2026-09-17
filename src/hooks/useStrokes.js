@@ -39,7 +39,24 @@ export default function useStrokes(spaceId, userId) {
           filter: `space_id=eq.${spaceId}`,
         },
         (payload) => {
-          setStrokes((current) => [...current, payload.new]);
+          setStrokes((current) => {
+            const newPointsStr = JSON.stringify(payload.new.points);
+            const localIdx = current.findIndex(
+              (s) =>
+                s.author_id === payload.new.author_id &&
+                String(s.id).startsWith('local-') &&
+                JSON.stringify(s.points) === newPointsStr
+            );
+
+            if (localIdx >= 0) {
+              const copy = [...current];
+              copy[localIdx] = payload.new;
+              return copy;
+            }
+            
+            if (current.some((s) => s.id === payload.new.id)) return current;
+            return [...current, payload.new];
+          });
         }
       )
       .on(
@@ -63,7 +80,18 @@ export default function useStrokes(spaceId, userId) {
   const addStroke = async (points, colorId = 'coral', sizePx = 4) => {
     if (!spaceId || !userId) return;
 
-    // Insert to DB directly (simpler v1 approach as requested)
+    const tempStroke = {
+      id: `local-${Date.now()}-${Math.random().toString(36).substring(2, 9)}`,
+      space_id: spaceId,
+      author_id: userId,
+      points,
+      color: colorId,
+      size: sizePx,
+      created_at: new Date().toISOString(),
+    };
+
+    setStrokes((current) => [...current, tempStroke]);
+
     const { error } = await supabase
       .from('strokes')
       .insert({
@@ -76,6 +104,8 @@ export default function useStrokes(spaceId, userId) {
 
     if (error) {
       console.error('Error adding stroke:', error);
+      // rollback on error
+      setStrokes((current) => current.filter(s => s.id !== tempStroke.id));
     }
   };
 
@@ -101,6 +131,11 @@ export default function useStrokes(spaceId, userId) {
     
     // Get the last stroke ID
     const lastStrokeId = userStrokes[userStrokes.length - 1].id;
+
+    if (String(lastStrokeId).startsWith('local-')) {
+      console.warn('Cannot undo in-flight stroke yet');
+      return;
+    }
 
     const { error } = await supabase
       .from('strokes')
