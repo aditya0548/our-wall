@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { Palette, Settings, RotateCcw, LogOut } from 'lucide-react';
 import { supabase } from '../supabaseClient';
 import ChangeThemeModal from './ChangeThemeModal';
@@ -11,6 +11,7 @@ export default function ProfileMenu({ onResetClick, onSignOutClick }) {
   const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
+  const location = useLocation();
   const { profile } = useTheme();
 
   const getInitials = (name) => {
@@ -34,6 +35,18 @@ export default function ProfileMenu({ onResetClick, onSignOutClick }) {
     };
   }, [isOpen]);
 
+  // Toggle class on body for FAB hiding
+  useEffect(() => {
+    if (isOpen) {
+      document.body.classList.add('profile-menu-open');
+    } else {
+      document.body.classList.remove('profile-menu-open');
+    }
+    return () => {
+      document.body.classList.remove('profile-menu-open');
+    };
+  }, [isOpen]);
+
   // Close on Escape key
   useEffect(() => {
     const handleKeyDown = (event) => {
@@ -49,6 +62,11 @@ export default function ProfileMenu({ onResetClick, onSignOutClick }) {
       document.removeEventListener('keydown', handleKeyDown);
     };
   }, [isOpen]);
+
+  // Close on navigation
+  useEffect(() => {
+    setIsOpen(false);
+  }, [location.pathname]);
 
   const handleToggle = () => setIsOpen(!isOpen);
 
@@ -72,10 +90,6 @@ export default function ProfileMenu({ onResetClick, onSignOutClick }) {
     }
   };
 
-  // We fetch session user email from supabase, or assume it's passed somehow.
-  // Actually, wait, useTheme doesn't give session. But the requirement is to show email.
-  // Let's get the email directly from supabase auth, or from session if available.
-  // I will just use a state to fetch the user email if we need it.
   const [userEmail, setUserEmail] = useState('');
   useEffect(() => {
     supabase.auth.getUser().then(({ data }) => {

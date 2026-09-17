@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { supabase } from '../supabaseClient';
 import useSpace from '../hooks/useSpace';
 import { useTheme } from '../theme/ThemeProvider';
@@ -27,7 +28,7 @@ export default function OpenEnvelopeModal({ envelope, onClose }) {
   const sealedDate = new Date(envelope.created_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' });
   const openedDate = envelope.opened_at ? new Date(envelope.opened_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }) : null;
 
-  return (
+  const modalContent = (
     <div className="modal-backdrop" onClick={onClose}>
       <div className="modal-content envelope-open-modal" onClick={(e) => e.stopPropagation()}>
         <div className="envelope-flap" />
@@ -47,4 +48,6 @@ export default function OpenEnvelopeModal({ envelope, onClose }) {
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 
 export default function CreateEnvelopeModal({ isOpen, onClose, onSubmit }) {
   const [title, setTitle] = useState('');
@@ -25,7 +26,7 @@ export default function CreateEnvelopeModal({ isOpen, onClose, onSubmit }) {
 
   const todayStr = new Date().toISOString().split('T')[0];
 
-  return (
+  const modalContent = (
     <div className="modal-backdrop">
       <div className="modal-content">
         <h3 className="display-font" style={{ marginBottom: '1.5rem', color: 'var(--text-primary)' }}>Seal an envelope</h3>
@@ -73,4 +74,6 @@ export default function CreateEnvelopeModal({ isOpen, onClose, onSubmit }) {
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

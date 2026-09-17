@@ -1,9 +1,10 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 
 export default function ResetModal({ isOpen, onClose, onConfirm }) {
   if (!isOpen) return null;
 
-  return (
+  const modalContent = (
     <div className="reset-modal-overlay">
       <div className="reset-modal-card">
         <h2 className="reset-modal-title display-font">Reset your connection?</h2>
@@ -17,4 +18,6 @@ export default function ResetModal({ isOpen, onClose, onConfirm }) {
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

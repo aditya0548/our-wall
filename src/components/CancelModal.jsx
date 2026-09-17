@@ -1,9 +1,10 @@
 import React from 'react';
+import { createPortal } from 'react-dom';
 
 export default function CancelModal({ isOpen, onClose, onConfirm }) {
   if (!isOpen) return null;
 
-  return (
+  const modalContent = (
     <div className="reset-modal-overlay">
       <div className="reset-modal-card">
         <h2 className="reset-modal-title display-font">Cancel this space?</h2>
@@ -17,4 +18,6 @@ export default function CancelModal({ isOpen, onClose, onConfirm }) {
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

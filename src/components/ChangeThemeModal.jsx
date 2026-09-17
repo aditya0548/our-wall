@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import ThemePicker from './ThemePicker';
 import { useTheme } from '../theme/ThemeProvider';
 
@@ -28,7 +29,7 @@ export default function ChangeThemeModal({ isOpen, onClose }) {
     }
   };
 
-  return (
+  const modalContent = (
     <div className="reset-modal-overlay">
       <div className="reset-modal-card" style={{ maxWidth: '480px' }}>
         <h2 className="reset-modal-title display-font">Change theme</h2>
@@ -59,4 +60,6 @@ export default function ChangeThemeModal({ isOpen, onClose }) {
       </div>
     </div>
   );
+
+  return createPortal(modalContent, document.body);
 }

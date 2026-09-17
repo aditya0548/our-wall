@@ -174,3 +174,7 @@
 }
 
 
+
+body.profile-menu-open .floating-fab {
+  display: none !important;
+}
