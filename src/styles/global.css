@@ -72,11 +72,6 @@
 
 
 /* ─── Sakura Glass Surfaces ─── */
-[data-theme="sakura"] .auth-card,
-[data-theme="sakura"] .auth-form,
-[data-theme="sakura"] .setup-card,
-[data-theme="sakura"] .setup-form,
-[data-theme="sakura"] .pairing-card,
 [data-theme="sakura"] .waiting-card,
 [data-theme="sakura"] .connected-card,
 [data-theme="sakura"] .envelope-card,
@@ -84,8 +79,6 @@
 [data-theme="sakura"] .settings-card,
 [data-theme="sakura"] .reset-modal-card,
 [data-theme="sakura"] .modal-content,
-[data-theme="sakura"] .floating-menu,
-[data-theme="sakura"] .wall-header,
 [data-theme="sakura"] .input-container,
 [data-theme="sakura"] .chibi-row,
 [data-theme="sakura"] .empty-state {
