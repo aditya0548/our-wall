@@ -60,6 +60,7 @@ export default function ChangeThemeModal({ isOpen, onClose }) {
           </button>
         </div>
       </div>
+      </div>
     </>
   );
 

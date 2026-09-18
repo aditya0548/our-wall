@@ -143,6 +143,7 @@ export default function CreateNoteModal({ onClose, onSave, initialData = null, u
           <button className="btn-primary" onClick={handleSave} disabled={!body.trim()}>Save</button>
         </div>
       </div>
+      </div>
     </>
   );
 

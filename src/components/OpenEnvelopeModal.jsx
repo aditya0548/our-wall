@@ -48,6 +48,7 @@ export default function OpenEnvelopeModal({ envelope, onClose }) {
           </div>
         </div>
       </div>
+      </div>
     </>
   );
 

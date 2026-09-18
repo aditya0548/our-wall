@@ -74,6 +74,7 @@ export default function CreateEnvelopeModal({ isOpen, onClose, onSubmit }) {
           </div>
         </form>
       </div>
+      </div>
     </>
   );
 
