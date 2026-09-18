@@ -71,29 +71,140 @@
 
 
 
-/* ─── Sakura Glass Surfaces ─── */
+/* ─── Apple-Style Glass Surfaces ─── */
+
+/* Sakura */
+[data-theme="sakura"] .auth-card,
+[data-theme="sakura"] .setup-card,
+[data-theme="sakura"] .pairing-card,
 [data-theme="sakura"] .waiting-card,
 [data-theme="sakura"] .connected-card,
-[data-theme="sakura"] .envelope-card,
-[data-theme="sakura"] .note-card,
 [data-theme="sakura"] .settings-card,
+[data-theme="sakura"] .note-modal-content,
 [data-theme="sakura"] .reset-modal-card,
-[data-theme="sakura"] .modal-content,
-[data-theme="sakura"] .input-container,
+[data-theme="sakura"] .modal-content {
+  background: rgba(255, 250, 253, 0.72) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.75) !important;
+  box-shadow:
+    0 2px 8px rgba(122, 84, 105, 0.06),
+    0 12px 32px rgba(122, 84, 105, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.3) !important;
+}
+[data-theme="sakura"] .profile-dropdown,
+[data-theme="sakura"] .floating-menu,
 [data-theme="sakura"] .chibi-row,
-[data-theme="sakura"] .empty-state {
-  background: rgba(255, 255, 255, 0.55) !important;
-  backdrop-filter: blur(16px) saturate(140%) !important;
-  -webkit-backdrop-filter: blur(16px) saturate(140%) !important;
+[data-theme="sakura"] .note-card {
+  background: rgba(255, 250, 253, 0.72) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.75) !important;
+  box-shadow:
+    0 12px 32px rgba(122, 84, 105, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+}
+
+/* Ocean */
+[data-theme="ocean"] .auth-card,
+[data-theme="ocean"] .setup-card,
+[data-theme="ocean"] .pairing-card,
+[data-theme="ocean"] .waiting-card,
+[data-theme="ocean"] .connected-card,
+[data-theme="ocean"] .settings-card,
+[data-theme="ocean"] .note-modal-content,
+[data-theme="ocean"] .reset-modal-card,
+[data-theme="ocean"] .modal-content {
+  background: rgba(245, 250, 255, 0.72) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
   border: 1px solid rgba(255, 255, 255, 0.6) !important;
   box-shadow:
-    0 8px 32px rgba(122, 84, 105, 0.10),
-    inset 0 1px 0 rgba(255, 255, 255, 0.7),
-    inset 0 -1px 0 rgba(255, 255, 255, 0.15),
-    inset 0 0 12px 4px rgba(255, 255, 255, 0.35) !important;
-  position: relative;
-  overflow: hidden;
+    0 2px 8px rgba(50, 90, 130, 0.06),
+    0 12px 32px rgba(50, 90, 130, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.25) !important;
 }
+[data-theme="ocean"] .profile-dropdown,
+[data-theme="ocean"] .floating-menu,
+[data-theme="ocean"] .chibi-row,
+[data-theme="ocean"] .note-card {
+  background: rgba(245, 250, 255, 0.72) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow:
+    0 12px 32px rgba(50, 90, 130, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Matcha */
+[data-theme="matcha"] .auth-card,
+[data-theme="matcha"] .setup-card,
+[data-theme="matcha"] .pairing-card,
+[data-theme="matcha"] .waiting-card,
+[data-theme="matcha"] .connected-card,
+[data-theme="matcha"] .settings-card,
+[data-theme="matcha"] .note-modal-content,
+[data-theme="matcha"] .reset-modal-card,
+[data-theme="matcha"] .modal-content {
+  background: rgba(248, 253, 243, 0.72) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow:
+    0 2px 8px rgba(70, 100, 70, 0.06),
+    0 12px 32px rgba(70, 100, 70, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.25) !important;
+}
+[data-theme="matcha"] .profile-dropdown,
+[data-theme="matcha"] .floating-menu,
+[data-theme="matcha"] .chibi-row,
+[data-theme="matcha"] .note-card {
+  background: rgba(248, 253, 243, 0.72) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.6) !important;
+  box-shadow:
+    0 12px 32px rgba(70, 100, 70, 0.12),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8) !important;
+}
+
+/* Midnight */
+[data-theme="midnight"] .auth-card,
+[data-theme="midnight"] .setup-card,
+[data-theme="midnight"] .pairing-card,
+[data-theme="midnight"] .waiting-card,
+[data-theme="midnight"] .connected-card,
+[data-theme="midnight"] .settings-card,
+[data-theme="midnight"] .note-modal-content,
+[data-theme="midnight"] .reset-modal-card,
+[data-theme="midnight"] .modal-content {
+  background: rgba(26, 27, 46, 0.65) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.2),
+    0 12px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.02) !important;
+}
+[data-theme="midnight"] .profile-dropdown,
+[data-theme="midnight"] .floating-menu,
+[data-theme="midnight"] .chibi-row,
+[data-theme="midnight"] .note-card {
+  background: rgba(26, 27, 46, 0.65) !important;
+  backdrop-filter: blur(24px) saturate(160%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(160%) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  box-shadow:
+    0 12px 32px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
 
 /* Top edge highlight line */
 [data-theme="sakura"] .auth-card::before,
@@ -292,33 +403,25 @@
 
 [data-theme="sakura"] body,
 body[data-theme="sakura"] {
-  background: 
-    linear-gradient(160deg, rgba(255, 248, 242, 0.35) 0%, rgba(248, 229, 236, 0.45) 45%, rgba(237, 212, 224, 0.55) 100%),
-    url('/backgrounds/sakura.jpg') center/cover no-repeat fixed;
+  background: url('/backgrounds/sakura.jpg') center/cover no-repeat fixed;
   min-height: 100vh;
 }
 
 [data-theme="ocean"] body,
 body[data-theme="ocean"] {
-  background: 
-    linear-gradient(180deg, rgba(242, 247, 252, 0.35) 0%, rgba(221, 233, 245, 0.50) 100%),
-    url('/backgrounds/ocean.jpg') center/cover no-repeat fixed;
+  background: url('/backgrounds/ocean.jpg') center/cover no-repeat fixed;
   min-height: 100vh;
 }
 
 [data-theme="matcha"] body,
 body[data-theme="matcha"] {
-  background: 
-    linear-gradient(180deg, rgba(246, 250, 242, 0.35) 0%, rgba(226, 237, 216, 0.50) 100%),
-    url('/backgrounds/matcha.jpg') center/cover no-repeat fixed;
+  background: url('/backgrounds/matcha.jpg') center/cover no-repeat fixed;
   min-height: 100vh;
 }
 
 [data-theme="midnight"] body,
 body[data-theme="midnight"] {
-  background: 
-    linear-gradient(180deg, rgba(26, 27, 46, 0.55) 0%, rgba(35, 36, 61, 0.75) 100%),
-    url('/backgrounds/midnight.jpg') center/cover no-repeat fixed;
+  background: url('/backgrounds/midnight.jpg') center/cover no-repeat fixed;
   min-height: 100vh;
 }
 
@@ -534,55 +637,27 @@ input {
 }
 
 @keyframes overlayFade {
-  from { opacity: 0; backdrop-filter: blur(0); }
-  to { opacity: 1; backdrop-filter: blur(12px); }
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 /* Bug 5: Chibi Avatars Solid Glass */
 [data-theme="sakura"] .chibi-row {
-  background: rgba(255, 255, 255, 0.90) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
-  box-shadow: 
-    0 4px 20px rgba(122, 84, 105, 0.10), 
-    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
   border-radius: 24px !important;
   padding: 16px !important;
 }
 
 [data-theme="ocean"] .chibi-row {
-  background: rgba(255, 255, 255, 0.90) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
-  box-shadow: 
-    0 4px 20px rgba(74, 123, 184, 0.10), 
-    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
   border-radius: 24px !important;
   padding: 16px !important;
 }
 
 [data-theme="matcha"] .chibi-row {
-  background: rgba(255, 255, 255, 0.90) !important;
-  backdrop-filter: blur(8px) !important;
-  -webkit-backdrop-filter: blur(8px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.85) !important;
-  box-shadow: 
-    0 4px 20px rgba(127, 168, 90, 0.10), 
-    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
   border-radius: 24px !important;
   padding: 16px !important;
 }
 
 [data-theme="midnight"] .chibi-row {
-  background: rgba(255, 255, 255, 0.15) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  box-shadow: 
-    0 4px 20px rgba(0, 0, 0, 0.4), 
-    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
   border-radius: 24px !important;
   padding: 16px !important;
 }
