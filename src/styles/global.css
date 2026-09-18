@@ -89,9 +89,8 @@ body[data-theme="sakura"]::before {
   position: fixed;
   inset: 0;
   background:
-    radial-gradient(circle at 15% 12%, rgba(245, 198, 213, 0.55) 0%, transparent 55%),
-    radial-gradient(circle at 88% 85%, rgba(232, 217, 168, 0.40) 0%, transparent 60%),
-    radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.15) 0%, transparent 70%);
+    radial-gradient(circle at 15% 12%, rgba(245, 198, 213, 0.30) 0%, transparent 55%),
+    radial-gradient(circle at 88% 85%, rgba(232, 217, 168, 0.20) 0%, transparent 60%);
   pointer-events: none;
   z-index: 0;
 }
@@ -324,6 +323,102 @@ body[data-theme="sakura"]::before {
   --accent-hover: #B8A8E8;
   --accent-soft: #4A4B7A;
   --accent-deep: #D8C8F8;
+}
+
+/* ─── Theme Background Images ─── */
+
+[data-theme="sakura"] body {
+  background-image: url('/backgrounds/sakura.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+[data-theme="ocean"] body {
+  background-image: url('/backgrounds/ocean.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+[data-theme="matcha"] body {
+  background-image: url('/backgrounds/matcha.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+[data-theme="midnight"] body {
+  background-image: url('/backgrounds/midnight.jpg');
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+}
+
+/* ─── Image Veils (for readability) ─── */
+
+[data-theme="sakura"] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(253, 246, 240, 0.45) 0%,
+    rgba(240, 217, 228, 0.55) 100%
+  );
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+[data-theme="ocean"] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(242, 247, 252, 0.45) 0%,
+    rgba(221, 233, 245, 0.55) 100%
+  );
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+[data-theme="matcha"] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(246, 250, 242, 0.45) 0%,
+    rgba(226, 237, 216, 0.55) 100%
+  );
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
+  z-index: -1;
+}
+
+[data-theme="midnight"] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(
+    180deg,
+    rgba(26, 27, 46, 0.35) 0%,
+    rgba(35, 36, 61, 0.50) 100%
+  );
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+  pointer-events: none;
+  z-index: -1;
 }
 
 * {
