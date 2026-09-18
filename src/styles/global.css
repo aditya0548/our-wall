@@ -116,14 +116,95 @@ body[data-theme="sakura"]::before {
 [data-theme="sakura"] .input-container,
 [data-theme="sakura"] .chibi-row,
 [data-theme="sakura"] .empty-state {
-  background: rgba(255, 255, 255, 0.72) !important;
-  backdrop-filter: blur(20px) saturate(140%) !important;
-  -webkit-backdrop-filter: blur(20px) saturate(140%) !important;
+  background: rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(16px) saturate(140%) !important;
+  -webkit-backdrop-filter: blur(16px) saturate(140%) !important;
   border: 1px solid rgba(255, 255, 255, 0.6) !important;
-  box-shadow: 
-    0 2px 6px rgba(122, 84, 105, 0.04),
-    0 8px 20px rgba(122, 84, 105, 0.08),
-    0 20px 40px rgba(122, 84, 105, 0.10) !important;
+  box-shadow:
+    0 8px 32px rgba(122, 84, 105, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.7),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.15),
+    inset 0 0 12px 4px rgba(255, 255, 255, 0.35) !important;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Top edge highlight line */
+[data-theme="sakura"] .auth-card::before,
+[data-theme="sakura"] .auth-form::before,
+[data-theme="sakura"] .setup-card::before,
+[data-theme="sakura"] .setup-form::before,
+[data-theme="sakura"] .pairing-card::before,
+[data-theme="sakura"] .settings-card::before,
+[data-theme="sakura"] .reset-modal-card::before,
+[data-theme="sakura"] .note-modal-content::before,
+[data-theme="sakura"] .profile-dropdown::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.8),
+    transparent
+  );
+  pointer-events: none;
+}
+
+/* Left edge highlight line */
+[data-theme="sakura"] .auth-card::after,
+[data-theme="sakura"] .auth-form::after,
+[data-theme="sakura"] .setup-card::after,
+[data-theme="sakura"] .setup-form::after,
+[data-theme="sakura"] .pairing-card::after,
+[data-theme="sakura"] .settings-card::after,
+[data-theme="sakura"] .reset-modal-card::after,
+[data-theme="sakura"] .note-modal-content::after,
+[data-theme="sakura"] .profile-dropdown::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1px;
+  height: 100%;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.8),
+    transparent,
+    rgba(255, 255, 255, 0.3)
+  );
+  pointer-events: none;
+}
+
+/* Container structural tweaks */
+[data-theme="sakura"] .auth-container,
+[data-theme="sakura"] .setup-container,
+[data-theme="sakura"] .pairing-container {
+  position: relative;
+}
+
+/* Container decorative glow */
+[data-theme="sakura"] .auth-container::before,
+[data-theme="sakura"] .setup-container::before,
+[data-theme="sakura"] .pairing-container::before {
+  content: '';
+  position: absolute;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle at center,
+    rgba(217, 160, 181, 0.55) 0%,
+    rgba(245, 198, 213, 0.30) 40%,
+    transparent 70%);
+  filter: blur(70px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -55%);
+  z-index: 0;
+  pointer-events: none;
 }
 
 [data-theme="sakura"] .empty-state {
