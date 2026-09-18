@@ -69,31 +69,7 @@
     0 20px 40px rgba(122, 84, 105, 0.10);
 }
 
-/* ─── Sakura Background Gradient ─── */
-[data-theme="sakura"] body,
-body[data-theme="sakura"] {
-  background: linear-gradient(
-    160deg,
-    #FFF8F2 0%,
-    #F8E5EC 45%,
-    #EDD4E0 100%
-  );
-  background-attachment: fixed;
-  min-height: 100vh;
-}
 
-/* ─── Soft Radial Light Patches ─── */
-[data-theme="sakura"] body::before,
-body[data-theme="sakura"]::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background:
-    radial-gradient(circle at 15% 12%, rgba(245, 198, 213, 0.30) 0%, transparent 55%),
-    radial-gradient(circle at 88% 85%, rgba(232, 217, 168, 0.20) 0%, transparent 60%);
-  pointer-events: none;
-  z-index: 0;
-}
 
 /* ─── Sakura Glass Surfaces ─── */
 [data-theme="sakura"] .auth-card,
@@ -325,100 +301,38 @@ body[data-theme="sakura"]::before {
   --accent-deep: #D8C8F8;
 }
 
-/* ─── Theme Background Images ─── */
+/* ─── Theme Backgrounds ─── */
 
-[data-theme="sakura"] body {
-  background-image: url('/backgrounds/sakura.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+[data-theme="sakura"] body,
+body[data-theme="sakura"] {
+  background: 
+    linear-gradient(160deg, rgba(255, 248, 242, 0.55) 0%, rgba(248, 229, 236, 0.65) 45%, rgba(237, 212, 224, 0.75) 100%),
+    url('/backgrounds/sakura.jpg') center/cover no-repeat fixed;
+  min-height: 100vh;
 }
 
-[data-theme="ocean"] body {
-  background-image: url('/backgrounds/ocean.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+[data-theme="ocean"] body,
+body[data-theme="ocean"] {
+  background: 
+    linear-gradient(180deg, rgba(242, 247, 252, 0.55) 0%, rgba(221, 233, 245, 0.75) 100%),
+    url('/backgrounds/ocean.jpg') center/cover no-repeat fixed;
+  min-height: 100vh;
 }
 
-[data-theme="matcha"] body {
-  background-image: url('/backgrounds/matcha.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
+[data-theme="matcha"] body,
+body[data-theme="matcha"] {
+  background: 
+    linear-gradient(180deg, rgba(246, 250, 242, 0.55) 0%, rgba(226, 237, 216, 0.75) 100%),
+    url('/backgrounds/matcha.jpg') center/cover no-repeat fixed;
+  min-height: 100vh;
 }
 
-[data-theme="midnight"] body {
-  background-image: url('/backgrounds/midnight.jpg');
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-}
-
-/* ─── Image Veils (for readability) ─── */
-
-[data-theme="sakura"] body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(253, 246, 240, 0.45) 0%,
-    rgba(240, 217, 228, 0.55) 100%
-  );
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  pointer-events: none;
-  z-index: -1;
-}
-
-[data-theme="ocean"] body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(242, 247, 252, 0.45) 0%,
-    rgba(221, 233, 245, 0.55) 100%
-  );
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  pointer-events: none;
-  z-index: -1;
-}
-
-[data-theme="matcha"] body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(246, 250, 242, 0.45) 0%,
-    rgba(226, 237, 216, 0.55) 100%
-  );
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  pointer-events: none;
-  z-index: -1;
-}
-
-[data-theme="midnight"] body::after {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background: linear-gradient(
-    180deg,
-    rgba(26, 27, 46, 0.35) 0%,
-    rgba(35, 36, 61, 0.50) 100%
-  );
-  backdrop-filter: blur(2px);
-  -webkit-backdrop-filter: blur(2px);
-  pointer-events: none;
-  z-index: -1;
+[data-theme="midnight"] body,
+body[data-theme="midnight"] {
+  background: 
+    linear-gradient(180deg, rgba(26, 27, 46, 0.55) 0%, rgba(35, 36, 61, 0.75) 100%),
+    url('/backgrounds/midnight.jpg') center/cover no-repeat fixed;
+  min-height: 100vh;
 }
 
 * {
@@ -435,18 +349,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-body::before {
-  content: '';
-  position: fixed;
-  inset: -20%;
-  background:
-    radial-gradient(circle at 25% 30%, var(--blob-1) 0%, transparent 35%),
-    radial-gradient(circle at 75% 70%, var(--blob-2) 0%, transparent 40%);
-  opacity: 0.45;
-  filter: blur(80px);
-  z-index: -1;
-  pointer-events: none;
-}
 
 h1, h2, h3, h4, .display-font {
   font-family: var(--font-display);
