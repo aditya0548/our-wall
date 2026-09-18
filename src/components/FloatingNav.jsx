@@ -250,11 +250,12 @@ export default function FloatingNav() {
         {isOpen ? <X size={24} /> : <Sparkles size={24} />}
       </button>
 
+      {isOpen && !isClosing && <div className="overlay-backdrop" onClick={handleClose} />}
       {(isOpen || isClosing) && (
         <div
           ref={menuRef}
           className={`floating-menu ${isClosing ? 'closing' : ''}`}
-          style={menuStyle}
+          style={{ ...menuStyle, zIndex: 1000 }}
           role="menu"
         >
           {NAV_ITEMS.map((item) => {

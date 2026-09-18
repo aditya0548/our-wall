@@ -71,7 +71,7 @@ export default function Notes({ session }) {
       } else {
         const pos_x = 0.2 + Math.random() * 0.6;
         const pos_y = 0.2 + Math.random() * 0.6;
-        await addNote({ ...noteData, position_x: pos_x, position_y: pos_y, width: 160, height: 160 });
+        await addNote({ ...noteData, position_x: pos_x, position_y: pos_y, width_pct: 0.28, height_pct: 0.28 });
       }
       setIsCreateModalOpen(false);
       setEditingNote(null);

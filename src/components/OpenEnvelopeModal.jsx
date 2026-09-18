@@ -29,9 +29,11 @@ export default function OpenEnvelopeModal({ envelope, onClose }) {
   const openedDate = envelope.opened_at ? new Date(envelope.opened_at).toLocaleDateString(undefined, { month: 'long', day: 'numeric', year: 'numeric' }) : null;
 
   const modalContent = (
-    <div className="reset-modal-overlay" onClick={onClose}>
-      <div className="reset-modal-card envelope-open-modal" onClick={(e) => e.stopPropagation()}>
-        <div className="envelope-flap" />
+    <>
+      <div className="overlay-backdrop" onClick={onClose} />
+      <div className="reset-modal-overlay" style={{ background: 'none', backdropFilter: 'none', pointerEvents: 'none' }}>
+        <div className="reset-modal-card envelope-open-modal" style={{ pointerEvents: 'auto', zIndex: 1000 }} onClick={(e) => e.stopPropagation()}>
+          <div className="envelope-flap" />
         <div className="envelope-inner-content">
           <h3 className="display-font" style={{ marginBottom: '1.5rem', color: 'var(--text-primary)', fontSize: '1.5rem' }}>{envelope.title}</h3>
           <p style={{ color: 'var(--text-primary)', whiteSpace: 'pre-wrap', lineHeight: '1.6', marginBottom: '2rem', textAlign: 'left' }}>
@@ -46,7 +48,7 @@ export default function OpenEnvelopeModal({ envelope, onClose }) {
           </div>
         </div>
       </div>
-    </div>
+    </>
   );
 
   return createPortal(modalContent, document.body);

@@ -27,9 +27,11 @@ export default function CreateEnvelopeModal({ isOpen, onClose, onSubmit }) {
   const todayStr = new Date().toISOString().split('T')[0];
 
   const modalContent = (
-    <div className="reset-modal-overlay" onClick={onClose}>
-      <div className="reset-modal-card" onClick={(e) => e.stopPropagation()} style={{ textAlign: 'left', maxWidth: '500px' }}>
-        <h3 className="display-font" style={{ marginBottom: '1.5rem', color: 'var(--text-primary)', textAlign: 'center' }}>Seal an envelope</h3>
+    <>
+      <div className="overlay-backdrop" onClick={onClose} />
+      <div className="reset-modal-overlay" style={{ background: 'none', backdropFilter: 'none', pointerEvents: 'none' }}>
+        <div className="reset-modal-card" onClick={(e) => e.stopPropagation()} style={{ textAlign: 'left', maxWidth: '500px', pointerEvents: 'auto', zIndex: 1000 }}>
+          <h3 className="display-font" style={{ marginBottom: '1.5rem', color: 'var(--text-primary)', textAlign: 'center' }}>Seal an envelope</h3>
         <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
           <div>
             <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Title</label>
@@ -72,7 +74,7 @@ export default function CreateEnvelopeModal({ isOpen, onClose, onSubmit }) {
           </div>
         </form>
       </div>
-    </div>
+    </>
   );
 
   return createPortal(modalContent, document.body);

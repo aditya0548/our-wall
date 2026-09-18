@@ -30,8 +30,10 @@ export default function ChangeThemeModal({ isOpen, onClose }) {
   };
 
   const modalContent = (
-    <div className="reset-modal-overlay" onClick={onClose}>
-      <div className="reset-modal-card" style={{ maxWidth: '480px' }} onClick={(e) => e.stopPropagation()}>
+    <>
+      <div className="overlay-backdrop" onClick={onClose} />
+      <div className="reset-modal-overlay" style={{ background: 'none', backdropFilter: 'none', pointerEvents: 'none' }}>
+        <div className="reset-modal-card" style={{ maxWidth: '480px', pointerEvents: 'auto', zIndex: 1000 }} onClick={(e) => e.stopPropagation()}>
         <h2 className="reset-modal-title display-font">Change theme</h2>
         
         <div style={{ marginBottom: '24px' }}>
@@ -58,7 +60,7 @@ export default function ChangeThemeModal({ isOpen, onClose }) {
           </button>
         </div>
       </div>
-    </div>
+    </>
   );
 
   return createPortal(modalContent, document.body);

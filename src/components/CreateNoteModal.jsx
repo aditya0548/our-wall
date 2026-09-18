@@ -60,9 +60,11 @@ export default function CreateNoteModal({ onClose, onSave, initialData = null, u
   };
 
   const modalContent = (
-    <div className="note-modal-overlay" onClick={onClose}>
-      <div className="note-modal-content" onClick={(e) => e.stopPropagation()}>
-        <h3 style={{ margin: 0 }}>{initialData ? 'Edit Note' : 'New Note'}</h3>
+    <>
+      <div className="overlay-backdrop" onClick={onClose} />
+      <div className="note-modal-overlay" style={{ background: 'none', backdropFilter: 'none', pointerEvents: 'none' }}>
+        <div className="note-modal-content" style={{ pointerEvents: 'auto', zIndex: 1000 }} onClick={(e) => e.stopPropagation()}>
+          <h2 className="note-modal-title">{initialData ? 'Edit Note' : 'New Note'}</h2>
         
         <div className="templates-scroll">
           {TEMPLATES.map(t => (
@@ -141,7 +143,7 @@ export default function CreateNoteModal({ onClose, onSave, initialData = null, u
           <button className="btn-primary" onClick={handleSave} disabled={!body.trim()}>Save</button>
         </div>
       </div>
-    </div>
+    </>
   );
 
   return createPortal(modalContent, document.body);

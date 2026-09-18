@@ -101,15 +101,15 @@ export default function useStickyNotes(spaceId, userId) {
     };
   }, [spaceId]);
 
-  const addNote = async ({ body, color, shape, width, height, alarm_at, position_x, position_y }) => {
+  const addNote = async ({ body, color, shape, width_pct, height_pct, alarm_at, position_x, position_y }) => {
     const { data, error } = await supabase.from('sticky_notes').insert({
       space_id: spaceId,
       author_id: userId,
       body,
       color,
       shape,
-      width,
-      height,
+      width_pct,
+      height_pct,
       alarm_at,
       position_x,
       position_y,

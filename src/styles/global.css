@@ -84,8 +84,6 @@
 [data-theme="sakura"] .settings-card,
 [data-theme="sakura"] .reset-modal-card,
 [data-theme="sakura"] .modal-content,
-[data-theme="sakura"] .profile-dropdown,
-[data-theme="sakura"] .note-modal-content,
 [data-theme="sakura"] .floating-menu,
 [data-theme="sakura"] .wall-header,
 [data-theme="sakura"] .input-container,
@@ -111,9 +109,7 @@
 [data-theme="sakura"] .setup-form::before,
 [data-theme="sakura"] .pairing-card::before,
 [data-theme="sakura"] .settings-card::before,
-[data-theme="sakura"] .reset-modal-card::before,
-[data-theme="sakura"] .note-modal-content::before,
-[data-theme="sakura"] .profile-dropdown::before {
+[data-theme="sakura"] .reset-modal-card::before {
   content: '';
   position: absolute;
   top: 0;
@@ -136,9 +132,7 @@
 [data-theme="sakura"] .setup-form::after,
 [data-theme="sakura"] .pairing-card::after,
 [data-theme="sakura"] .settings-card::after,
-[data-theme="sakura"] .reset-modal-card::after,
-[data-theme="sakura"] .note-modal-content::after,
-[data-theme="sakura"] .profile-dropdown::after {
+[data-theme="sakura"] .reset-modal-card::after {
   content: '';
   position: absolute;
   top: 0;
@@ -306,7 +300,7 @@
 [data-theme="sakura"] body,
 body[data-theme="sakura"] {
   background: 
-    linear-gradient(160deg, rgba(255, 248, 242, 0.55) 0%, rgba(248, 229, 236, 0.65) 45%, rgba(237, 212, 224, 0.75) 100%),
+    linear-gradient(160deg, rgba(255, 248, 242, 0.35) 0%, rgba(248, 229, 236, 0.45) 45%, rgba(237, 212, 224, 0.55) 100%),
     url('/backgrounds/sakura.jpg') center/cover no-repeat fixed;
   min-height: 100vh;
 }
@@ -314,7 +308,7 @@ body[data-theme="sakura"] {
 [data-theme="ocean"] body,
 body[data-theme="ocean"] {
   background: 
-    linear-gradient(180deg, rgba(242, 247, 252, 0.55) 0%, rgba(221, 233, 245, 0.75) 100%),
+    linear-gradient(180deg, rgba(242, 247, 252, 0.35) 0%, rgba(221, 233, 245, 0.50) 100%),
     url('/backgrounds/ocean.jpg') center/cover no-repeat fixed;
   min-height: 100vh;
 }
@@ -322,7 +316,7 @@ body[data-theme="ocean"] {
 [data-theme="matcha"] body,
 body[data-theme="matcha"] {
   background: 
-    linear-gradient(180deg, rgba(246, 250, 242, 0.55) 0%, rgba(226, 237, 216, 0.75) 100%),
+    linear-gradient(180deg, rgba(246, 250, 242, 0.35) 0%, rgba(226, 237, 216, 0.50) 100%),
     url('/backgrounds/matcha.jpg') center/cover no-repeat fixed;
   min-height: 100vh;
 }
@@ -509,3 +503,175 @@ input {
   animation: slideIn 300ms ease-out forwards;
 }
 
+
+/* Bug 1: Profile Dropdown Fixes */
+.profile-dropdown {
+  z-index: 1000;
+  pointer-events: auto;
+}
+
+[data-theme="sakura"] .profile-dropdown,
+[data-theme="ocean"] .profile-dropdown,
+[data-theme="matcha"] .profile-dropdown {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+/* Bug 2: Work Surfaces (Whiteboard, Note Editor) Solid Background */
+.whiteboard-canvas-container,
+.note-modal-content {
+  background: #FFFFFF !important;
+  border: 2px solid var(--surface-border) !important;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.02) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+/* Bug 3: Universal Overlay Backdrop */
+.overlay-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 900;
+  background: rgba(0, 0, 0, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  pointer-events: auto;
+  animation: overlayFade 200ms ease;
+}
+
+@keyframes overlayFade {
+  from { opacity: 0; backdrop-filter: blur(0); }
+  to { opacity: 1; backdrop-filter: blur(12px); }
+}
+
+/* Bug 5: Chibi Avatars Solid Glass */
+[data-theme="sakura"] .chibi-row {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 
+    0 4px 20px rgba(122, 84, 105, 0.10), 
+    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  border-radius: 24px !important;
+  padding: 16px !important;
+}
+
+[data-theme="ocean"] .chibi-row {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 
+    0 4px 20px rgba(74, 123, 184, 0.10), 
+    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  border-radius: 24px !important;
+  padding: 16px !important;
+}
+
+[data-theme="matcha"] .chibi-row {
+  background: rgba(255, 255, 255, 0.90) !important;
+  backdrop-filter: blur(8px) !important;
+  -webkit-backdrop-filter: blur(8px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 
+    0 4px 20px rgba(127, 168, 90, 0.10), 
+    inset 0 1px 0 rgba(255, 255, 255, 0.9) !important;
+  border-radius: 24px !important;
+  padding: 16px !important;
+}
+
+[data-theme="midnight"] .chibi-row {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.4), 
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  border-radius: 24px !important;
+  padding: 16px !important;
+}
+
+/* Bug 6: Note Cards Detachment */
+[data-theme="sakura"] .note-card {
+  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 
+    0 4px 12px rgba(122, 84, 105, 0.12),
+    0 1px 3px rgba(122, 84, 105, 0.08) !important;
+}
+
+[data-theme="ocean"] .note-card {
+  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 
+    0 4px 12px rgba(74, 123, 184, 0.12),
+    0 1px 3px rgba(74, 123, 184, 0.08) !important;
+}
+
+[data-theme="matcha"] .note-card {
+  border: 1.5px solid rgba(255, 255, 255, 0.85) !important;
+  box-shadow: 
+    0 4px 12px rgba(127, 168, 90, 0.12),
+    0 1px 3px rgba(127, 168, 90, 0.08) !important;
+}
+
+[data-theme="midnight"] .note-card {
+  border: 1.5px solid rgba(255, 255, 255, 0.2) !important;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    0 1px 3px rgba(0, 0, 0, 0.2) !important;
+}
+
+/* Bug 8: Note Hover Controls */
+.note-hover-controls {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  display: flex;
+  gap: 6px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 150ms ease, transform 150ms ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.sticky-note:hover .note-hover-controls {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+
+@media (hover: none) {
+  .note-hover-controls {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+}
+
+.note-control-btn {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: var(--text-primary);
+  transition: background 150ms ease, color 150ms ease, transform 150ms ease;
+  padding: 0;
+}
+
+.note-control-btn:hover {
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--accent-deep);
+  transform: scale(1.08);
+}
+
+.note-control-btn--danger:hover {
+  color: #D97070;
+}

@@ -1,4 +1,5 @@
 import React, { useRef, useState } from 'react';
+import { Pencil, X } from 'lucide-react';
 
 const EMOJIS = ['❤️', '😂', '😮', '🥰'];
 
@@ -21,8 +22,7 @@ export default function StickyNote({
   const noteRef = useRef(null);
 
   const handlePointerDown = (e) => {
-    if (!isAuthor || e.button !== 0) return; // Only left click and author
-    // Ignore if clicking on buttons or resize handle
+    if (!isAuthor || e.button !== 0) return; 
     if (e.target.closest('button') || e.target.closest('.sticky-author-container') || e.target.closest('.alarm-badge') || e.target.closest('.resize-handle') || e.target.closest('.reaction-trigger') || e.target.closest('.reaction-picker') || e.target.closest('.pin-icon-corner') || e.target.closest('.reaction-pill')) return;
 
     setIsDragging(true);
@@ -84,10 +84,17 @@ export default function StickyNote({
     if (e.button !== 0) return;
     
     e.target.setPointerCapture(e.pointerId);
+    
+    const container = noteRef.current.parentElement;
+    const rect = container.getBoundingClientRect();
+    const canvasWidth = rect.width;
+    const canvasHeight = rect.height;
+
     const startX = e.clientX;
     const startY = e.clientY;
-    const startW = parseFloat(note.width) || 160;
-    const startH = parseFloat(note.height) || 160;
+    
+    const startW = canvasWidth * (parseFloat(note.width_pct) || 0.28);
+    const startH = canvasHeight * (parseFloat(note.height_pct) || 0.28);
     const startPosX = parseFloat(note.position_x) || 0;
     const startPosY = parseFloat(note.position_y) || 0;
 
@@ -96,36 +103,31 @@ export default function StickyNote({
     let newX = startPosX;
     let newY = startPosY;
 
-    const container = noteRef.current.parentElement;
-    const rect = container.getBoundingClientRect();
-    const canvasWidth = rect.width;
-    const canvasHeight = rect.height;
-
     const handlePointerMove = (moveEvent) => {
       const dx = moveEvent.clientX - startX;
       const dy = moveEvent.clientY - startY;
 
       if (corner === 'bottom-right') {
-        newW = Math.max(100, Math.min(500, startW + dx));
-        newH = Math.max(100, Math.min(500, startH + dy));
+        newW = Math.max(80, Math.min(canvasWidth * 0.9, startW + dx));
+        newH = Math.max(80, Math.min(canvasHeight * 0.9, startH + dy));
       } else if (corner === 'bottom-left') {
-        newW = Math.max(100, Math.min(500, startW - dx));
-        newH = Math.max(100, Math.min(500, startH + dy));
+        newW = Math.max(80, Math.min(canvasWidth * 0.9, startW - dx));
+        newH = Math.max(80, Math.min(canvasHeight * 0.9, startH + dy));
         newX = startPosX + (startW - newW) / canvasWidth;
       } else if (corner === 'top-right') {
-        newW = Math.max(100, Math.min(500, startW + dx));
-        newH = Math.max(100, Math.min(500, startH - dy));
+        newW = Math.max(80, Math.min(canvasWidth * 0.9, startW + dx));
+        newH = Math.max(80, Math.min(canvasHeight * 0.9, startH - dy));
         newY = startPosY + (startH - newH) / canvasHeight;
       } else if (corner === 'top-left') {
-        newW = Math.max(100, Math.min(500, startW - dx));
-        newH = Math.max(100, Math.min(500, startH - dy));
+        newW = Math.max(80, Math.min(canvasWidth * 0.9, startW - dx));
+        newH = Math.max(80, Math.min(canvasHeight * 0.9, startH - dy));
         newX = startPosX + (startW - newW) / canvasWidth;
         newY = startPosY + (startH - newH) / canvasHeight;
       }
 
       if (noteRef.current) {
-        noteRef.current.style.width = `${newW}px`;
-        noteRef.current.style.height = `${newH}px`;
+        noteRef.current.style.width = `calc(${(newW / canvasWidth)} * 100%)`;
+        noteRef.current.style.height = `calc(${(newH / canvasHeight)} * 100%)`;
         noteRef.current.style.left = `${newX * 100}%`;
         noteRef.current.style.top = `${newY * 100}%`;
       }
@@ -139,8 +141,9 @@ export default function StickyNote({
       e.target.removeEventListener('pointercancel', handlePointerUp);
       
       if (newW !== startW || newH !== startH) {
-        console.log('[resize] saving', { id: note.id, width: newW, height: newH, x: newX, y: newY });
-        onUpdateNote(note.id, { width: newW, height: newH, position_x: newX, position_y: newY });
+        const newWidthPct = newW / canvasWidth;
+        const newHeightPct = newH / canvasHeight;
+        onUpdateNote(note.id, { width_pct: newWidthPct, height_pct: newHeightPct, position_x: newX, position_y: newY });
       }
     };
 
@@ -155,14 +158,17 @@ export default function StickyNote({
   const authorInitials = authorName ? authorName.substring(0, 2).toUpperCase() : '?';
   const firstName = authorName ? authorName.split(' ')[0] : '?';
 
-  // Group reactions by emoji
   const groupedReactions = EMOJIS.map(emoji => ({
     emoji,
     users: reactions.filter(r => r.emoji === emoji).map(r => r.user_id)
   })).filter(g => g.users.length > 0);
 
   const isRound = note.shape === 'round';
-  const isSmall = (parseFloat(note.width) || 160) < 140 || (parseFloat(note.height) || 160) < 140;
+  const widthPct = parseFloat(note.width_pct) || 0.28;
+  const heightPct = parseFloat(note.height_pct) || 0.28;
+  
+  // Approximate logic for smallness just to truncate text
+  const isSmall = widthPct < 0.2 && heightPct < 0.2;
   
   let displayText = note.body || '';
   if (isRound && isSmall && displayText.length > 40) {
@@ -176,9 +182,9 @@ export default function StickyNote({
       style={{
         left: `${parseFloat(note.position_x) * 100 || 0}%`,
         top: `${parseFloat(note.position_y) * 100 || 0}%`,
-        width: `${parseFloat(note.width) || 160}px`,
-        height: `${parseFloat(note.height) || 160}px`,
-        touchAction: 'none' // Prevent scrolling while dragging on mobile
+        width: `calc(${widthPct} * 100%)`,
+        height: `calc(${heightPct} * 100%)`,
+        touchAction: 'none' 
       }}
       onPointerDown={handlePointerDown}
       onMouseLeave={() => setShowReactions(false)}
@@ -203,13 +209,26 @@ export default function StickyNote({
       </div>
       
       {isAuthor && (
-        <div className="sticky-actions" style={{ top: isRound ? '16px' : '8px', left: isRound ? '24px' : '12px' }}>
-          <button className="sticky-action-btn" onClick={() => onEdit(note)}>✏️</button>
-          <button className="sticky-action-btn" onClick={() => {
-            if (window.confirm('Delete this note?')) {
-              onDelete(note.id);
-            }
-          }}>❌</button>
+        <div className="note-hover-controls">
+          <button 
+            className="note-control-btn" 
+            onClick={(e) => { e.stopPropagation(); onEdit(note); }}
+            aria-label="Edit note"
+          >
+            <Pencil size={14} />
+          </button>
+          <button 
+            className="note-control-btn note-control-btn--danger" 
+            onClick={(e) => {
+              e.stopPropagation();
+              if (window.confirm('Delete this note?')) {
+                onDelete(note.id);
+              }
+            }}
+            aria-label="Delete note"
+          >
+            <X size={14} />
+          </button>
         </div>
       )}
 
@@ -233,7 +252,6 @@ export default function StickyNote({
         </div>
       )}
 
-      {/* Reactions trigger */}
       <div className="reaction-trigger-container">
         {showReactions && (
           <div className="reaction-picker">
@@ -263,7 +281,6 @@ export default function StickyNote({
         </button>
       </div>
 
-      {/* Reaction pills below note */}
       {groupedReactions.length > 0 && (
         <div className="reaction-pills">
           {groupedReactions.map(g => {

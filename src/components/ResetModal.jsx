@@ -5,18 +5,21 @@ export default function ResetModal({ isOpen, onClose, onConfirm }) {
   if (!isOpen) return null;
 
   const modalContent = (
-    <div className="reset-modal-overlay" onClick={onClose}>
-      <div className="reset-modal-card" onClick={(e) => e.stopPropagation()}>
-        <h2 className="reset-modal-title display-font">Reset your connection?</h2>
-        <p className="reset-modal-body">
-          This will disconnect you from your partner. Your notes will be saved, but your partner will need the new code to reconnect.
-        </p>
-        <div className="reset-modal-actions">
-          <button className="reset-modal-cancel" onClick={onClose}>Cancel</button>
-          <button className="reset-modal-confirm" onClick={onConfirm}>Reset</button>
+    <>
+      <div className="overlay-backdrop" onClick={onClose} />
+      <div className="reset-modal-overlay" style={{ background: 'none', backdropFilter: 'none', pointerEvents: 'none' }}>
+        <div className="reset-modal-card" style={{ pointerEvents: 'auto', zIndex: 1000 }} onClick={(e) => e.stopPropagation()}>
+          <h2 className="reset-modal-title display-font">Reset your connection?</h2>
+          <p className="reset-modal-body">
+            This will disconnect you from your partner. Your notes will be saved, but your partner will need the new code to reconnect.
+          </p>
+          <div className="reset-modal-actions">
+            <button className="reset-modal-cancel" onClick={onClose}>Cancel</button>
+            <button className="reset-modal-confirm" onClick={onConfirm}>Reset</button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 
   return createPortal(modalContent, document.body);
