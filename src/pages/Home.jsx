@@ -6,6 +6,7 @@ import CreateSpaceCard from '../components/CreateSpaceCard';
 import JoinSpaceCard from '../components/JoinSpaceCard';
 import ShareCodeScreen from '../components/ShareCodeScreen';
 import Wall from './Wall';
+import AppShell from '../components/AppShell';
 import '../styles/pairing.css';
 import '../styles/auth.css';
 
@@ -26,7 +27,7 @@ export default function Home({ session }) {
     if (!profile) {
       return <Navigate to="/setup" replace />;
     }
-    return <Wall session={session} spaceId={space.id} />;
+    return <AppShell session={session} space={space} />;
   }
 
   // State 2: Waiting for partner (1 member)
