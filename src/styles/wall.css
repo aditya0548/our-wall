@@ -348,3 +348,13 @@
   from { opacity: 0; transform: scale(0.9); }
   to { opacity: 1; transform: scale(1); }
 }
+
+/* MOBILE RESPONSIVENESS */
+@media (max-width: 767px) {
+  .wall-chat {
+    padding: 16px;
+  }
+  .note-input-bar {
+    padding: 12px 16px;
+  }
+}
