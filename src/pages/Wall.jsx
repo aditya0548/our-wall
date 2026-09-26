@@ -12,7 +12,7 @@ import MessageMenu from '../components/MessageMenu';
 import '../styles/wall.css';
 
 export default function Wall({ session, spaceId }) {
-  const { notes, loading, sendNote } = useNotes(spaceId, session.user.id);
+  const { notes, loading, sendNote, deleteNote } = useNotes(spaceId, session.user.id);
   const { profile, partnerProfile } = useTheme();
 
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
@@ -71,8 +71,31 @@ export default function Wall({ session, spaceId }) {
     setMenuState({ isOpen: false, noteId: null, position: { x: 0, y: 0 } });
   };
 
-  const handleMenuAction = (action) => {
-    console.log(`Action '${action}' clicked on note ${menuState.noteId}`);
+  const showToast = (msg) => {
+    setToastMessage(msg);
+    setTimeout(() => setToastMessage(''), 2000);
+  };
+
+  const handleMenuAction = async (action) => {
+    const noteId = menuState.noteId;
+    const note = notes.find(n => n.id === noteId);
+    if (!note) return;
+
+    if (action === 'copy') {
+      await navigator.clipboard.writeText(note.body);
+      showToast('Copied');
+    } else if (action === 'delete') {
+      try {
+        await deleteNote(noteId);
+        showToast('Message deleted');
+      } catch (err) {
+        showToast('Failed to delete');
+      }
+    } else if (action === 'pin' || action === 'reply') {
+      showToast('Coming soon');
+    } else if (action === 'react') {
+      console.log('React clicked');
+    }
   };
 
   if (loading) {

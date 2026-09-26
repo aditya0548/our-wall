@@ -102,5 +102,14 @@ export default function useNotes(spaceId, userId) {
     }
   };
 
-  return { notes, loading, sendNote };
+  const deleteNote = async (noteId) => {
+    setNotes((prev) => prev.filter(n => n.id !== noteId));
+    const { error } = await supabase.from('notes').delete().eq('id', noteId);
+    if (error) {
+      console.error('Failed to delete note:', error);
+      throw error;
+    }
+  };
+
+  return { notes, loading, sendNote, deleteNote };
 }
