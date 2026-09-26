@@ -48,7 +48,8 @@ export default function useSpace(session) {
         id: spaceRes.data.id,
         code: spaceRes.data.connection_code,
         isFull: spaceRes.data.is_full,
-        memberCount: countRes.count
+        memberCount: countRes.count,
+        createdAt: spaceRes.data.created_at
       });
 
     } catch (err) {
