@@ -258,3 +258,21 @@
   cursor: not-allowed;
   filter: grayscale(0.5);
 }
+
+/* Emoji Picker styling */
+.emoji-picker-wrapper {
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  margin-bottom: 8px;
+  z-index: 100;
+  box-shadow: var(--shadow-soft);
+  border-radius: 8px;
+  
+  /* emoji-picker-react CSS variables */
+  --epr-bg-color: var(--bg-card);
+  --epr-category-label-bg-color: var(--bg-card);
+  --epr-picker-border-color: var(--border-soft);
+  --epr-hover-bg-color: var(--bg-app);
+  --epr-search-input-bg-color: var(--bg-app);
+}
