@@ -102,6 +102,7 @@
   max-width: 1440px;
   margin: 0 auto;
   width: 100%;
+  min-height: 0;
 }
 
 .column-left, .column-right {
@@ -127,6 +128,9 @@
   border-radius: var(--radius-panel) var(--radius-panel) 0 0;
   position: relative;
   overflow: hidden;
+  height: 100%;
+  min-height: 0;
+  padding: 0;
 }
 
 /* PLACEHOLDERS */
@@ -271,8 +275,19 @@
 }
 
 .column-center .wall-container {
-  height: 100%;
+  flex: 1;
+  min-height: 0;
   width: 100%;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
+}
+
+/* Feature main areas (games-main, sticky-canvas, whiteboard-main) fill the wall-container */
+.column-center .games-main,
+.column-center .sticky-canvas,
+.column-center .whiteboard-main {
+  flex: 1;
+  min-height: 0;
+  overflow: auto; /* scroll inside the feature, not the whole page */
 }
