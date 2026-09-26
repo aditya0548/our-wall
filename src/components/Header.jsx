@@ -1,7 +1,9 @@
 import React from 'react';
 import { useTheme } from '../theme/ThemeProvider';
+import ProfileMenu from './ProfileMenu';
+import { supabase } from '../supabaseClient';
 
-export default function Header({ space, onAvatarClick }) {
+export default function Header({ space, onAvatarClick, onResetClick }) {
   const { profile } = useTheme();
 
   // Calculate days together
@@ -40,11 +42,11 @@ export default function Header({ space, onAvatarClick }) {
         <span className="days-label">days</span>
       </div>
 
-      <div className="header-right" onClick={onAvatarClick}>
-        <div className="header-avatar">
-          {getInitials(profile?.display_name)}
-        </div>
-        <span className="avatar-caret">▼</span>
+      <div className="header-right">
+        <ProfileMenu 
+          onSignOutClick={() => supabase.auth.signOut()} 
+          onResetClick={onResetClick}
+        />
       </div>
     </header>
   );

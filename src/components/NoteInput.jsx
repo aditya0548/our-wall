@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Send } from 'lucide-react';
 
-export default function NoteInput({ onSend, currentTheme }) {
+export default function NoteInput({ onSend }) {
   const [text, setText] = useState('');
   const [sending, setSending] = useState(false);
 
@@ -25,26 +26,26 @@ export default function NoteInput({ onSend, currentTheme }) {
   };
 
   return (
-    <div className="input-container">
-      <div className="input-row">
-        <input 
-          type="text" 
-          className="note-input"
-          maxLength={140}
-          placeholder="Type a note..."
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          onKeyDown={handleKeyDown}
-          disabled={sending}
-        />
-        <button 
-          className="send-button"
-          onClick={handleSend}
-          disabled={sending || !text.trim()}
-        >
-          {sending ? 'Sending...' : <>Send <span style={{fontSize: '12px'}}>♥</span></>}
-        </button>
-      </div>
+    <div className="note-input-bar">
+      <button className="emoji-btn" disabled={sending}>
+        😊
+      </button>
+      <input
+        type="text"
+        placeholder="Type a message..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        onKeyDown={handleKeyDown}
+        disabled={sending}
+      />
+      <button 
+        className="send-btn" 
+        onClick={handleSend} 
+        disabled={sending || !text.trim()}
+        aria-label="Send message"
+      >
+        <Send size={20} />
+      </button>
     </div>
   );
 }

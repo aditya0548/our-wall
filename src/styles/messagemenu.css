@@ -1,0 +1,42 @@
+.message-menu {
+  position: fixed;
+  background: white;
+  border-radius: 12px;
+  box-shadow: var(--shadow-card);
+  padding: 8px 0;
+  z-index: 1000;
+  min-width: 150px;
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 150ms ease-out;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 16px;
+  width: 100%;
+  font-size: 14px;
+  color: var(--text-primary);
+  transition: background 150ms ease;
+  text-align: left;
+}
+
+.menu-item:hover {
+  background: var(--bg-chat);
+}
+
+.menu-item.danger {
+  color: #D9534F;
+}
+
+.menu-item.danger:hover {
+  background: #FDF1F0;
+}
+
+.menu-divider {
+  height: 1px;
+  background: var(--border-soft);
+  margin: 4px 0;
+}

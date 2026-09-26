@@ -1,228 +1,260 @@
-.wall-container {
+.wall-chat {
+  flex-grow: 1;
   display: flex;
   flex-direction: column;
-  height: 100vh;
-}
-
-.wall-header {
-  height: 64px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0 24px;
-  background: var(--surface);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--surface-border);
-  flex-shrink: 0;
-  position: sticky;
-  top: 0;
-  z-index: 50;
-}
-
-.wall-title {
-  font-size: 20px;
-  color: var(--accent-deep);
-  font-style: italic;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.header-right {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-}
-
-.user-avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: var(--accent-soft);
-  color: var(--accent-deep);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 600;
-  font-size: 14px;
-  border: 1px solid var(--surface-border);
-}
-
-.wall-main {
-  flex-grow: 1;
   overflow-y: auto;
-  padding: 24px 24px 80px 24px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.notes-list {
-  display: flex;
-  flex-direction: column;
-  width: 100%;
-  max-width: 600px;
-  gap: 8px;
-  padding-bottom: 120px; /* space for the floating input */
-}
-
-.empty-state {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  color: var(--text-muted);
-  font-size: 15px;
-  height: 100%;
-  text-align: center;
-  gap: 8px;
-}
-
-.empty-sparkle {
-  font-size: 24px;
-  color: var(--accent-soft);
-}
-
-.note-card {
-  width: fit-content;
-  max-width: 65%;
-  padding: 12px 16px;
-  animation: slideIn 300ms ease-out forwards;
-  transition: all 200ms ease;
+  padding: 24px;
+  background: var(--bg-chat);
   position: relative;
 }
 
-.note-card.own {
-  background: var(--accent);
-  color: white;
-  border-radius: 18px 18px 6px 18px;
-  align-self: flex-end;
+.wall-chat::-webkit-scrollbar {
+  display: none;
 }
 
-.note-card.partner {
-  background: var(--surface);
-  color: var(--text-primary);
-  border-radius: 18px 18px 18px 6px;
-  align-self: flex-start;
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--surface-border);
-}
-
-.note-card:hover {
-  transform: translateY(-2px);
-}
-
-.note-body {
-  font-size: 16px;
-  line-height: 1.5;
-  margin-bottom: 4px;
-  word-wrap: break-word;
-  white-space: pre-wrap;
-}
-
-.note-footer {
-  font-size: 11px;
+.wall-empty {
+  flex-grow: 1;
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  gap: 16px;
+  animation: fadeIn 300ms ease-out;
 }
 
-.note-card.own .note-footer {
-  color: rgba(255, 255, 255, 0.8);
+.empty-sparkle {
+  color: var(--text-muted);
+  opacity: 0.5;
 }
 
-.note-card.partner .note-footer {
-  color: var(--text-secondary);
-}
-
-/* Floating input bar */
-.wall-footer {
-  position: fixed;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 48px);
-  max-width: 600px;
-  z-index: 10;
-}
-
-.input-container {
-  background: var(--surface);
-  backdrop-filter: blur(10px);
-  border: 1px solid var(--surface-border);
-  border-radius: var(--radius-card);
-  padding: 16px;
-  box-shadow: var(--shadow-lifted);
+.wall-messages {
   display: flex;
   flex-direction: column;
   gap: 12px;
+  justify-content: flex-end;
+  min-height: 100%;
 }
 
-.input-row {
+.date-divider {
   display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 24px 0 12px;
+  color: var(--text-muted);
+  font-family: var(--font-display);
+  font-size: 13px;
+  letter-spacing: 0.05em;
+}
+
+.date-divider::before,
+.date-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.date-divider:not(:empty)::before {
+  margin-right: 16px;
+}
+
+.date-divider:not(:empty)::after {
+  margin-left: 16px;
+}
+
+/* Note Card Structure */
+.note-card {
+  display: flex;
+  align-items: flex-end;
   gap: 12px;
+  width: 100%;
+  animation: fadeIn 200ms ease-out forwards;
+}
+
+.note-card.mine {
+  flex-direction: row-reverse;
+}
+
+.note-avatar-container {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg-card);
+}
+
+.note-avatar {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.note-avatar.fallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-size: 12px;
+  color: var(--text-secondary);
+  background: var(--accent-sage);
+}
+
+.note-content {
+  display: flex;
+  flex-direction: column;
+  max-width: 60%;
+  position: relative;
+}
+
+.note-card.mine .note-content {
+  align-items: flex-end;
+}
+
+.note-card.partner .note-content {
+  align-items: flex-start;
+}
+
+/* Bubble Styling */
+.note-bubble {
+  position: relative;
+  padding: 12px 16px;
+  font-size: 15px;
+  line-height: 1.5;
+  color: var(--text-primary);
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  transition: transform 150ms ease;
+  display: flex;
   align-items: center;
 }
 
-.note-input {
-  flex-grow: 1;
-  background: transparent;
-  border: none;
-  padding: 8px 4px;
-  font-size: 15px;
-  color: var(--text-primary);
+.note-card.mine .note-bubble {
+  background: var(--accent-blush);
+  border-radius: 14px 14px 4px 14px;
 }
 
-.note-input::placeholder {
+.note-card.partner .note-bubble {
+  /* Mimic 30% opacity without making text transparent */
+  background: color-mix(in srgb, var(--accent-sage) 30%, transparent);
+  border-radius: 14px 14px 14px 4px;
+}
+
+/* Three Dot Menu */
+.note-menu-trigger {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: white;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted);
+  opacity: 0;
+  transition: opacity 150ms ease, box-shadow 150ms ease;
+  box-shadow: var(--shadow-soft);
+  z-index: 10;
+}
+
+.note-card.mine .note-menu-trigger {
+  left: -32px;
+}
+
+.note-card.partner .note-menu-trigger {
+  right: -32px;
+}
+
+.note-bubble:hover .note-menu-trigger,
+.note-menu-trigger:focus,
+.note-menu-trigger:active {
+  opacity: 1;
+}
+
+.note-menu-trigger:hover {
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Make it always visible on smaller screens for touch */
+@media (hover: none) {
+  .note-menu-trigger {
+    opacity: 1;
+  }
+}
+
+.note-timestamp {
+  font-size: 11px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  padding: 0 4px;
+}
+
+/* Input Bar */
+.note-input-bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: var(--bg-chat);
+  border-top: 1px solid var(--border-soft);
+  flex-shrink: 0;
+}
+
+.note-input-bar input {
+  flex-grow: 1;
+  background: var(--bg-card);
+  border-radius: 999px;
+  padding: 14px 20px;
+  font-size: 15px;
+  color: var(--text-primary);
+  transition: box-shadow 200ms ease;
+}
+
+.note-input-bar input:focus {
+  box-shadow: inset 0 0 0 1px var(--border-soft), var(--shadow-soft);
+}
+
+.note-input-bar input::placeholder {
   color: var(--text-muted);
 }
 
-.send-button {
-  background: var(--accent);
-  color: white;
-  padding: 12px 20px;
-  border-radius: var(--radius-button);
-  font-weight: 600;
-  font-size: 15px;
-  border: none;
-  cursor: pointer;
-  transition: all 200ms ease;
-  flex-shrink: 0;
+.emoji-btn {
+  font-size: 20px;
+  opacity: 0.6;
+  transition: opacity 200ms ease;
+  padding: 8px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: center;
 }
 
-.send-button:disabled {
+.emoji-btn:hover {
+  opacity: 1;
+}
+
+.send-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--accent-sage);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: filter 200ms ease, transform 150ms ease;
+}
+
+.send-btn:not(:disabled):hover {
+  filter: brightness(0.95);
+  transform: scale(1.02);
+}
+
+.send-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
-}
-
-.send-button:hover:not(:disabled) {
-  background: var(--accent-hover);
-  transform: translateY(-2px);
-}
-
-.send-button:active:not(:disabled) {
-  transform: scale(0.98);
-}
-
-
-
-@keyframes slideIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-
-
-/* Sakura Theme Global Overrides */
-[data-theme="sakura"] .note-card {
-  box-shadow: 0 2px 12px rgba(122, 84, 105, 0.08);
-  border: 1px solid rgba(122, 84, 105, 0.06);
-  border-radius: 20px;
-}
-[data-theme="sakura"] .note-card:hover {
-  box-shadow: 0 6px 24px rgba(122, 84, 105, 0.14);
-  transform: translateY(-1px);
+  filter: grayscale(0.5);
 }

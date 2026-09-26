@@ -8,17 +8,18 @@ import NoteInput from '../components/NoteInput';
 import Sparkle from '../components/Sparkle';
 import ResetModal from '../components/ResetModal';
 import PartnerResetModal from '../components/PartnerResetModal';
-import ProfileMenu from '../components/ProfileMenu';
-import ChibiRow from '../components/ChibiRow';
+import MessageMenu from '../components/MessageMenu';
 import '../styles/wall.css';
 
 export default function Wall({ session, spaceId }) {
   const { notes, loading, sendNote } = useNotes(spaceId, session.user.id);
-  const { profile, partnerProfile, theme } = useTheme();
+  const { profile, partnerProfile } = useTheme();
 
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isPartnerResetModalOpen, setIsPartnerResetModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
+  
+  const [menuState, setMenuState] = useState({ isOpen: false, noteId: null, position: { x: 0, y: 0 } });
   
   const bottomRef = useRef(null);
 
@@ -36,14 +37,6 @@ export default function Wall({ session, spaceId }) {
       bottomRef.current.scrollIntoView({ behavior: 'smooth' });
     }
   }, [notes]);
-
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-  };
-
-  const handleResetClick = () => {
-    setIsResetModalOpen(true);
-  };
 
   const handleResetConfirm = async () => {
     setIsResetModalOpen(false);
@@ -63,17 +56,29 @@ export default function Wall({ session, spaceId }) {
     window.location.reload();
   };
 
-  const getInitials = (name) => {
-    if (!name) return '?';
-    return name.substring(0, 2).toUpperCase();
+  const partnerName = partnerProfile?.display_name || 'Partner';
+
+  const handleMenuOpen = (noteId, e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    setMenuState({
+      isOpen: true,
+      noteId,
+      position: { x: rect.right + 8, y: rect.top }
+    });
   };
 
-  const partnerName = partnerProfile?.display_name || 'Partner';
+  const handleMenuClose = () => {
+    setMenuState({ isOpen: false, noteId: null, position: { x: 0, y: 0 } });
+  };
+
+  const handleMenuAction = (action) => {
+    console.log(`Action '${action}' clicked on note ${menuState.noteId}`);
+  };
 
   if (loading) {
     return (
-      <div className="wall-container" style={{ alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: 'var(--text-muted)' }}>Loading your wall...</div>
+      <div className="wall-chat" style={{ alignItems: 'center', justifyContent: 'center' }}>
+        <div style={{ color: 'var(--text-muted)' }}>Loading your chat...</div>
       </div>
     );
   }
@@ -82,49 +87,61 @@ export default function Wall({ session, spaceId }) {
   const sortedNotes = [...notes].reverse();
 
   return (
-    <div className="wall-container">
-      <header className="wall-header">
-        <h1 className="wall-title display-font">
-          {theme === 'sakura' ? <span className="sakura-title-icon">🌸</span> : '♥'} Our Wall
-        </h1>
-        <div className="header-right">
-          <ProfileMenu 
-            onResetClick={handleResetClick} 
-            onSignOutClick={handleLogout} 
-          />
-        </div>
-      </header>
-      
-      <ChibiRow 
-        spaceId={spaceId} 
-        session={session} 
-        profile={profile} 
-        partnerProfile={partnerProfile} 
-      />
-
-      <main className="wall-main">
+    <>
+      <div className="wall-chat">
         {sortedNotes.length === 0 ? (
-          <div className="empty-state">
+          <div className="wall-empty">
             <Sparkle className="empty-sparkle" />
             <p>Nothing here yet. Send the first note to {partnerName}.</p>
           </div>
         ) : (
-          <div className="notes-list">
-            {sortedNotes.map((note) => (
-              <NoteCard 
-                key={note.id} 
-                note={note} 
-                isOwn={note.author_id === session.user.id}
-              />
-            ))}
+          <div className="wall-messages">
+            {sortedNotes.map((note, index) => {
+              const isMine = note.author_id === session.user.id;
+              const authorName = isMine ? (profile?.display_name || 'Me') : partnerName;
+              const authorAvatar = isMine ? profile?.avatarUrl : partnerProfile?.avatarUrl;
+              
+              let showDivider = false;
+              if (index > 0) {
+                const prevDate = new Date(sortedNotes[index - 1].created_at).toDateString();
+                const currDate = new Date(note.created_at).toDateString();
+                if (prevDate !== currDate) showDivider = true;
+              } else {
+                showDivider = true; // Always show date for the first message
+              }
+
+              return (
+                <React.Fragment key={note.id}>
+                  {showDivider && (
+                    <div className="date-divider">
+                      <span>{new Date(note.created_at).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+                    </div>
+                  )}
+                  <NoteCard 
+                    note={note} 
+                    isMine={isMine}
+                    authorName={authorName}
+                    authorAvatar={authorAvatar}
+                    onMenuOpen={handleMenuOpen}
+                  />
+                </React.Fragment>
+              );
+            })}
             <div ref={bottomRef} />
           </div>
         )}
-      </main>
+      </div>
 
-      <footer className="wall-footer">
-        <NoteInput onSend={sendNote} currentTheme={theme} />
-      </footer>
+      <NoteInput onSend={sendNote} />
+
+      {menuState.isOpen && (
+        <MessageMenu 
+          position={menuState.position}
+          isMine={sortedNotes.find(n => n.id === menuState.noteId)?.author_id === session.user.id}
+          onClose={handleMenuClose}
+          onAction={handleMenuAction}
+        />
+      )}
 
       <ResetModal 
         isOpen={isResetModalOpen}
@@ -142,6 +159,6 @@ export default function Wall({ session, spaceId }) {
           {toastMessage}
         </div>
       )}
-    </div>
+    </>
   );
 }

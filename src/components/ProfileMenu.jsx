@@ -112,7 +112,6 @@ export default function ProfileMenu({ onResetClick, onSignOutClick }) {
 
       {isOpen && (
         <>
-          <div className="overlay-backdrop" onClick={() => setIsOpen(false)} />
           <div className="profile-dropdown">
             <div className="profile-dropdown-header">
               <div className="profile-dropdown-avatar">

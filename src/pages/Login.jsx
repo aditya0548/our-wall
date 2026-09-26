@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
 import { Loader2 } from 'lucide-react';
 import Sparkle from '../components/Sparkle';
@@ -10,6 +10,8 @@ export default function Login() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   
+  const navigate = useNavigate();
+
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({
     email: '',
@@ -64,6 +66,7 @@ export default function Login() {
           password,
         });
         if (error) throw error;
+        navigate('/setup');
       } else {
         const { error } = await supabase.auth.signInWithPassword({
           email,
@@ -131,7 +134,7 @@ export default function Login() {
             {loading && <Loader2 size={18} className="animate-spin" style={{ animation: 'spin 1s linear infinite' }} />}
             {loading 
               ? (mode === 'signin' ? 'Signing in…' : 'Creating account…') 
-              : (mode === 'signin' ? "Let's go" : 'Create Account')}
+              : (mode === 'signin' ? "Sign In" : 'Create Account')}
           </button>
         </form>
 

@@ -12,7 +12,6 @@ import OpenWhen from './pages/OpenWhen';
 import Whiteboard from './pages/Whiteboard';
 import Games from './pages/Games';
 import TicTacToe from './pages/TicTacToe';
-import FloatingNav from './components/FloatingNav';
 import { ThemeProvider } from './theme/ThemeProvider';
 
 function App() {
@@ -55,7 +54,6 @@ function App() {
           <Route path="/settings" element={session ? <Settings session={session} /> : <Navigate to="/login" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
-        {session && <FloatingNav />}
       </BrowserRouter>
     </ThemeProvider>
   );
