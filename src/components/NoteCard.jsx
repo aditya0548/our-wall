@@ -1,12 +1,19 @@
 import React from 'react';
 import { MoreVertical } from 'lucide-react';
 
-export default function NoteCard({ note, isMine, authorName, authorAvatar, onMenuOpen }) {
+export default function NoteCard({ note, isMine, authorName, authorAvatar, onMenuOpen, reactions = [], onReactionClick, currentUserId }) {
   const formatTime = (dateStr) => {
     if (!dateStr) return '';
     const date = new Date(dateStr);
     return date.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit', hour12: true });
   };
+
+  const reactionGroups = reactions.reduce((acc, r) => {
+    if (!acc[r.emoji]) acc[r.emoji] = { count: 0, hasMine: false };
+    acc[r.emoji].count += 1;
+    if (r.user_id === currentUserId) acc[r.emoji].hasMine = true;
+    return acc;
+  }, {});
 
   return (
     <div className={`note-card ${isMine ? 'mine' : 'partner'}`}>
@@ -31,6 +38,22 @@ export default function NoteCard({ note, isMine, authorName, authorAvatar, onMen
             <MoreVertical size={16} />
           </button>
         </div>
+        
+        {Object.keys(reactionGroups).length > 0 && (
+          <div className="note-reactions">
+            {Object.entries(reactionGroups).map(([emoji, data]) => (
+              <button 
+                key={emoji}
+                className={`reaction-pill ${data.hasMine ? 'active' : ''}`}
+                onClick={() => onReactionClick(note.id, emoji)}
+              >
+                <span>{emoji}</span>
+                <span className="reaction-count">{data.count}</span>
+              </button>
+            ))}
+          </div>
+        )}
+
         <div className="note-timestamp">
           {formatTime(note.created_at)}
         </div>

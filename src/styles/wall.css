@@ -276,3 +276,75 @@
   --epr-hover-bg-color: var(--bg-app);
   --epr-search-input-bg-color: var(--bg-app);
 }
+
+/* Reaction Pills */
+.note-reactions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: -4px;
+  margin-bottom: 4px;
+  z-index: 2;
+}
+
+.note-card.mine .note-reactions {
+  justify-content: flex-end;
+}
+
+.reaction-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  border-radius: 99px;
+  padding: 2px 8px;
+  font-size: 12px;
+  color: var(--text-secondary);
+  transition: all 0.2s;
+}
+
+.reaction-pill:hover {
+  background: var(--bg-app);
+}
+
+.reaction-pill.active {
+  background: color-mix(in srgb, var(--accent-sage) 20%, transparent);
+  border-color: var(--accent-sage);
+  color: var(--text-primary);
+}
+
+.reaction-count {
+  font-weight: 500;
+}
+
+/* Reaction Picker Menu */
+.reaction-picker-menu {
+  position: fixed;
+  background: var(--bg-card);
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-card);
+  border-radius: 99px;
+  padding: 8px 12px;
+  display: flex;
+  gap: 12px;
+  z-index: 1000;
+  animation: popIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reaction-picker-btn {
+  font-size: 20px;
+  transition: transform 0.2s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.reaction-picker-btn:hover {
+  transform: scale(1.2);
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.9); }
+  to { opacity: 1; transform: scale(1); }
+}

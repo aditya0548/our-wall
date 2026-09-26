@@ -11,8 +11,31 @@ import PartnerResetModal from '../components/PartnerResetModal';
 import MessageMenu from '../components/MessageMenu';
 import '../styles/wall.css';
 
+const REACTION_EMOJIS = ['❤️', '😂', '😮', '😢', '👍', '🔥'];
+
+const ReactionPickerOverlay = ({ position, onSelect, onClose }) => {
+  const ref = useRef(null);
+  useEffect(() => {
+    const handleClick = (e) => {
+      if (ref.current && !ref.current.contains(e.target)) onClose();
+    };
+    setTimeout(() => document.addEventListener('click', handleClick), 0);
+    return () => document.removeEventListener('click', handleClick);
+  }, [onClose]);
+
+  return (
+    <div ref={ref} className="reaction-picker-menu" style={{ top: position.y, left: position.x }}>
+      {REACTION_EMOJIS.map(e => (
+        <button key={e} className="reaction-picker-btn" onClick={() => onSelect(e)}>
+          {e}
+        </button>
+      ))}
+    </div>
+  );
+};
+
 export default function Wall({ session, spaceId }) {
-  const { notes, loading, sendNote, deleteNote } = useNotes(spaceId, session.user.id);
+  const { notes, loading, sendNote, deleteNote, reactions, toggleReaction } = useNotes(spaceId, session.user.id);
   const { profile, partnerProfile } = useTheme();
 
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
@@ -20,6 +43,7 @@ export default function Wall({ session, spaceId }) {
   const [toastMessage, setToastMessage] = useState('');
   
   const [menuState, setMenuState] = useState({ isOpen: false, noteId: null, position: { x: 0, y: 0 } });
+  const [reactionPickerState, setReactionPickerState] = useState({ isOpen: false, noteId: null, position: { x: 0, y: 0 } });
   
   const bottomRef = useRef(null);
 
@@ -94,7 +118,11 @@ export default function Wall({ session, spaceId }) {
     } else if (action === 'pin' || action === 'reply') {
       showToast('Coming soon');
     } else if (action === 'react') {
-      console.log('React clicked');
+      setReactionPickerState({
+        isOpen: true,
+        noteId: noteId,
+        position: menuState.position
+      });
     }
   };
 
@@ -106,7 +134,6 @@ export default function Wall({ session, spaceId }) {
     );
   }
 
-  // Reverse notes so newest is at the bottom
   const sortedNotes = [...notes].reverse();
 
   return (
@@ -130,7 +157,7 @@ export default function Wall({ session, spaceId }) {
                 const currDate = new Date(note.created_at).toDateString();
                 if (prevDate !== currDate) showDivider = true;
               } else {
-                showDivider = true; // Always show date for the first message
+                showDivider = true;
               }
 
               return (
@@ -146,6 +173,9 @@ export default function Wall({ session, spaceId }) {
                     authorName={authorName}
                     authorAvatar={authorAvatar}
                     onMenuOpen={handleMenuOpen}
+                    reactions={reactions[note.id] || []}
+                    onReactionClick={toggleReaction}
+                    currentUserId={session.user.id}
                   />
                 </React.Fragment>
               );
@@ -163,6 +193,17 @@ export default function Wall({ session, spaceId }) {
           isMine={sortedNotes.find(n => n.id === menuState.noteId)?.author_id === session.user.id}
           onClose={handleMenuClose}
           onAction={handleMenuAction}
+        />
+      )}
+
+      {reactionPickerState.isOpen && (
+        <ReactionPickerOverlay 
+          position={reactionPickerState.position}
+          onSelect={(emoji) => {
+            toggleReaction(reactionPickerState.noteId, emoji);
+            setReactionPickerState({ isOpen: false, noteId: null, position: { x: 0, y: 0 } });
+          }}
+          onClose={() => setReactionPickerState({ isOpen: false, noteId: null, position: { x: 0, y: 0 } })}
         />
       )}
 

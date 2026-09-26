@@ -4,6 +4,7 @@ import { supabase } from '../supabaseClient';
 export default function useNotes(spaceId, userId) {
   const [notes, setNotes] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [reactions, setReactions] = useState({});
 
   useEffect(() => {
     if (!spaceId) return;
@@ -24,6 +25,23 @@ export default function useNotes(spaceId, userId) {
         if (isMounted) {
           setNotes(data || []);
           setLoading(false);
+          
+          if (data && data.length > 0) {
+            const noteIds = data.map(n => n.id);
+            const { data: rxData } = await supabase
+              .from('note_reactions')
+              .select('*')
+              .in('note_id', noteIds);
+            
+            if (rxData && isMounted) {
+               const rxMap = {};
+               rxData.forEach(r => {
+                 if(!rxMap[r.note_id]) rxMap[r.note_id] = [];
+                 rxMap[r.note_id].push(r);
+               });
+               setReactions(rxMap);
+            }
+          }
         }
       } catch (err) {
         console.error('Error fetching notes:', err);
@@ -111,5 +129,36 @@ export default function useNotes(spaceId, userId) {
     }
   };
 
-  return { notes, loading, sendNote, deleteNote };
+  const toggleReaction = async (noteId, emoji) => {
+    const noteReactions = reactions[noteId] || [];
+    const existing = noteReactions.find(r => r.user_id === userId && r.emoji === emoji);
+
+    if (existing) {
+      setReactions(prev => ({
+        ...prev,
+        [noteId]: prev[noteId].filter(r => r.id !== existing.id)
+      }));
+      await supabase.from('note_reactions').delete().eq('id', existing.id);
+    } else {
+      const tempId = `temp-${Date.now()}`;
+      setReactions(prev => ({
+        ...prev,
+        [noteId]: [...(prev[noteId] || []), { id: tempId, note_id: noteId, user_id: userId, emoji }]
+      }));
+      const { data, error } = await supabase.from('note_reactions').insert({
+        note_id: noteId,
+        user_id: userId,
+        emoji
+      }).select().single();
+      
+      if (data) {
+        setReactions(prev => ({
+          ...prev,
+          [noteId]: prev[noteId].map(r => r.id === tempId ? data : r)
+        }));
+      }
+    }
+  };
+
+  return { notes, loading, sendNote, deleteNote, reactions, toggleReaction };
 }
