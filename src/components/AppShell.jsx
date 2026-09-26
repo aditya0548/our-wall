@@ -4,6 +4,9 @@ import BottomNav from './BottomNav';
 import ProfileColumn from './ProfileColumn';
 import useProfile from '../hooks/useProfile';
 import Wall from '../pages/Wall';
+import Notes from '../pages/Notes';
+import Whiteboard from '../pages/Whiteboard';
+import Games from '../pages/Games';
 import ResetModal from './ResetModal';
 import { supabase } from '../supabaseClient';
 import '../styles/appshell.css';
@@ -52,11 +55,13 @@ export default function AppShell({ session, space }) {
 
         {/* Center Column: Active Feature */}
         <section className="column-center">
-          {activeFeature === 'chat' ? (
-            <Wall session={session} spaceId={space?.id} />
-          ) : (
+          {activeFeature === 'chat' && <Wall session={session} spaceId={space?.id} />}
+          {activeFeature === 'notes' && <Notes session={session} />}
+          {activeFeature === 'whiteboard' && <Whiteboard session={session} />}
+          {activeFeature === 'games' && <Games session={session} />}
+          {activeFeature === 'memories' && (
             <div style={{ textAlign: 'center', padding: 48, color: 'var(--text-muted)' }}>
-              {activeFeature} coming soon
+              Memories coming soon
             </div>
           )}
         </section>

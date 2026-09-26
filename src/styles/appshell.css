@@ -264,3 +264,15 @@
     color: var(--text-primary);
   }
 }
+
+/* Feature pages embedded in AppShell */
+.column-center .wall-header {
+  display: none;
+}
+
+.column-center .wall-container {
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
