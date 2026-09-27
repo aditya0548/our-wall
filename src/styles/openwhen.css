@@ -49,8 +49,8 @@
 }
 
 .envelope-card {
-  background-color: var(--surface);
-  border: 1px solid var(--surface-border);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-soft);
   border-radius: 20px;
   padding: 1.5rem 1rem;
   display: flex;
@@ -66,7 +66,7 @@
 
 .envelope-card:hover {
   transform: translateY(-2px);
-  border-color: var(--accent);
+  border-color: var(--accent-sage);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
 }
 
@@ -83,7 +83,7 @@
 }
 
 .envelope-card.ready .envelope-icon-wrapper {
-  color: var(--accent);
+  color: var(--accent-sage);
   animation: pulse 2s infinite;
 }
 
@@ -97,7 +97,7 @@
   right: -8px;
   width: 8px;
   height: 8px;
-  background-color: var(--accent);
+  background-color: var(--accent-sage);
   border-radius: 50%;
 }
 
