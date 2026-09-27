@@ -80,7 +80,7 @@ export default function Setup() {
             />
           </div>
 
-          {error && <div className="setup-error" style={{ color: 'var(--accent-red)', marginBottom: '1rem', fontSize: '0.9rem' }}>{error}</div>}
+          {error && <div className="setup-error" style={{ color: '#d32f2f', marginBottom: '1rem', fontSize: '0.9rem' }}>{error}</div>}
 
           <button type="submit" disabled={isSubmitting || !displayName.trim()} className="setup-submit">
             {isSubmitting ? 'Saving...' : <>Let's go <Sparkle /></>}

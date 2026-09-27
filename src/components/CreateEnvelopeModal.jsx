@@ -42,7 +42,7 @@ export default function CreateEnvelopeModal({ isOpen, onClose, onSubmit }) {
               placeholder="Open when you miss me"
               maxLength={60}
               required
-              style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--surface-border)', backgroundColor: 'var(--surface)', color: 'var(--text-primary)' }}
+              style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--border-soft)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)' }}
             />
           </div>
           <div>
@@ -54,7 +54,7 @@ export default function CreateEnvelopeModal({ isOpen, onClose, onSubmit }) {
               maxLength={2000}
               required
               rows={4}
-              style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--surface-border)', backgroundColor: 'var(--surface)', color: 'var(--text-primary)', resize: 'vertical' }}
+              style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--border-soft)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)', resize: 'vertical' }}
             />
           </div>
           <div>
@@ -65,7 +65,7 @@ export default function CreateEnvelopeModal({ isOpen, onClose, onSubmit }) {
               onChange={(e) => setUnlockAt(e.target.value)}
               min={new Date().toISOString().slice(0, 16)}
               required
-              style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--surface-border)', backgroundColor: 'var(--surface)', color: 'var(--text-primary)' }}
+              style={{ width: '100%', padding: '0.75rem', borderRadius: '12px', border: '1px solid var(--border-soft)', backgroundColor: 'var(--bg-card)', color: 'var(--text-primary)' }}
             />
           </div>
           <div className="reset-modal-actions" style={{ marginTop: '1rem' }}>

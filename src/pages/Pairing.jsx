@@ -207,11 +207,11 @@ const inputStyle = {
   width: '100%',
   textAlign: 'center',
   letterSpacing: '2px',
-  backgroundColor: 'var(--bg-primary)'
+  backgroundColor: 'var(--bg-app)'
 };
 
 const buttonStyle = {
-  backgroundColor: 'var(--accent)',
+  backgroundColor: 'var(--accent-sage)',
   color: 'white',
   padding: '12px 16px',
   borderRadius: '8px',
@@ -239,7 +239,7 @@ const dividerTextStyle = {
 };
 
 const codeBoxStyle = {
-  backgroundColor: 'var(--bg-primary)',
+  backgroundColor: 'var(--bg-app)',
   padding: '24px',
   borderRadius: '8px',
   display: 'flex',
