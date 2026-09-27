@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+
 import { ArrowLeft, Heart, Star } from 'lucide-react';
 import useSpace from '../hooks/useSpace';
 import useProfile from '../hooks/useProfile';
@@ -10,7 +10,7 @@ import { supabase } from '../supabaseClient';
 import '../styles/wall.css';
 import '../styles/games.css';
 
-export default function TicTacToe({ session }) {
+export default function TicTacToe({ session, onBack }) {
   const { space, loading: spaceLoading } = useSpace(session);
   const { partnerProfile, loading: profileLoading } = useProfile(session);
   
@@ -71,9 +71,9 @@ export default function TicTacToe({ session }) {
       </header>
 
       <main className="games-main" style={{ alignItems: 'center' }}>
-        <Link to="/games" className="tic-tac-toe-breadcrumb">
+        <button onClick={onBack} className="tic-tac-toe-breadcrumb" style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', fontFamily: 'inherit' }}>
           <ArrowLeft size={16} /> Back to Games
-        </Link>
+        </button>
         
         <h2 className="display-font games-title" style={{ marginBottom: '16px' }}>Tic-Tac-Toe <span className="title-sparkle">✦</span></h2>
         

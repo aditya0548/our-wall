@@ -7,12 +7,14 @@ import Wall from '../pages/Wall';
 import Notes from '../pages/Notes';
 import Whiteboard from '../pages/Whiteboard';
 import Games from '../pages/Games';
+import TicTacToe from '../pages/TicTacToe';
 import ResetModal from './ResetModal';
 import { supabase } from '../supabaseClient';
 import '../styles/appshell.css';
 
 export default function AppShell({ session, space }) {
   const [activeFeature, setActiveFeature] = useState('chat');
+  const [selectedGame, setSelectedGame] = useState(null);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
@@ -58,7 +60,8 @@ export default function AppShell({ session, space }) {
           {activeFeature === 'chat' && <Wall session={session} spaceId={space?.id} />}
           {activeFeature === 'notes' && <Notes session={session} />}
           {activeFeature === 'whiteboard' && <Whiteboard session={session} />}
-          {activeFeature === 'games' && <Games session={session} />}
+          {activeFeature === 'games' && !selectedGame && <Games session={session} onSelectGame={setSelectedGame} />}
+          {activeFeature === 'games' && selectedGame === 'tic-tac-toe' && <TicTacToe session={session} onBack={() => setSelectedGame(null)} />}
           {activeFeature === 'memories' && (
             <div style={{ textAlign: 'center', padding: 48, color: 'var(--text-muted)' }}>
               Memories coming soon

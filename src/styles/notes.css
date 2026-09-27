@@ -185,7 +185,7 @@
   opacity: 1;
 }
 .pin-icon-corner.pinned {
-  background: var(--accent);
+  background: var(--accent-sage);
 }
 .sticky-note.shape-round .pin-icon-corner { top: 16px; left: 24px; }
 
@@ -305,9 +305,9 @@
   white-space: nowrap;
 }
 .reaction-pill.active {
-  background: var(--accent-soft);
-  color: var(--accent-deep);
-  border: 1px solid var(--accent);
+  background: color-mix(in srgb, var(--accent-sage) 20%, transparent);
+  color: var(--text-primary);
+  border: 1px solid var(--accent-sage);
 }
 
 /* Resize handles (4 corners) */
@@ -368,7 +368,7 @@
 }
 
 .note-modal-content {
-  background: var(--surface-solid, var(--surface));
+  background: var(--bg-card);
   color: var(--text-primary);
   border-radius: 16px;
   padding: 24px;
@@ -392,9 +392,9 @@
 .templates-scroll::-webkit-scrollbar { display: none; }
 
 .template-chip {
-  background: var(--surface);
+  background: var(--bg-card);
   color: var(--text-primary);
-  border: 1px solid var(--surface-border);
+  border: 1px solid var(--border-soft);
   border-radius: 16px;
   padding: 4px 12px;
   font-size: 10px;
@@ -403,8 +403,8 @@
   transition: all 0.2s;
 }
 .template-chip:hover {
-  background: var(--accent-soft);
-  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent-sage) 20%, transparent);
+  border-color: var(--accent-sage);
 }
 
 
@@ -416,9 +416,9 @@
 
 .note-modal-content input,
 .note-modal-content textarea {
-  background: var(--surface-solid, var(--surface));
+  background: var(--bg-card);
   color: var(--text-primary);
-  border: 1px solid var(--surface-border);
+  border: 1px solid var(--border-soft);
 }
 
 .note-modal-content input::placeholder,
@@ -467,19 +467,19 @@
 .shape-btn {
   padding: 4px 8px;
   border-radius: 4px;
-  border: 1px solid var(--surface-border);
+  border: 1px solid var(--border-soft);
   background: transparent;
   color: var(--text-primary);
   font-size: 12px;
   cursor: pointer;
 }
 .shape-btn.selected {
-  background: var(--accent-soft);
-  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent-sage) 20%, transparent);
+  border-color: var(--accent-sage);
 }
 
 .alarm-section {
-  border: 1px solid var(--surface-border);
+  border: 1px solid var(--border-soft);
   padding: 12px;
   border-radius: 8px;
 }
@@ -499,15 +499,15 @@
 .alarm-preset-btn {
   padding: 4px 8px;
   border-radius: 12px;
-  border: 1px solid var(--surface-border);
+  border: 1px solid var(--border-soft);
   background: transparent;
   color: var(--text-primary);
   font-size: 12px;
   cursor: pointer;
 }
 .alarm-preset-btn.selected {
-  background: var(--accent-soft);
-  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent-sage) 20%, transparent);
+  border-color: var(--accent-sage);
 }
 
 .modal-actions {
@@ -518,7 +518,7 @@
 }
 
 .btn-primary {
-  background: var(--accent);
+  background: var(--accent-sage);
   color: white;
   border: none;
   padding: 8px 16px;
@@ -529,7 +529,7 @@
 .btn-secondary {
   background: transparent;
   color: var(--text-primary);
-  border: 1px solid var(--surface-border);
+  border: 1px solid var(--border-soft);
   padding: 8px 16px;
   border-radius: 20px;
   cursor: pointer;
@@ -542,7 +542,7 @@
   width: 56px;
   height: 56px;
   border-radius: 50%;
-  background: var(--accent);
+  background: var(--accent-sage);
   color: white;
   border: none;
   display: flex;

@@ -6,7 +6,7 @@ import { supabase } from '../supabaseClient';
 import '../styles/wall.css';
 import '../styles/games.css';
 
-export default function Games({ session }) {
+export default function Games({ session, onSelectGame }) {
   const handleLogout = async () => {
     await supabase.auth.signOut();
   };
@@ -29,7 +29,7 @@ export default function Games({ session }) {
           <GameTile 
             title="Tic-Tac-Toe" 
             icon={Gamepad2} 
-            to="/games/tic-tac-toe" 
+            onClick={() => onSelectGame('tic-tac-toe')} 
           />
         </div>
 

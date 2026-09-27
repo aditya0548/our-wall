@@ -6,12 +6,7 @@ import ForgotPassword from './pages/ForgotPassword';
 import ResetPassword from './pages/ResetPassword';
 import Home from './pages/Home';
 import Setup from './pages/Setup';
-import Notes from './pages/Notes';
 import Settings from './pages/Settings';
-import OpenWhen from './pages/OpenWhen';
-import Whiteboard from './pages/Whiteboard';
-import Games from './pages/Games';
-import TicTacToe from './pages/TicTacToe';
 import { ProfileProvider } from './context/ProfileProvider';
 
 function App() {
@@ -46,11 +41,6 @@ function App() {
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route path="/setup" element={session ? <Setup session={session} /> : <Navigate to="/login" replace />} />
           <Route path="/" element={session ? <Home session={session} /> : <Navigate to="/login" replace />} />
-          <Route path="/notes" element={session ? <Notes session={session} /> : <Navigate to="/login" replace />} />
-          <Route path="/open-when" element={session ? <OpenWhen session={session} /> : <Navigate to="/login" replace />} />
-          <Route path="/whiteboard" element={session ? <Whiteboard session={session} /> : <Navigate to="/login" replace />} />
-          <Route path="/games" element={session ? <Games session={session} /> : <Navigate to="/login" replace />} />
-          <Route path="/games/tic-tac-toe" element={session ? <TicTacToe session={session} /> : <Navigate to="/login" replace />} />
           <Route path="/settings" element={session ? <Settings session={session} /> : <Navigate to="/login" replace />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>

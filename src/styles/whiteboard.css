@@ -26,15 +26,15 @@
 }
 
 .whiteboard-title {
-  color: var(--accent-deep);
+  color: var(--text-primary);
   margin: 0;
 }
 
 .whiteboard-toolbar {
   display: flex;
   gap: 1rem;
-  background-color: var(--surface);
-  border: 1px solid var(--surface-border);
+  background-color: var(--bg-card);
+  border: 1px solid var(--border-soft);
   padding: 0.5rem 1rem;
   border-radius: 16px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
@@ -58,7 +58,7 @@
 .toolbar-divider {
   width: 1px;
   height: 24px;
-  background-color: var(--surface-border);
+  background-color: var(--border-soft);
 }
 
 .color-btn {
@@ -76,8 +76,8 @@
 }
 
 .color-btn.selected {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent);
+  border-color: var(--accent-sage);
+  box-shadow: 0 0 0 2px var(--bg-card), 0 0 0 4px var(--accent-sage);
 }
 
 .size-btn {
@@ -94,12 +94,12 @@
 }
 
 .size-btn:hover {
-  background-color: var(--surface-solid);
+  background-color: var(--bg-card);
 }
 
 .size-btn.selected {
-  border-color: var(--accent);
-  background-color: var(--accent-soft);
+  border-color: var(--accent-sage);
+  background-color: color-mix(in srgb, var(--accent-sage) 20%, transparent);
 }
 
 .size-dot {
@@ -122,15 +122,15 @@
 }
 
 .tool-btn:hover:not(:disabled) {
-  background-color: var(--surface-solid);
+  background-color: var(--bg-card);
   transform: translateY(-2px);
-  color: var(--accent);
+  color: var(--accent-sage);
 }
 
 .tool-btn.selected {
-  background-color: var(--accent-soft);
-  color: var(--accent-deep);
-  border-color: var(--accent);
+  background-color: color-mix(in srgb, var(--accent-sage) 20%, transparent);
+  color: var(--text-primary);
+  border-color: var(--accent-sage);
 }
 
 .tool-btn:disabled {
@@ -144,9 +144,9 @@
 
 .whiteboard-canvas-container {
   flex: 1;
-  background-color: var(--surface-solid);
+  background-color: var(--bg-card);
   border-radius: 20px;
-  border: 1px solid var(--surface-border);
+  border: 1px solid var(--border-soft);
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
   position: relative;
   overflow: hidden;
