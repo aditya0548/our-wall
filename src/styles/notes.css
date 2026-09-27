@@ -379,10 +379,7 @@
   flex-direction: column;
   gap: 16px;
 }
-[data-theme="midnight"] .note-modal-content {
-  background: #2A2B45;
-  color: #EDEAF8;
-}
+
 
 .templates-scroll {
   display: flex;
@@ -409,9 +406,7 @@
   background: var(--accent-soft);
   border-color: var(--accent);
 }
-[data-theme="midnight"] .template-chip {
-  background: #1F1F33;
-}
+
 
 .note-modal-content h2,
 .note-modal-content h3,
@@ -430,10 +425,7 @@
 .note-modal-content textarea::placeholder {
   color: var(--text-muted);
 }
-[data-theme="midnight"] .note-modal-content input,
-[data-theme="midnight"] .note-modal-content textarea {
-  background: #1F1F33;
-}
+
 
 .note-textarea {
   width: 100%;

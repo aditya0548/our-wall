@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import { Navigate } from 'react-router-dom';
 import useSpace from '../hooks/useSpace';
-import { useTheme } from '../theme/ThemeProvider';
+import { useProfileContext } from '../context/ProfileProvider';
 import CreateSpaceCard from '../components/CreateSpaceCard';
 import JoinSpaceCard from '../components/JoinSpaceCard';
 import ShareCodeScreen from '../components/ShareCodeScreen';
@@ -12,7 +12,7 @@ import '../styles/auth.css';
 
 export default function Home({ session }) {
   const { space, loading: spaceLoading, refresh } = useSpace(session);
-  const { profile, loading: profileLoading } = useTheme();
+  const { profile, loading: profileLoading } = useProfileContext();
 
   if (spaceLoading || profileLoading) {
     return (

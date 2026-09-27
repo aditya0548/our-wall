@@ -1,9 +1,9 @@
-import { noteColorMaps } from '../theme/themes';
+import { NOTE_COLORS } from '../constants/noteColors';
 
 const COLOR_IDS = ['coral', 'lavender', 'sky', 'mint', 'sunset', 'sand'];
 
-export default function ColorPicker({ selectedColor, onSelectColor, currentTheme }) {
-  const palette = noteColorMaps[currentTheme || 'sakura'];
+export default function ColorPicker({ selectedColor, onSelectColor }) {
+  const palette = NOTE_COLORS;
 
   return (
     <div className="color-picker">

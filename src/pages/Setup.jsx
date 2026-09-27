@@ -1,17 +1,15 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useTheme } from '../theme/ThemeProvider';
-import ThemePicker from '../components/ThemePicker';
+import { useProfileContext } from '../context/ProfileProvider';
 import Sparkle from '../components/Sparkle';
 import '../styles/setup.css';
 
 export default function Setup() {
-  const { profile, updateProfile } = useTheme();
+  const { profile, updateProfile } = useProfileContext();
   const navigate = useNavigate();
   
   const [displayName, setDisplayName] = useState(profile?.display_name || '');
   const [pronouns, setPronouns] = useState(profile?.pronouns || '');
-  const [theme, setTheme] = useState(profile?.theme || 'sakura');
   const [birthday, setBirthday] = useState(profile?.birthday || '');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
@@ -30,7 +28,6 @@ export default function Setup() {
         await updateProfile({
           display_name: displayName.trim(),
           pronouns,
-          theme,
           birthday: birthday || null
         });
         navigate('/', { replace: true });
@@ -72,11 +69,6 @@ export default function Setup() {
               <option value="they/them">they/them</option>
               <option value="custom">custom</option>
             </select>
-          </div>
-
-          <div className="form-group">
-            <label>Theme</label>
-            <ThemePicker selectedTheme={theme} onSelect={setTheme} />
           </div>
 
           <div className="form-group">

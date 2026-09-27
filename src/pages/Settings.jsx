@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '../supabaseClient';
-import { useTheme } from '../theme/ThemeProvider';
+import { useProfileContext } from '../context/ProfileProvider';
 import ProfileMenu from '../components/ProfileMenu';
 import '../styles/settings.css';
 import '../styles/wall.css'; // For header styles
 
 export default function Settings({ session }) {
-  const { profile, updateProfile, loading, theme } = useTheme();
+  const { profile, updateProfile, loading } = useProfileContext();
   const navigate = useNavigate();
   
   const [formData, setFormData] = useState({
@@ -76,7 +76,7 @@ export default function Settings({ session }) {
       <header className="wall-header">
         <h1 className="wall-title display-font">
           <Link to="/" style={{ color: 'inherit', textDecoration: 'none' }}>
-            {theme === 'sakura' ? <span className="sakura-title-icon">🌸</span> : '♥'} Our Wall
+            ♥ Our Wall
           </Link>
         </h1>
         <div className="header-right">

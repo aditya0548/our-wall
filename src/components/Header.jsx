@@ -1,10 +1,10 @@
 import React from 'react';
-import { useTheme } from '../theme/ThemeProvider';
+import { useProfileContext } from '../context/ProfileProvider';
 import ProfileMenu from './ProfileMenu';
 import { supabase } from '../supabaseClient';
 
 export default function Header({ space, onAvatarClick, onResetClick }) {
-  const { profile } = useTheme();
+  const { profile } = useProfileContext();
 
   // Calculate days together
   const getDaysTogether = () => {

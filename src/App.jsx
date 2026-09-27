@@ -12,7 +12,7 @@ import OpenWhen from './pages/OpenWhen';
 import Whiteboard from './pages/Whiteboard';
 import Games from './pages/Games';
 import TicTacToe from './pages/TicTacToe';
-import { ThemeProvider } from './theme/ThemeProvider';
+import { ProfileProvider } from './context/ProfileProvider';
 
 function App() {
   const [session, setSession] = useState(null);
@@ -38,7 +38,7 @@ function App() {
   }
 
   return (
-    <ThemeProvider session={session}>
+    <ProfileProvider session={session}>
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={!session ? <Login /> : <Navigate to="/" replace />} />
@@ -55,7 +55,7 @@ function App() {
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </BrowserRouter>
-    </ThemeProvider>
+    </ProfileProvider>
   );
 }
 

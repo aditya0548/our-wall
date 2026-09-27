@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { supabase } from '../supabaseClient';
 import useNotes from '../hooks/useNotes';
-import { useTheme } from '../theme/ThemeProvider';
+import { useProfileContext } from '../context/ProfileProvider';
 import { subscribeToReset } from '../hooks/useSpace';
 import NoteCard from '../components/NoteCard';
 import NoteInput from '../components/NoteInput';
@@ -36,7 +36,7 @@ const ReactionPickerOverlay = ({ position, onSelect, onClose }) => {
 
 export default function Wall({ session, spaceId }) {
   const { notes, loading, sendNote, deleteNote, reactions, toggleReaction } = useNotes(spaceId, session.user.id);
-  const { profile, partnerProfile } = useTheme();
+  const { profile, partnerProfile } = useProfileContext();
 
   const [isResetModalOpen, setIsResetModalOpen] = useState(false);
   const [isPartnerResetModalOpen, setIsPartnerResetModalOpen] = useState(false);

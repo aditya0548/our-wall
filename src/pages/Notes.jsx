@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Navigate } from 'react-router-dom';
 import useSpace from '../hooks/useSpace';
-import { useTheme } from '../theme/ThemeProvider';
+import { useProfileContext } from '../context/ProfileProvider';
 import ProfileMenu from '../components/ProfileMenu';
 import useStickyNotes from '../hooks/useStickyNotes';
 import useNoteAlarms from '../hooks/useNoteAlarms';
@@ -13,15 +13,13 @@ import '../styles/wall.css';
 import '../styles/notes.css';
 
 const IDENTITY_COLORS = {
-  sakura:   { you: '#D98BA8', them: '#8BB8D9' },
-  ocean:    { you: '#4A7BB8', them: '#D98BA8' },
-  matcha:   { you: '#7FA85A', them: '#D98BA8' },
-  midnight: { you: '#9A8AD8', them: '#D98BA8' },
+  you: '#ed948e',
+  them: '#b9b4d8'
 };
 
 export default function Notes({ session }) {
   const { space, loading: spaceLoading } = useSpace(session);
-  const { profile, partnerProfile, loading: profileLoading } = useTheme();
+  const { profile, partnerProfile, loading: profileLoading } = useProfileContext();
 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [editingNote, setEditingNote] = useState(null);
@@ -81,18 +79,8 @@ export default function Notes({ session }) {
     }
   };
 
-  const myTheme = profile?.theme || 'sakura';
-  const partnerTheme = partnerProfile?.theme || 'sakura';
-
   const getAuthorDetails = (isAuthor) => {
-    let color;
-    if (myTheme !== partnerTheme) {
-      const themeToUse = isAuthor ? myTheme : partnerTheme;
-      color = IDENTITY_COLORS[themeToUse]?.you || '#000';
-    } else {
-      color = isAuthor ? IDENTITY_COLORS[myTheme].you : IDENTITY_COLORS[myTheme].them;
-    }
-    
+    const color = isAuthor ? IDENTITY_COLORS.you : IDENTITY_COLORS.them;
     const name = isAuthor ? (profile?.display_name || 'You') : (partnerProfile?.display_name || 'Partner');
     return { color, name };
   };
@@ -159,7 +147,6 @@ export default function Notes({ session }) {
       {isCreateModalOpen && (
         <CreateNoteModal
           initialData={editingNote}
-          userTheme={myTheme}
           onClose={() => {
             setIsCreateModalOpen(false);
             setEditingNote(null);

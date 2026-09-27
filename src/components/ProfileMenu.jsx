@@ -2,17 +2,15 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { Palette, Settings, RotateCcw, LogOut } from 'lucide-react';
 import { supabase } from '../supabaseClient';
-import ChangeThemeModal from './ChangeThemeModal';
-import { useTheme } from '../theme/ThemeProvider';
+import { useProfileContext } from '../context/ProfileProvider';
 import '../styles/menu.css';
 
 export default function ProfileMenu({ onResetClick, onSignOutClick }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [isThemeModalOpen, setIsThemeModalOpen] = useState(false);
   const menuRef = useRef(null);
   const navigate = useNavigate();
   const location = useLocation();
-  const { profile } = useTheme();
+  const { profile } = useProfileContext();
 
   const getInitials = (name) => {
     if (!name) return '?';
@@ -76,9 +74,6 @@ export default function ProfileMenu({ onResetClick, onSignOutClick }) {
       case 'settings':
         navigate('/settings');
         break;
-      case 'change_theme':
-        setIsThemeModalOpen(true);
-        break;
       case 'reset_connection':
         if (onResetClick) onResetClick();
         break;
@@ -125,11 +120,6 @@ export default function ProfileMenu({ onResetClick, onSignOutClick }) {
             
             <div className="profile-dropdown-divider"></div>
             
-            <button className="profile-menu-item" onClick={() => handleAction('change_theme')}>
-              <Palette size={16} />
-              Change theme
-            </button>
-            
             <button className="profile-menu-item" onClick={() => handleAction('settings')}>
               <Settings size={16} />
               Settings
@@ -152,10 +142,6 @@ export default function ProfileMenu({ onResetClick, onSignOutClick }) {
         </>
       )}
 
-      <ChangeThemeModal 
-        isOpen={isThemeModalOpen} 
-        onClose={() => setIsThemeModalOpen(false)} 
-      />
     </div>
   );
 }

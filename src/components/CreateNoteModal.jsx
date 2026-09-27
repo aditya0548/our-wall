@@ -4,13 +4,6 @@ import { createPortal } from 'react-dom';
 const COLORS = ['coral', 'mint', 'lavender', 'sky'];
 const SHAPES = ['square', 'round'];
 
-const THEME_TO_DEFAULT_COLOR = {
-  sakura:   'coral',
-  ocean:    'sky',
-  matcha:   'mint',
-  midnight: 'lavender',
-};
-
 const TEMPLATES = [
   { label: 'Reminder', text: "Don't forget to " },
   { label: 'Love', text: "I love you ❤️" },
@@ -20,9 +13,9 @@ const TEMPLATES = [
   { label: 'Clear', text: "" },
 ];
 
-export default function CreateNoteModal({ onClose, onSave, initialData = null, userTheme = 'sakura' }) {
+export default function CreateNoteModal({ onClose, onSave, initialData = null }) {
   const [body, setBody] = useState(initialData?.body || '');
-  const [color, setColor] = useState(initialData?.color || THEME_TO_DEFAULT_COLOR[userTheme] || 'coral');
+  const [color, setColor] = useState(initialData?.color || 'coral');
   const [shape, setShape] = useState(initialData?.shape || 'square');
   const [hasAlarm, setHasAlarm] = useState(!!initialData?.alarm_at);
   const [alarmAt, setAlarmAt] = useState(

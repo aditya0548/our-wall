@@ -2,11 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { supabase } from '../supabaseClient';
 import useSpace from '../hooks/useSpace';
-import { useTheme } from '../theme/ThemeProvider';
+import { useProfileContext } from '../context/ProfileProvider';
 
 export default function OpenEnvelopeModal({ envelope, onClose }) {
   const [senderName, setSenderName] = useState('');
-  const { profile, partnerProfile } = useTheme();
+  const { profile, partnerProfile } = useProfileContext();
 
   useEffect(() => {
     if (!envelope) return;
